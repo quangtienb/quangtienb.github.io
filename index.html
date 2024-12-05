@@ -1,143 +1,36 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng LED Dự Báo Thời Tiết</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #222;
-            color: #fff;
-        }
-
-        header {
-            background-color: #007BFF;
-            padding: 1rem 0;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            margin: 0;
-            color: #fff;
-        }
-
-        #weather-info {
-            text-align: center;
-            margin: 2rem auto;
-            padding: 1rem;
-            background-color: #333;
-            width: 90%;
-            max-width: 700px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        #weather-info h2 {
-            margin-bottom: 1rem;
-        }
-
-        #weather-info .info {
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-        }
-
-        .led-board {
-            background-color: #000;
-            color: #0f0;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.5rem;
-            text-align: center;
-            padding: 1rem;
-            margin: 2rem auto;
-            width: 90%;
-            max-width: 600px;
-            border: 5px solid #0f0;
-            overflow: hidden;
-            position: relative;
-            height: 50px;
-        }
-
-        .led-board .scrolling-text {
-            position: absolute;
-            white-space: nowrap;
-            animation: scroll 10s linear infinite;
-        }
-
-        @keyframes scroll {
-            from {
-                transform: translateX(100%);
-            }
-            to {
-                transform: translateX(-100%);
-            }
-        }
-
-        #time {
-            margin-top: 1rem;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-    </style>
+    <title>Hiển Thị Thông Tin</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h1>NHÓM 20</h1>
+        <nav>
+            <ul>
+                <li><a href="gioithieu.html">Giới thiệu</a></li>
+                <li><a href="yeucau.html">Yêu cầu</a></li>
+                <li><a href="#">Mục tiêu</a></li>
+                <li><a href="lienhe.html">Liên hệ</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <div id="weather-info">
-        <h2>HIỂN THỊ THÔNG TIN THỜI TIẾT KHU VỰC</h2>
-        <div class="info">Ngày, giờ: <span id="date-time">--/--/-- --:--:--</span></div>
-        <div class="info">Nhiệt độ: <span id="temperature">--</span> °C</div>
-        <div class="info">Độ ẩm: <span id="humidity">--</span> %</div>
-        <div class="info">Tốc độ gió: <span id="wind-speed">--</span> km/h</div>
-        <div class="info">Lượng mưa: <span id="rainfall">--</span> mm</div>
-    </div>
+    <section>
+        <h2>HIỂN THỊ THÔNG TIN THỜI TIẾT RA BẢNG LED</h2>
+           </section>
 
-    <div class="led-board">
-        <div class="scrolling-text" id="scrollingText">
-            Dự báo thời tiết tại trường Đại học Nông Lâm: Trời nắng, nhiệt độ 28°C, độ ẩm 70%.
-        </div>
-    </div>
+    <section id="gioiThieu" style="display: none;">
+        <h2>Giới thiệu</h2>
+        <p>Chào mừng thầy và các bạn đến với web đề tài của nhóm 20.</p>
+    </section>
 
-    <script>
-        // Mô phỏng dữ liệu thời tiết
-        const mockWeatherData = {
-            temperature: 28,
-            humidity: 70,
-            windSpeed: 10,
-            rainfall: 0,
-            location: "Đại học Nông Lâm",
-            forecast: "Trời nắng đẹp.",
-        };
+    <footer>
+	<p>© 2024 Nhóm 20 - Lớp DH21TD</p>
+        <p>Đồ án IOT và Ứng Dụng<p>
+    </footer>
 
-        // Cập nhật thông tin thời tiết
-        function updateWeather() {
-            const { temperature, humidity, windSpeed, rainfall, location, forecast } = mockWeatherData;
-            document.getElementById("temperature").textContent = temperature;
-            document.getElementById("humidity").textContent = humidity;
-            document.getElementById("wind-speed").textContent = windSpeed;
-            document.getElementById("rainfall").textContent = rainfall;
-
-            const scrollingText = `Dự báo tại ${location}: ${forecast} 🌡️ ${temperature}°C 💧 ${humidity}% 🌬️ ${windSpeed} km/h 🌧️ ${rainfall} mm.`;
-            document.getElementById("scrollingText").textContent = scrollingText;
-        }
-
-        // Cập nhật thời gian thực tế
-        function updateTime() {
-            const now = new Date();
-            const dateString = now.toLocaleDateString("vi-VN");
-            const timeString = now.toLocaleTimeString("vi-VN", { hour12: false });
-            document.getElementById("date-time").textContent = `${dateString} ${timeString}`;
-        }
-
-        // Chạy hàm định kỳ
-        updateWeather();
-        updateTime();
-        setInterval(updateTime, 1000);
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

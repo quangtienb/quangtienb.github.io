@@ -1,8 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hiển Thị Thông Tin</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Đề xuất thêm CSS ở đây nếu chưa có file style.css */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            margin: 0.5rem 0 0;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        section h2 {
+            margin-bottom: 1rem;
+            color: #007BFF;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -19,7 +87,12 @@
 
     <section>
         <h2>HIỂN THỊ THÔNG TIN THỜI TIẾT RA BẢNG LED</h2>
-           </section>
+        <p>Dữ liệu thời tiết đang được thu thập và hiển thị theo thời gian thực.</p>
+        <div id="weather-info">
+            <p id="temperature">Nhiệt độ: -- °C</p>
+            <p id="humidity">Độ ẩm: -- %</p>
+        </div>
+    </section>
 
     <section id="gioiThieu" style="display: none;">
         <h2>Giới thiệu</h2>
@@ -27,8 +100,8 @@
     </section>
 
     <footer>
-	<p>© 2024 Nhóm 20 - Lớp DH21TD</p>
-        <p>Đồ án IOT và Ứng Dụng<p>
+        <p>© 2024 Nhóm 20 - Lớp DH21TD</p>
+        <p>Đồ án IoT và Ứng Dụng</p>
     </footer>
 
     <script src="script.js"></script>

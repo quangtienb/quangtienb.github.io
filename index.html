@@ -25,6 +25,26 @@
             color: #fff;
         }
 
+        #weather-info {
+            text-align: center;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: #333;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #weather-info h2 {
+            margin-bottom: 1rem;
+        }
+
+        #weather-info .info {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
         .led-board {
             background-color: #000;
             color: #0f0;
@@ -56,16 +76,6 @@
             }
         }
 
-        #weather-info {
-            text-align: center;
-            margin: 1rem auto;
-        }
-
-        #weather-info p {
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-        }
-
         #time {
             margin-top: 1rem;
             font-size: 1.5rem;
@@ -75,19 +85,22 @@
 </head>
 <body>
     <header>
-        <h1>Bảng LED Dự Báo Thời Tiết</h1>
+        <h1>NHÓM 20</h1>
     </header>
+
+    <div id="weather-info">
+        <h2>HIỂN THỊ THÔNG TIN THỜI TIẾT KHU VỰC</h2>
+        <div class="info">Ngày, giờ: <span id="date-time">--/--/-- --:--:--</span></div>
+        <div class="info">Nhiệt độ: <span id="temperature">--</span> °C</div>
+        <div class="info">Độ ẩm: <span id="humidity">--</span> %</div>
+        <div class="info">Tốc độ gió: <span id="wind-speed">--</span> km/h</div>
+        <div class="info">Lượng mưa: <span id="rainfall">--</span> mm</div>
+    </div>
 
     <div class="led-board">
         <div class="scrolling-text" id="scrollingText">
-            Đang tải dữ liệu thời tiết...
+            Dự báo thời tiết tại trường Đại học Nông Lâm: Trời nắng, nhiệt độ 28°C, độ ẩm 70%.
         </div>
-    </div>
-
-    <div id="weather-info">
-        <p>🌡️ Nhiệt độ: <span id="temperature">--</span> °C</p>
-        <p>💧 Độ ẩm: <span id="humidity">--</span> %</p>
-        <p id="time">Thời gian: --:--:--</p>
     </div>
 
     <script>
@@ -95,25 +108,30 @@
         const mockWeatherData = {
             temperature: 28,
             humidity: 70,
+            windSpeed: 10,
+            rainfall: 0,
             location: "Đại học Nông Lâm",
-            forecast: "Trời nắng đẹp, không mưa.",
+            forecast: "Trời nắng đẹp.",
         };
 
         // Cập nhật thông tin thời tiết
         function updateWeather() {
-            const { temperature, humidity, location, forecast } = mockWeatherData;
+            const { temperature, humidity, windSpeed, rainfall, location, forecast } = mockWeatherData;
             document.getElementById("temperature").textContent = temperature;
             document.getElementById("humidity").textContent = humidity;
+            document.getElementById("wind-speed").textContent = windSpeed;
+            document.getElementById("rainfall").textContent = rainfall;
 
-            const scrollingText = `Dự báo tại ${location}: ${forecast} 🌡️ ${temperature}°C 💧 Độ ẩm ${humidity}%.`;
+            const scrollingText = `Dự báo tại ${location}: ${forecast} 🌡️ ${temperature}°C 💧 ${humidity}% 🌬️ ${windSpeed} km/h 🌧️ ${rainfall} mm.`;
             document.getElementById("scrollingText").textContent = scrollingText;
         }
 
         // Cập nhật thời gian thực tế
         function updateTime() {
             const now = new Date();
+            const dateString = now.toLocaleDateString("vi-VN");
             const timeString = now.toLocaleTimeString("vi-VN", { hour12: false });
-            document.getElementById("time").textContent = `Thời gian: ${timeString}`;
+            document.getElementById("date-time").textContent = `${dateString} ${timeString}`;
         }
 
         // Chạy hàm định kỳ

@@ -104,8 +104,13 @@
         <h2>HIỂN THỊ THÔNG TIN THỜI TIẾT RA BẢNG LED</h2>
         <p>Dữ liệu thời tiết đang được thu thập và hiển thị theo thời gian thực.</p>
         <div id="weather-info">
+            <p id="current-time">🕒 Thời gian: --:--:--</p>
+            <p id="current-date">📅 Ngày: --/--/----</p>
             <p id="temperature">🌡️ Nhiệt độ: -- °C</p>
             <p id="humidity">💧 Độ ẩm: -- %</p>
+            <p id="wind-speed">💨 Tốc độ gió: -- km/h</p>
+            <p id="rainfall">🌧️ Lượng mưa: -- mm</p>
+            <p id="cloud-cover">☁️ Lượng mây: -- %</p>
         </div>
     </section>
 
@@ -115,17 +120,27 @@
     </footer>
 
     <script>
-        // Dữ liệu thời tiết mô phỏng (cần thay bằng dữ liệu thực tế từ ESP32)
+        // Dữ liệu mô phỏng (thay thế bằng dữ liệu từ ESP32)
         const mockData = {
+            time: "14:30:45",
+            date: "05/12/2024",
             temperature: 25,
             humidity: 60,
+            windSpeed: 15,
+            rainfall: 2.5,
+            cloudCover: 80
         };
 
         // Cập nhật dữ liệu thời tiết lên giao diện
+        document.getElementById('current-time').textContent = `🕒 Thời gian: ${mockData.time}`;
+        document.getElementById('current-date').textContent = `📅 Ngày: ${mockData.date}`;
         document.getElementById('temperature').textContent = `🌡️ Nhiệt độ: ${mockData.temperature} °C`;
         document.getElementById('humidity').textContent = `💧 Độ ẩm: ${mockData.humidity} %`;
+        document.getElementById('wind-speed').textContent = `💨 Tốc độ gió: ${mockData.windSpeed} km/h`;
+        document.getElementById('rainfall').textContent = `🌧️ Lượng mưa: ${mockData.rainfall} mm`;
+        document.getElementById('cloud-cover').textContent = `☁️ Lượng mây: ${mockData.cloudCover} %`;
 
-        // Kết nối với ESP32 để lấy dữ liệu (đề xuất bổ sung tính năng AJAX nếu cần)
+        // Đề xuất: Nếu sử dụng AJAX, thay thế `mockData` bằng dữ liệu thực tế từ ESP32.
     </script>
 </body>
 </html>

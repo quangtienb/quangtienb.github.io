@@ -31,9 +31,10 @@
         nav ul {
             list-style: none;
             padding: 0;
-            margin: 1rem 0 0;
+            margin: 0;
             display: flex;
             justify-content: center;
+            background-color: #333; /* Thêm nền cho thanh menu */
         }
 
         nav ul li {
@@ -44,10 +45,13 @@
             text-decoration: none;
             color: white;
             font-weight: bold;
+            padding: 10px 15px;  /* Thêm padding để các liên kết không bị sát nhau */
+            display: block;  /* Đảm bảo các liên kết chiếm toàn bộ chiều rộng của mỗi mục */
         }
 
         nav ul li a:hover {
             text-decoration: underline;
+            background-color: #555;  /* Thêm hiệu ứng hover */
         }
 
         section {

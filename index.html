@@ -1,34 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hiển Thị Thông Tin</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Phần đầu trang -->
     <header>
         <h1>NHÓM 20</h1>
         <nav>
             <ul>
-                <li><a href="gioithieu.html">Giới thiệu</a></li>
-                <li><a href="yeucau.html">Yêu cầu</a></li>
-                <li><a href="#">Mục tiêu</a></li>
-                <li><a href="lienhe.html">Liên hệ</a></li>
+                <li><a href="#" data-section="gioiThieu">Giới thiệu</a></li>
+                <li><a href="#" data-section="yeuCau">Yêu cầu</a></li>
+                <li><a href="#" data-section="mucTieu">Mục tiêu</a></li>
+                <li><a href="#" data-section="lienHe">Liên hệ</a></li>
             </ul>
         </nav>
     </header>
 
-    <section>
-        <h2>HIỂN THỊ THÔNG TIN THỜI TIẾT RA BẢNG LED</h2>
-           </section>
+    <!-- Các phần nội dung -->
+    <main>
+        <!-- Phần Giới thiệu -->
+        <section id="gioiThieu" class="active">
+            <h2>Giới thiệu</h2>
+            <p>Chào mừng thầy và các bạn đến với web đề tài của nhóm 20.</p>
+            <p>Đề tài: *Hiển thị thông tin thời tiết lên bảng LED*.</p>
+        </section>
 
-    <section id="gioiThieu" style="display: none;">
-        <h2>Giới thiệu</h2>
-        <p>Chào mừng thầy và các bạn đến với web đề tài của nhóm 20.</p>
-    </section>
+        <!-- Phần Yêu cầu -->
+        <section id="yeuCau">
+            <h2>Yêu cầu</h2>
+            <ul>
+                <li>Kết nối cảm biến DHT11 với ESP32 để lấy thông tin thời tiết.</li>
+                <li>Gửi dữ liệu thời tiết lên website.</li>
+                <li>Hiển thị dữ liệu thời tiết lên bảng LED.</li>
+            </ul>
+        </section>
 
+        <!-- Phần Mục tiêu -->
+        <section id="mucTieu">
+            <h2>Mục tiêu</h2>
+            <p>Thiết kế hệ thống IoT tự động hóa việc cập nhật thông tin thời tiết theo thời gian thực.</p>
+            <p>Ứng dụng thực tế vào nông nghiệp thông minh và các lĩnh vực khác.</p>
+        </section>
+
+        <!-- Phần Liên hệ -->
+        <section id="lienHe">
+            <h2>Liên hệ</h2>
+            <p>Nhóm 20 - Lớp DH21TD</p>
+            <p>Email: nhom20@gmail.com</p>
+            <p>Số điện thoại: 0123 456 789</p>
+        </section>
+    </main>
+
+    <!-- Phần cuối trang -->
     <footer>
-	<p>© 2024 Nhóm 20 - Lớp DH21TD</p>
-        <p>Đồ án IOT và Ứng Dụng<p>
+        <p>© 2024 Nhóm 20 - Lớp DH21TD</p>
+        <p>Đồ án IoT và Ứng Dụng</p>
     </footer>
 
     <script src="script.js"></script>

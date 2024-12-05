@@ -52,31 +52,35 @@
             border-radius: 5px;
         }
 
-        /* Bảng LED điện tử chạy chữ */
+        /* Bảng LED điện tử lớn hơn và đẹp hơn */
         .led-banner {
-            background-color: #000;
+            background: #000;
             color: #fff;
-            padding: 0.8rem;
+            padding: 1.5rem;
             text-align: center;
-            overflow: hidden;
+            border: 4px solid #FF4500;
+            border-radius: 10px;
+            margin: 1rem auto;
+            max-width: 90%;
             position: relative;
-            font-size: 1.2rem;
-            font-weight: bold;
+            overflow: hidden;
         }
 
         .led-banner span {
             display: inline-block;
             white-space: nowrap;
-            position: absolute;
             animation: scrollText 10s linear infinite;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px #FF4500, 0 0 20px #FF6347;
         }
 
         @keyframes scrollText {
             from {
-                left: 100%;
+                transform: translateX(100%);
             }
             to {
-                left: -100%;
+                transform: translateX(-100%);
             }
         }
 
@@ -247,7 +251,6 @@
             document.getElementById('date-time').textContent = updateDateTime();
         }
 
-        // Cập nhật mỗi giây
         setInterval(() => {
             updateLEDText();
             updateWeatherInfo();

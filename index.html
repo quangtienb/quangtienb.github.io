@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hiển Thị Thông Tin Thời Tiết</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Bảng LED Dự Báo Thời Tiết</title>
     <style>
-        /* Cải tiến CSS */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
-            color: #333;
+            background-color: #222;
+            color: #fff;
         }
 
         header {
             background-color: #007BFF;
-            color: #fff;
             padding: 1rem 0;
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -25,107 +22,104 @@
 
         header h1 {
             margin: 0;
-        }
-
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0.5rem 0 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        nav ul li {
-            margin: 0 1rem;
-        }
-
-        nav ul li a {
-            text-decoration: none;
             color: #fff;
-            font-weight: bold;
         }
 
-        nav ul li a:hover {
-            text-decoration: underline;
-        }
-
-        section {
-            padding: 2rem;
+        .led-board {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
             text-align: center;
+            padding: 1rem;
+            margin: 2rem auto;
+            width: 90%;
+            max-width: 600px;
+            border: 5px solid #0f0;
+            overflow: hidden;
+            position: relative;
+            height: 50px;
         }
 
-        section h2 {
-            margin-bottom: 1rem;
-            color: #007BFF;
+        .led-board .scrolling-text {
+            position: absolute;
+            white-space: nowrap;
+            animation: scroll 10s linear infinite;
+        }
+
+        @keyframes scroll {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(-100%);
+            }
         }
 
         #weather-info {
-            margin-top: 1rem;
-            background-color: #e8f4ff;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-            text-align: left;
+            text-align: center;
+            margin: 1rem auto;
         }
 
         #weather-info p {
-            margin: 0.5rem 0;
             font-size: 1.2rem;
-        }
-
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1rem 0;
-            margin-top: 2rem;
-        }
-
-        footer p {
             margin: 0.5rem 0;
+        }
+
+        #time {
+            margin-top: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>NHÓM 20</h1>
-        <nav>
-            <ul>
-                <li><a href="gioithieu.html">Giới thiệu</a></li>
-                <li><a href="yeucau.html">Yêu cầu</a></li>
-                <li><a href="#">Mục tiêu</a></li>
-                <li><a href="lienhe.html">Liên hệ</a></li>
-            </ul>
-        </nav>
+        <h1>Bảng LED Dự Báo Thời Tiết</h1>
     </header>
 
-    <section>
-        <h2>HIỂN THỊ THÔNG TIN THỜI TIẾT RA BẢNG LED</h2>
-        <p>Dữ liệu thời tiết đang được thu thập và hiển thị theo thời gian thực.</p>
-        <div id="weather-info">
-            <p id="temperature">🌡️ Nhiệt độ: -- °C</p>
-            <p id="humidity">💧 Độ ẩm: -- %</p>
+    <div class="led-board">
+        <div class="scrolling-text" id="scrollingText">
+            Đang tải dữ liệu thời tiết...
         </div>
-    </section>
+    </div>
 
-    <footer>
-        <p>© 2024 Nhóm 20 - Lớp DH21TD</p>
-        <p>Đồ án IoT và Ứng Dụng</p>
-    </footer>
+    <div id="weather-info">
+        <p>🌡️ Nhiệt độ: <span id="temperature">--</span> °C</p>
+        <p>💧 Độ ẩm: <span id="humidity">--</span> %</p>
+        <p id="time">Thời gian: --:--:--</p>
+    </div>
 
     <script>
-        // Dữ liệu thời tiết mô phỏng (cần thay bằng dữ liệu thực tế từ ESP32)
-        const mockData = {
-            temperature: 25,
-            humidity: 60,
+        // Mô phỏng dữ liệu thời tiết
+        const mockWeatherData = {
+            temperature: 28,
+            humidity: 70,
+            location: "Đại học Nông Lâm",
+            forecast: "Trời nắng đẹp, không mưa.",
         };
 
-        // Cập nhật dữ liệu thời tiết lên giao diện
-        document.getElementById('temperature').textContent = `🌡️ Nhiệt độ: ${mockData.temperature} °C`;
-        document.getElementById('humidity').textContent = `💧 Độ ẩm: ${mockData.humidity} %`;
+        // Cập nhật thông tin thời tiết
+        function updateWeather() {
+            const { temperature, humidity, location, forecast } = mockWeatherData;
+            document.getElementById("temperature").textContent = temperature;
+            document.getElementById("humidity").textContent = humidity;
 
-        // Kết nối với ESP32 để lấy dữ liệu (đề xuất bổ sung tính năng AJAX nếu cần)
+            const scrollingText = `Dự báo tại ${location}: ${forecast} 🌡️ ${temperature}°C 💧 Độ ẩm ${humidity}%.`;
+            document.getElementById("scrollingText").textContent = scrollingText;
+        }
+
+        // Cập nhật thời gian thực tế
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString("vi-VN", { hour12: false });
+            document.getElementById("time").textContent = `Thời gian: ${timeString}`;
+        }
+
+        // Chạy hàm định kỳ
+        updateWeather();
+        updateTime();
+        setInterval(updateTime, 1000);
     </script>
 </body>
 </html>

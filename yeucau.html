@@ -4,82 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yêu Cầu - Nhóm 20</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Thiết kế cơ bản nếu chưa có style.css */
+        /* Tổng quan toàn trang */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            background-color: #f4f4f9;
+            background: linear-gradient(135deg, #e3f2fd, #fff);
             color: #333;
         }
 
+        /* Header */
         header {
-            background-color: #007BFF;
+            background: linear-gradient(135deg, #007BFF, #0056b3);
             color: white;
-            padding: 1rem;
+            padding: 1.5rem 0;
             text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         header h1 {
             margin: 0;
-            font-size: 2rem;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
+        /* Thanh điều hướng */
         nav ul {
             list-style: none;
             padding: 0;
             margin: 1rem 0 0;
             display: flex;
             justify-content: center;
-        }
-
-        nav ul li {
-            margin: 0 1rem;
+            gap: 1.5rem;
         }
 
         nav ul li a {
             text-decoration: none;
             color: white;
-            font-weight: bold;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
         nav ul li a:hover {
             text-decoration: underline;
+            transform: scale(1.1);
         }
 
+        /* Phần chính */
         section {
+            background: #fff;
+            margin: 2rem auto;
             padding: 2rem;
             max-width: 800px;
-            margin: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             text-align: center;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
         }
 
         section h2 {
             color: #007BFF;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         section p {
             font-size: 1.2rem;
-            margin: 0.5rem 0;
+            margin: 1rem 0;
+            line-height: 1.6;
         }
 
+        /* Footer */
         footer {
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 1rem 0;
+            padding: 1.5rem 0;
             margin-top: 2rem;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.2);
         }
 
         footer p {
             margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        footer p a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        footer p a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -99,13 +122,16 @@
 
     <section>
         <h2>YÊU CẦU</h2>
-        <p>Mô hình yêu cầu sử dụng các cảm biến như DHT11, cảm biến ánh sáng, cảm biến hướng gió để thu thập dữ liệu thời tiết và hiển thị lên bảng LED.</p>
-        <p>ESP32 được sử dụng để truyền thông dữ liệu lên web server một cách ổn định.</p>
+        <p>Mô hình yêu cầu sử dụng các cảm biến hiện đại như:</p>
+        <p>
+            <b>DHT11</b> để đo nhiệt độ, độ ẩm; <b>cảm biến ánh sáng</b> để phát hiện cường độ sáng, và <b>cảm biến hướng gió</b> để thu thập dữ liệu thời tiết chính xác.
+        </p>
+        <p>Hệ thống sẽ hiển thị thông tin thời tiết lên bảng LED, đồng thời truyền dữ liệu thời gian thực lên <b>web server</b> thông qua <b>ESP32</b>.</p>
     </section>
 
     <footer>
         <p>© 2024 Nhóm 20 - Lớp DH21TD</p>
-        <p>Đồ án IoT và Ứng Dụng</p>
+        <p>Đồ án <a href="#">IoT và Ứng dụng</a></p>
     </footer>
 </body>
 </html>

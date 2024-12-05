@@ -54,7 +54,7 @@
             padding: 2rem;
             max-width: 800px;
             margin: auto;
-            text-align: center;
+            text-align: left;
             background-color: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
@@ -63,9 +63,14 @@
         section h2 {
             color: #007BFF;
             margin-bottom: 1rem;
+            text-align: center;
         }
 
-        section p {
+        section ul {
+            padding-left: 20px;
+        }
+
+        section ul li {
             font-size: 1.2rem;
             margin: 0.5rem 0;
         }
@@ -91,7 +96,7 @@
                 <li><a href="index.html">Trang chủ</a></li>
                 <li><a href="gioithieu.html">Giới thiệu</a></li>
                 <li><a href="yeucau.html">Yêu cầu</a></li>
-                <li><a href="#">Mục tiêu</a></li>
+                <li><a href="muctieu.html">Mục tiêu</a></li>
                 <li><a href="lienhe.html">Liên hệ</a></li>
             </ul>
         </nav>
@@ -99,8 +104,21 @@
 
     <section>
         <h2>YÊU CẦU</h2>
-        <p>Mô hình yêu cầu sử dụng các cảm biến như DHT11, cảm biến ánh sáng, cảm biến hướng gió để thu thập dữ liệu thời tiết và hiển thị lên bảng LED.</p>
-        <p>ESP32 được sử dụng để truyền thông dữ liệu lên web server một cách ổn định.</p>
+        <ul>
+            <li>Mô hình yêu cầu sử dụng các cảm biến:
+                <ul>
+                    <li>DHT11 để đo nhiệt độ và độ ẩm.</li>
+                    <li>Cảm biến ánh sáng để đo cường độ sáng.</li>
+                    <li>Cảm biến hướng gió để thu thập dữ liệu về gió.</li>
+                </ul>
+            </li>
+            <li>ESP32 được sử dụng để:
+                <ul>
+                    <li>Truyền dữ liệu thời tiết lên bảng LED.</li>
+                    <li>Kết nối và đồng bộ dữ liệu với web server.</li>
+                </ul>
+            </li>
+        </ul>
     </section>
 
     <footer>

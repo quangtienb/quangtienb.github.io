@@ -14,6 +14,11 @@
             padding: 0;
             background: linear-gradient(135deg, #74ebd5, #9face6);
             color: #333;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
         }
         header {
             background: linear-gradient(135deg, #007BFF, #0056b3);
@@ -192,7 +197,6 @@
     </footer>
 
     <script>
-        // JavaScript
         const mockData = {
             temperature: 26,
             humidity: 70,
@@ -208,7 +212,7 @@
 
         function updateLEDText() {
             const dateTime = updateDateTime();
-            const ledText = `Trường Đại học Nông Lâm | Thời gian: ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Tốc độ gió: ${mockData.windSpeed}m/s | Chúc các bạn có một ngày vui vẻ!`;
+            const ledText = `Nông Lâm | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Tốc độ gió: ${mockData.windSpeed} m/s | Chúc bạn vui vẻ!`;
             document.getElementById('led-text').textContent = ledText;
         }
 
@@ -221,10 +225,17 @@
             document.getElementById('date-time').textContent = updateDateTime();
         }
 
+        document.querySelector('header').addEventListener('dblclick', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
         setInterval(() => {
             updateLEDText();
-            updateWeatherInfo();
         }, 1000);
+
+        setInterval(() => {
+            updateWeatherInfo();
+        }, 60000);
     </script>
 </body>
 </html>

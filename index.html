@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            background-color: #eef2f3;
+            background-color: #f4f4f9;
             color: #333;
         }
 
@@ -60,12 +60,14 @@
             white-space: nowrap;
             position: relative;
             margin: 1rem auto;
-            max-width: 90%;
+            max-width: 100%;  /* Đảm bảo thanh LED có chiều rộng đầy đủ */
+            height: 4rem; /* Tăng chiều cao khung thanh LED */
             border-radius: 10px; /* Bo tròn khung */
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng mờ */
             border: 2px solid #00FF00; /* Viền màu xanh sáng */
         }
 
+        /* Hiệu ứng chạy chữ */
         @keyframes scroll-text {
             0% {
                 transform: translateX(100%);
@@ -80,6 +82,8 @@
             position: absolute;
             white-space: nowrap;
             animation: scroll-text 12s linear infinite; /* Hiệu ứng chạy chữ 12s */
+            font-size: 1.8rem;  /* Điều chỉnh kích thước chữ cho vừa với khung */
+            line-height: 4rem;  /* Căn chỉnh chữ giữa theo chiều dọc */
         }
 
         section {
@@ -99,45 +103,41 @@
             margin-bottom: 1rem;
         }
 
-        .weather-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-
         .weather-card {
-            background: linear-gradient(145deg, #d4e1ff, #f4f9ff);
-            border: 1px solid #b5d1ff;
+            background: #fff;
             padding: 1.5rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2), inset 0 -1px 4px rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
             text-align: center;
-            width: 40%;
-            margin: 1rem;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .weather-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1rem;
         }
 
         .weather-card i {
-            font-size: 3rem;
+            font-size: 2rem;
             color: #007BFF;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
-        .weather-card h3 {
-            font-size: 1.2rem;
-            color: #0056b3;
-            margin-bottom: 0.5rem;
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
         }
 
-        .weather-card p {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
+        .button-container button {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #0056b3;
         }
 
         footer {
@@ -177,7 +177,7 @@
     </header>
 
     <div class="led-banner">
-        <span id="led-text">Đang tải thông tin thời tiết...</span>
+        <span id="led-text"></span>
     </div>
 
     <section>
@@ -187,8 +187,7 @@
             <input type="text" id="city-input" placeholder="Ví dụ: Hanoi, Ho Chi Minh...">
             <button id="fetch-weather-btn">Lấy dữ liệu thời tiết</button>
         </div>
-
-        <div id="weather-info" class="weather-container">
+        <div id="weather-info">
             <div class="weather-card">
                 <i class="fas fa-temperature-high"></i>
                 <h3>Nhiệt độ</h3>
@@ -203,6 +202,11 @@
                 <i class="fas fa-wind"></i>
                 <h3>Tốc độ gió</h3>
                 <p id="wind-speed">-- m/s</p>
+            </div>
+            <div class="weather-card">
+                <i class="fas fa-cloud-rain"></i>
+                <h3>Lượng mưa</h3>
+                <p id="rainfall">-- mm</p>
             </div>
             <div class="weather-card">
                 <i class="fas fa-cloud"></i>
@@ -222,11 +226,12 @@
             temperature: "--",
             humidity: "--",
             windSpeed: "--",
+            rainfall: "--",
             cloudCover: "--",
         };
 
         function updateLEDText(city, dateTime) {
-            const ledText = `${city} | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Gió: ${mockData.windSpeed} m/s`;
+            const ledText = `${city} | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}%`;
             document.getElementById('led-text').textContent = ledText;
         }
 
@@ -234,6 +239,7 @@
             document.getElementById('temperature').textContent = `${mockData.temperature} °C`;
             document.getElementById('humidity').textContent = `${mockData.humidity} %`;
             document.getElementById('wind-speed').textContent = `${mockData.windSpeed} m/s`;
+            document.getElementById('rainfall').textContent = `${mockData.rainfall} mm`;
             document.getElementById('cloud-cover').textContent = `${mockData.cloudCover} %`;
             updateLEDText(city, new Date().toLocaleString('vi-VN'));
         }
@@ -254,6 +260,7 @@
                 mockData.temperature = data.main.temp;
                 mockData.humidity = data.main.humidity;
                 mockData.windSpeed = data.wind.speed;
+                mockData.rainfall = data.rain ? data.rain['1h'] : 0;
                 mockData.cloudCover = data.clouds.all;
 
                 updateWeatherInfo(city);

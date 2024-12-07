@@ -234,8 +234,7 @@
             return now.toLocaleString('vi-VN', { hour12: false });
         }
 
-        function updateLEDText() {
-            const dateTime = updateDateTime();
+        function updateLEDText(dateTime) {
             const ledText = `Nông Lâm | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Tốc độ gió: ${mockData.windSpeed} m/s | Chúc bạn vui vẻ!`;
             document.getElementById('led-text').textContent = ledText;
         }
@@ -249,12 +248,31 @@
             document.getElementById('date-time').textContent = updateDateTime();
         }
 
+        // Hàm kiểm tra định dạng thời gian
+        function validateDateTime(dateTime) {
+            const regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/; // Kiểm tra định dạng 'YYYY-MM-DD HH:mm:ss'
+            return regex.test(dateTime);
+        }
+
         document.querySelector('header').addEventListener('dblclick', () => {
             document.body.classList.toggle('dark-mode');
         });
 
         document.getElementById('reset-time-btn').addEventListener('click', () => {
-            updateLEDText(); // Cập nhật lại thời gian thực
+            // Hiển thị hộp thoại để người dùng nhập thời gian mới
+            const newDateTime = prompt('Nhập thời gian mới (Ví dụ: 2024-12-07 14:30:00):');
+            
+            if (newDateTime) {
+                const isValid = validateDateTime(newDateTime);
+                if (isValid) {
+                    // Cập nhật lại thời gian nếu người dùng nhập đúng định dạng
+                    updateLEDText(newDateTime); // Gửi thời gian mới vào hàm cập nhật
+                } else {
+                    alert('Định dạng thời gian không hợp lệ. Vui lòng nhập lại theo định dạng: YYYY-MM-DD HH:mm:ss');
+                }
+            } else {
+                alert('Bạn chưa nhập thời gian.');
+            }
         });
 
         document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
@@ -275,7 +293,7 @@
         });
 
         setInterval(() => {
-            updateLEDText();
+            updateLEDText(updateDateTime());
         }, 1000);
 
         setInterval(() => {

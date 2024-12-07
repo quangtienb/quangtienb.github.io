@@ -201,6 +201,12 @@
                 <i class="fas fa-cloud"></i>
                 <h3>Lượng mây</h3>
                 <p id="cloud-cover">-- %</p>
+            </div>
+            <div class="weather-card">
+                <i class="fas fa-clock"></i>
+                <h3>Thời gian</h3>
+                <p id="date-time">--</p>
+            </div>
         </div>
 
         <div class="button-container">
@@ -229,7 +235,7 @@
         }
 
         function updateLEDText(dateTime) {
-            const ledText = `Trường đại học Nông Lâm | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Tốc độ gió: ${mockData.windSpeed} m/s | Chúc bạn vui vẻ!`;
+            const ledText = `Nông Lâm | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Tốc độ gió: ${mockData.windSpeed} m/s | Chúc bạn vui vẻ!`;
             document.getElementById('led-text').textContent = ledText;
         }
 

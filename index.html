@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        /* Toàn bộ CSS */
+        /* CSS */
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
@@ -15,7 +15,6 @@
             background: linear-gradient(135deg, #74ebd5, #9face6);
             color: #333;
         }
-
         header {
             background: linear-gradient(135deg, #007BFF, #0056b3);
             color: #fff;
@@ -23,12 +22,10 @@
             text-align: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
-
         header h1 {
             margin: 0;
             font-size: 2.5rem;
         }
-
         nav ul {
             list-style: none;
             padding: 0;
@@ -37,7 +34,6 @@
             justify-content: center;
             gap: 1.5rem;
         }
-
         nav ul li a {
             text-decoration: none;
             color: #fff;
@@ -45,14 +41,11 @@
             padding: 0.5rem 1rem;
             transition: background 0.3s, transform 0.2s;
         }
-
         nav ul li a:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: scale(1.1);
             border-radius: 5px;
         }
-
-        /* Bảng LED điện tử lớn hơn và đẹp hơn */
         .led-banner {
             background: #000;
             color: #fff;
@@ -65,7 +58,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .led-banner span {
             display: inline-block;
             white-space: nowrap;
@@ -74,7 +66,6 @@
             font-weight: bold;
             text-shadow: 0 0 10px #FF4500, 0 0 20px #FF6347;
         }
-
         @keyframes scrollText {
             from {
                 transform: translateX(100%);
@@ -83,26 +74,22 @@
                 transform: translateX(-100%);
             }
         }
-
         section {
             padding: 2rem;
             text-align: center;
         }
-
         section h2 {
             margin-bottom: 1.5rem;
             color: #0056b3;
             font-size: 2rem;
             text-transform: uppercase;
         }
-
         #weather-info {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
-
         .weather-card {
             background: #fff;
             padding: 1.5rem;
@@ -110,26 +97,22 @@
             box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
-
         .weather-card i {
             font-size: 2rem;
             color: #007BFF;
             margin-bottom: 1rem;
         }
-
         .weather-card h3 {
             margin: 0.5rem 0;
             font-size: 1.2rem;
             color: #333;
         }
-
         .weather-card p {
             margin: 0;
             font-size: 1.5rem;
             font-weight: bold;
             color: #333;
         }
-
         footer {
             background-color: #333;
             color: #fff;
@@ -137,17 +120,14 @@
             padding: 1rem 0;
             margin-top: 3rem;
         }
-
         footer p {
             margin: 0.5rem 0;
         }
-
         footer a {
             color: #007BFF;
             text-decoration: none;
             font-weight: 500;
         }
-
         footer a:hover {
             text-decoration: underline;
         }
@@ -166,7 +146,6 @@
         </nav>
     </header>
 
-    <!-- Bảng LED điện tử -->
     <div class="led-banner">
         <span id="led-text"></span>
     </div>
@@ -213,7 +192,7 @@
     </footer>
 
     <script>
-        // Dữ liệu mô phỏng
+        // JavaScript
         const mockData = {
             temperature: 26,
             humidity: 70,
@@ -222,26 +201,17 @@
             cloudCover: 60,
         };
 
-        // Cập nhật thời gian
         function updateDateTime() {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const year = now.getFullYear();
-            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+            return now.toLocaleString('vi-VN', { hour12: false });
         }
 
-        // Cập nhật bảng LED
         function updateLEDText() {
             const dateTime = updateDateTime();
             const ledText = `Trường Đại học Nông Lâm | Thời gian: ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Tốc độ gió: ${mockData.windSpeed}m/s | Chúc các bạn có một ngày vui vẻ!`;
             document.getElementById('led-text').textContent = ledText;
         }
 
-        // Cập nhật dữ liệu thời tiết
         function updateWeatherInfo() {
             document.getElementById('temperature').textContent = `${mockData.temperature} °C`;
             document.getElementById('humidity').textContent = `${mockData.humidity} %`;

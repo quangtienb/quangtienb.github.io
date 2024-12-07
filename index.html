@@ -260,7 +260,7 @@
         document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
             // Thực hiện lấy dữ liệu thời tiết từ API (OpenWeatherMap hoặc API tương tự)
             try {
-                const response = await fetch('https://api.openweathermap.org/data/2.5/weather?q=Hanoi&appid=YOUR_API_KEY&units=metric&lang=vi');
+                const response = await fetch('https://api.openweathermap.org/data/2.5/weather?q=ho%20chi%20minh&appid=c05417eac917208d896aa3f9cff02ac9&units=metric&lang=vi');
                 const data = await response.json();
                 mockData.temperature = data.main.temp;
                 mockData.humidity = data.main.humidity;

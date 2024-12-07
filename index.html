@@ -230,8 +230,9 @@
             cloudCover: "--",
         };
 
+        // Cập nhật dữ liệu thời tiết cho thanh LED
         function updateLEDText(city, dateTime) {
-            const ledText = `${city} | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}%`;
+            const ledText = `${city} | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Gió: ${mockData.windSpeed} m/s | Mưa: ${mockData.rainfall} mm | Chúc các bạn một ngày tốt lành!`;
             document.getElementById('led-text').textContent = ledText;
         }
 
@@ -241,7 +242,9 @@
             document.getElementById('wind-speed').textContent = `${mockData.windSpeed} m/s`;
             document.getElementById('rainfall').textContent = `${mockData.rainfall} mm`;
             document.getElementById('cloud-cover').textContent = `${mockData.cloudCover} %`;
-            updateLEDText(city, new Date().toLocaleString('vi-VN'));
+
+            const currentTime = new Date().toLocaleString('vi-VN');
+            updateLEDText(city, currentTime);
         }
 
         document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
@@ -268,6 +271,15 @@
                 alert(error.message || "Không thể lấy dữ liệu thời tiết.");
             }
         });
+
+        // Cập nhật thời gian thực cho thanh LED mỗi 10 giây
+        setInterval(() => {
+            const currentCity = document.getElementById('city-input').value.trim();
+            if (currentCity) {
+                const currentTime = new Date().toLocaleString('vi-VN');
+                updateLEDText(currentCity, currentTime);
+            }
+        }, 10000);  // Cập nhật mỗi 10 giây
     </script>
 </body>
 </html>

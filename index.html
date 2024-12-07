@@ -53,11 +53,28 @@
         .led-banner {
             background: black;
             color: #00FF00;
-            font-size: 1.2rem;
-            text-align: center;
-            padding: 0.5rem;
-            overflow: hidden;
+            font-size: 2rem; /* Tăng kích thước font */
+            text-align: left;
+            padding: 1rem 0.5rem; /* Tăng chiều cao */
+            overflow: hidden; /* Ẩn phần chữ thừa */
+            white-space: nowrap; /* Chữ không xuống dòng */
+            position: relative;
+        }
+
+        @keyframes scroll-text {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        #led-text {
+            display: inline-block;
+            position: absolute;
             white-space: nowrap;
+            animation: scroll-text 10s linear infinite; /* Tốc độ chạy: 10s */
         }
 
         section {
@@ -75,43 +92,6 @@
             font-size: 2rem;
             color: #007BFF;
             margin-bottom: 1rem;
-        }
-
-        .weather-card {
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .weather-card i {
-            font-size: 2rem;
-            color: #007BFF;
-            margin-bottom: 1rem;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .button-container button {
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-            transition: background-color 0.3s;
-        }
-
-        .button-container button:hover {
-            background-color: #0056b3;
         }
 
         footer {
@@ -151,7 +131,7 @@
     </header>
 
     <div class="led-banner">
-        <span id="led-text"></span>
+        <span id="led-text">Đang tải thông tin thời tiết...</span>
     </div>
 
     <section>
@@ -160,33 +140,6 @@
             <label for="city-input">Nhập tên thành phố:</label>
             <input type="text" id="city-input" placeholder="Ví dụ: Hanoi, Ho Chi Minh...">
             <button id="fetch-weather-btn">Lấy dữ liệu thời tiết</button>
-        </div>
-        <div id="weather-info">
-            <div class="weather-card">
-                <i class="fas fa-temperature-high"></i>
-                <h3>Nhiệt độ</h3>
-                <p id="temperature">-- °C</p>
-            </div>
-            <div class="weather-card">
-                <i class="fas fa-tint"></i>
-                <h3>Độ ẩm</h3>
-                <p id="humidity">-- %</p>
-            </div>
-            <div class="weather-card">
-                <i class="fas fa-wind"></i>
-                <h3>Tốc độ gió</h3>
-                <p id="wind-speed">-- m/s</p>
-            </div>
-            <div class="weather-card">
-                <i class="fas fa-cloud-rain"></i>
-                <h3>Lượng mưa</h3>
-                <p id="rainfall">-- mm</p>
-            </div>
-            <div class="weather-card">
-                <i class="fas fa-cloud"></i>
-                <h3>Lượng mây</h3>
-                <p id="cloud-cover">-- %</p>
-            </div>
         </div>
     </section>
 
@@ -200,22 +153,11 @@
             temperature: "--",
             humidity: "--",
             windSpeed: "--",
-            rainfall: "--",
-            cloudCover: "--",
         };
 
         function updateLEDText(city, dateTime) {
-            const ledText = `${city} | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}%`;
+            const ledText = `${city} | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Gió: ${mockData.windSpeed} m/s`;
             document.getElementById('led-text').textContent = ledText;
-        }
-
-        function updateWeatherInfo(city) {
-            document.getElementById('temperature').textContent = `${mockData.temperature} °C`;
-            document.getElementById('humidity').textContent = `${mockData.humidity} %`;
-            document.getElementById('wind-speed').textContent = `${mockData.windSpeed} m/s`;
-            document.getElementById('rainfall').textContent = `${mockData.rainfall} mm`;
-            document.getElementById('cloud-cover').textContent = `${mockData.cloudCover} %`;
-            updateLEDText(city, new Date().toLocaleString('vi-VN'));
         }
 
         document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
@@ -234,10 +176,8 @@
                 mockData.temperature = data.main.temp;
                 mockData.humidity = data.main.humidity;
                 mockData.windSpeed = data.wind.speed;
-                mockData.rainfall = data.rain ? data.rain['1h'] : 0;
-                mockData.cloudCover = data.clouds.all;
 
-                updateWeatherInfo(city);
+                updateLEDText(city, new Date().toLocaleString('vi-VN'));
             } catch (error) {
                 alert(error.message || "Không thể lấy dữ liệu thời tiết.");
             }

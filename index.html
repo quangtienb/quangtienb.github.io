@@ -26,6 +26,31 @@
             font-size: 2rem;
         }
 
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #0056b3;
+        }
+
+        /* LED Banner */
         .led-banner {
             background: black;
             color: #00FF00;
@@ -60,76 +85,159 @@
             line-height: 4rem;
         }
 
-        .controls {
+        section {
+            padding: 2rem;
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        section h2 {
+            font-size: 2rem;
+            color: #007BFF;
+            margin-bottom: 1rem;
+        }
+
+        .button-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 1rem auto;
+            justify-content: center;
             gap: 1rem;
+            margin-top: 2rem;
         }
 
-        .controls label {
+        .button-container button {
+            padding: 1rem 2rem;
             font-size: 1rem;
-            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            transition: background-color 0.3s;
         }
 
-        .controls input[type="range"] {
-            width: 300px;
+        .button-container button:hover {
+            background-color: #0056b3;
         }
 
-        .controls select {
-            padding: 0.5rem;
+        .custom-controls {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .custom-controls div {
+            margin-bottom: 1rem;
+        }
+
+        .custom-controls label {
             font-size: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        .custom-controls input[type="range"] {
+            width: 100%;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+        }
+
+        footer a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>🌍 Thông Tin Thời Tiết</h1>
+        <nav>
+            <ul>
+                <li><a href="gioithieu.html">Giới thiệu</a></li>
+                <li><a href="yeucau.html">Yêu cầu</a></li>
+                <li><a href="#">Mục tiêu</a></li>
+                <li><a href="lienhe.html">Liên hệ</a></li>
+            </ul>
+        </nav>
     </header>
 
     <div class="led-banner">
-        <span id="led-text">Chào mừng bạn đến với hệ thống hiển thị thời tiết! 🌞</span>
+        <span id="led-text"></span>
     </div>
 
-    <div class="controls">
-        <div>
-            <label for="speed-control">Tốc độ chạy chữ (1-20):</label>
-            <input type="range" id="speed-control" min="1" max="20" value="12">
+    <section>
+        <h2>Tùy chỉnh thanh LED</h2>
+        <div class="custom-controls">
+            <div>
+                <label for="speed-slider">Tốc độ chạy chữ:</label>
+                <input type="range" id="speed-slider" min="1" max="20" value="12">
+                <span id="speed-display">12</span> giây/vòng
+            </div>
+            <div>
+                <label for="bg-color">Màu nền LED:</label>
+                <select id="bg-color">
+                    <option value="black">Đen</option>
+                    <option value="red">Đỏ</option>
+                    <option value="blue">Xanh dương</option>
+                    <option value="green">Xanh lá</option>
+                    <option value="yellow">Vàng</option>
+                </select>
+            </div>
         </div>
-        <div>
-            <label for="color-control">Chọn màu nền LED:</label>
-            <select id="color-control">
-                <option value="black">Đen</option>
-                <option value="red">Đỏ</option>
-                <option value="blue">Xanh dương</option>
-                <option value="green">Xanh lá</option>
-                <option value="yellow">Vàng</option>
-            </select>
-        </div>
-    </div>
+    </section>
 
     <footer>
-        <p>© 2024 Nhóm 20 - Đồ án IoT và Ứng dụng</p>
+        <p>© 2024 Nhóm 20 - <a href="https://github.com/quangtienb" target="_blank">GitHub</a></p>
+        <p>Đồ án IoT và Ứng dụng</p>
     </footer>
 
     <script>
         const ledText = document.getElementById('led-text');
-        const speedControl = document.getElementById('speed-control');
-        const colorControl = document.getElementById('color-control');
-        const ledBanner = document.querySelector('.led-banner');
+        const mockData = {
+            temperature: "--",
+            humidity: "--",
+            windSpeed: "--",
+            rainfall: "--",
+            cloudCover: "--",
+        };
 
-        // Điều chỉnh tốc độ chạy chữ
-        speedControl.addEventListener('input', () => {
-            const speed = speedControl.value;
-            const animationDuration = `${21 - speed}s`; // Tốc độ càng cao thời gian chạy càng ngắn
-            ledText.style.animationDuration = animationDuration;
+        // Cập nhật dữ liệu thanh LED
+        function updateLEDText() {
+            const content = `Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Gió: ${mockData.windSpeed} m/s`;
+            ledText.textContent = content;
+        }
+
+        // Tùy chỉnh tốc độ chạy chữ
+        document.getElementById('speed-slider').addEventListener('input', (event) => {
+            const speed = event.target.value;
+            document.getElementById('speed-display').textContent = speed;
+            ledText.style.animationDuration = `${speed}s`;
         });
 
-        // Thay đổi màu nền LED
-        colorControl.addEventListener('change', () => {
-            ledBanner.style.backgroundColor = colorControl.value;
+        // Tùy chỉnh màu nền
+        document.getElementById('bg-color').addEventListener('change', (event) => {
+            document.querySelector('.led-banner').style.backgroundColor = event.target.value;
         });
+
+        // Khởi tạo nội dung ban đầu
+        updateLEDText();
     </script>
 </body>
 </html>

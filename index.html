@@ -81,6 +81,29 @@
             padding: 0.5rem;
             font-size: 1rem;
         }
+
+        .weather {
+            margin: 1rem auto;
+            text-align: center;
+        }
+
+        .weather h2 {
+            font-size: 1.5rem;
+            color: #007BFF;
+        }
+
+        .weather p {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #007BFF;
+            color: white;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -93,6 +116,11 @@
     </div>
 
     <div class="controls">
+        <div>
+            <label for="city-input">Nhập tên thành phố:</label>
+            <input type="text" id="city-input" placeholder="Ví dụ: Hanoi">
+            <button id="fetch-weather">Lấy thông tin thời tiết</button>
+        </div>
         <div>
             <label for="speed-control">Tốc độ chạy chữ (1-20):</label>
             <input type="range" id="speed-control" min="1" max="20" value="12">
@@ -109,15 +137,34 @@
         </div>
     </div>
 
+    <div class="weather" id="weather-info">
+        <h2>Thông tin thời tiết</h2>
+        <p id="temperature">Nhiệt độ: -- °C</p>
+        <p id="humidity">Độ ẩm: -- %</p>
+        <p id="wind-speed">Tốc độ gió: -- m/s</p>
+        <p id="rain">Lượng mưa: -- mm</p>
+        <p id="clouds">Lượng mây: -- %</p>
+    </div>
+
     <footer>
         <p>© 2024 Nhóm 20 - Đồ án IoT và Ứng dụng</p>
     </footer>
 
     <script>
+        const apiKey = "YOUR_API_KEY_HERE"; // Thay bằng API Key của bạn từ OpenWeatherMap
         const ledText = document.getElementById('led-text');
         const speedControl = document.getElementById('speed-control');
         const colorControl = document.getElementById('color-control');
         const ledBanner = document.querySelector('.led-banner');
+        const cityInput = document.getElementById('city-input');
+        const fetchWeatherButton = document.getElementById('fetch-weather');
+        const weatherInfo = document.getElementById('weather-info');
+
+        const temperature = document.getElementById('temperature');
+        const humidity = document.getElementById('humidity');
+        const windSpeed = document.getElementById('wind-speed');
+        const rain = document.getElementById('rain');
+        const clouds = document.getElementById('clouds');
 
         // Điều chỉnh tốc độ chạy chữ
         speedControl.addEventListener('input', () => {
@@ -130,6 +177,49 @@
         colorControl.addEventListener('change', () => {
             ledBanner.style.backgroundColor = colorControl.value;
         });
+
+        // Lấy thông tin thời tiết từ API
+        fetchWeatherButton.addEventListener('click', () => {
+            const city = cityInput.value.trim();
+
+            if (!city) {
+                alert("Vui lòng nhập tên thành phố!");
+                return;
+            }
+
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Không tìm thấy thông tin thời tiết cho thành phố này.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const temp = data.main.temp;
+                    const hum = data.main.humidity;
+                    const wind = data.wind.speed;
+                    const rainVolume = data.rain ? data.rain["1h"] : 0;
+                    const cloudiness = data.clouds.all;
+
+                    temperature.textContent = `Nhiệt độ: ${temp} °C`;
+                    humidity.textContent = `Độ ẩm: ${hum} %`;
+                    windSpeed.textContent = `Tốc độ gió: ${wind} m/s`;
+                    rain.textContent = `Lượng mưa: ${rainVolume} mm`;
+                    clouds.textContent = `Lượng mây: ${cloudiness} %`;
+
+                    // Cập nhật nội dung LED
+                    ledText.textContent = `🌡️ Nhiệt độ: ${temp}°C | 💧 Độ ẩm: ${hum}% | 🌬️ Gió: ${wind} m/s | ☔ Mưa: ${rainVolume} mm | ☁️ Mây: ${cloudiness}%`;
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        });
+
+        // Tự động cập nhật LED mỗi 10 giây
+        setInterval(() => {
+            const currentContent = ledText.textContent;
+            ledText.textContent = currentContent; // Giữ nội dung nếu không có thay đổi
+        }, 10000);
     </script>
 </body>
 </html>

@@ -26,6 +26,21 @@
             font-size: 2rem;
         }
 
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
         .led-banner {
             background: black;
             color: #00FF00;
@@ -124,6 +139,14 @@
 <body>
     <header>
         <h1>🌍 Thông Tin Thời Tiết</h1>
+        <nav>
+            <ul>
+                <li><a href="gioithieu.html">Giới thiệu</a></li>
+                <li><a href="yeucau.html">Yêu cầu</a></li>
+                <li><a href="#">Mục tiêu</a></li>
+                <li><a href="lienhe.html">Liên hệ</a></li>
+            </ul>
+        </nav>
     </header>
 
     <div class="led-banner">
@@ -256,14 +279,14 @@
             }
         });
 
-        // Cập nhật thời gian thực cho thanh LED mỗi 10 giây
-        setInterval(() => {
-            const currentCity = document.getElementById('city-input').value.trim();
-            if (currentCity) {
-                const currentTime = new Date().toLocaleString('vi-VN');
-                updateLEDText(currentCity, currentTime);
-            }
-        }, 10000);
+        // Cập nhật thời gian mỗi giây
+        function updateLEDTime() {
+            const currentTime = new Date().toLocaleString('vi-VN');
+            ledText.textContent = currentTime; // Cập nhật thời gian lên thanh LED
+        }
+
+        // Cập nhật thời gian liên tục mỗi giây
+        setInterval(updateLEDTime, 1000);
     </script>
 </body>
 </html>

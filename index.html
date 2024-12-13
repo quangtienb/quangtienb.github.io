@@ -134,6 +134,13 @@
             color: #555;
         }
 
+        #error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
         footer {
             text-align: center;
             margin: 2rem 0;
@@ -143,6 +150,7 @@
             color: #007BFF;
             text-decoration: none;
         }
+
     </style>
 </head>
 <body>
@@ -186,6 +194,7 @@
             <input type="text" id="city-input" placeholder="Ví dụ: Hanoi, Ho Chi Minh...">
             <button id="fetch-weather-btn">Lấy dữ liệu thời tiết</button>
         </div>
+        <div id="error-message"></div>
         <div id="weather-info" class="weather-info-container">
             <div class="weather-info">
                 <i class="fas fa-temperature-high"></i>
@@ -225,6 +234,7 @@
         const speedControl = document.getElementById('speed-control');
         const colorControl = document.getElementById('color-control');
         const ledBanner = document.querySelector('.led-banner');
+        const errorMessage = document.getElementById('error-message');
 
         // Điều chỉnh tốc độ chạy chữ
         speedControl.addEventListener('input', () => {
@@ -264,11 +274,8 @@
         }
 
         document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
-            const city = document.getElementById('city-input').value.trim();
-            if (!city) {
-                alert('Vui lòng nhập tên thành phố.');
-                return;
-            }
+            const city = document.getElementById('city-input').value.trim() || "Hanoi";
+            errorMessage.textContent = '';
 
             try {
                 const apiKey = 'c05417eac917208d896aa3f9cff02ac9'; // Thay bằng API key của bạn
@@ -284,19 +291,9 @@
 
                 updateWeatherInfo(city);
             } catch (error) {
-                alert(error.message || "Không thể lấy dữ liệu thời tiết.");
+                errorMessage.textContent = error.message || "Không thể lấy dữ liệu thời tiết.";
             }
         });
-
-        // Cập nhật thời gian mỗi giây
-        function updateLEDTime() {
-            const currentTime = new Date().toLocaleString('vi-VN');
-            const city = document.getElementById('city-input').value.trim() || "Chưa nhập thành phố";
-            updateLEDText(city, currentTime); // Cập nhật thời gian lên thanh LED
-        }
-
-        // Cập nhật thời gian liên tục mỗi giây
-        setInterval(updateLEDTime, 1000);
     </script>
 </body>
 </html>

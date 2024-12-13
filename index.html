@@ -282,7 +282,8 @@
         // Cập nhật thời gian mỗi giây
         function updateLEDTime() {
             const currentTime = new Date().toLocaleString('vi-VN');
-            ledText.textContent = currentTime; // Cập nhật thời gian lên thanh LED
+            const city = document.getElementById('city-input').value.trim() || "Chưa nhập thành phố";
+            updateLEDText(city, currentTime); // Cập nhật thời gian lên thanh LED
         }
 
         // Cập nhật thời gian liên tục mỗi giây

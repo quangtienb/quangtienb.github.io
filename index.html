@@ -1,92 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Display & LED Control</title>
+    <title>Thông Tin Thời Tiết - Nhóm 20</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            text-align: center;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            background-color: #f4f4f9;
+            color: #333;
         }
-        #weather {
-            margin-top: 20px;
+
+        header {
+            background: linear-gradient(90deg, #007BFF, #0056b3);
+            color: white;
+            padding: 1rem;
+            text-align: center;
         }
-        #ledControl {
-            margin-top: 40px;
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
         }
-        .led-preview {
-            width: 100px;
-            height: 100px;
-            margin: 10px auto;
-            border: 1px solid #000;
+
+        .led-banner {
+            background: black;
+            color: #00FF00;
+            font-size: 2rem;
+            padding: 1rem 0.5rem;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            margin: 1rem auto;
+            max-width: 100%;
+            height: 4rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border: 2px solid #00FF00;
         }
-        input[type="range"] {
-            width: 80%;
-            margin: 10px 0;
+
+        @keyframes scroll-text {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        #led-text {
+            display: inline-block;
+            position: absolute;
+            white-space: nowrap;
+            animation: scroll-text 12s linear infinite;
+            font-size: 1.8rem;
+            line-height: 4rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1rem auto;
+            gap: 1rem;
+        }
+
+        .controls label {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .controls input[type="range"] {
+            width: 300px;
+        }
+
+        .controls select {
+            padding: 0.5rem;
+            font-size: 1rem;
         }
     </style>
 </head>
 <body>
-    <div id="weather">
-        <h1>Weather Information</h1>
-        <div id="weatherData">
-            <p>Loading weather data...</p>
+    <header>
+        <h1>🌍 Thông Tin Thời Tiết</h1>
+    </header>
+
+    <div class="led-banner">
+        <span id="led-text">Chào mừng bạn đến với hệ thống hiển thị thời tiết! 🌞</span>
+    </div>
+
+    <div class="controls">
+        <div>
+            <label for="speed-control">Tốc độ chạy chữ (1-20):</label>
+            <input type="range" id="speed-control" min="1" max="20" value="12">
+        </div>
+        <div>
+            <label for="color-control">Chọn màu nền LED:</label>
+            <select id="color-control">
+                <option value="black">Đen</option>
+                <option value="red">Đỏ</option>
+                <option value="blue">Xanh dương</option>
+                <option value="green">Xanh lá</option>
+                <option value="yellow">Vàng</option>
+            </select>
         </div>
     </div>
 
-    <div id="ledControl">
-        <h2>LED Control Panel</h2>
-        <div>
-            <label for="scrollSpeed">Scroll Speed:</label>
-            <input type="range" id="scrollSpeed" min="1" max="10" value="5">
-        </div>
-        <div>
-            <label for="bgColor">Background Color:</label>
-            <input type="color" id="bgColor" value="#ff0000">
-        </div>
-        <div class="led-preview" id="ledPreview"></div>
-    </div>
+    <footer>
+        <p>© 2024 Nhóm 20 - Đồ án IoT và Ứng dụng</p>
+    </footer>
 
     <script>
-        // Weather Data Fetching
-        async function fetchWeather() {
-            try {
-                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=10.8231&longitude=106.6297&current_weather=true');
-                const data = await response.json();
-                const weatherDiv = document.getElementById('weatherData');
-                weatherDiv.innerHTML = `
-                    <p><strong>Temperature:</strong> ${data.current_weather.temperature}&#8451;</p>
-                    <p><strong>Wind Speed:</strong> ${data.current_weather.windspeed} m/s</p>
-                    <p><strong>Conditions:</strong> ${data.current_weather.weathercode}</p>
-                `;
-            } catch (error) {
-                console.error('Error fetching weather data:', error);
-                document.getElementById('weatherData').textContent = 'Failed to load weather data.';
-            }
-        }
+        const ledText = document.getElementById('led-text');
+        const speedControl = document.getElementById('speed-control');
+        const colorControl = document.getElementById('color-control');
+        const ledBanner = document.querySelector('.led-banner');
 
-        fetchWeather();
-
-        // LED Control Panel
-        const scrollSpeed = document.getElementById('scrollSpeed');
-        const bgColor = document.getElementById('bgColor');
-        const ledPreview = document.getElementById('ledPreview');
-
-        scrollSpeed.addEventListener('input', () => {
-            console.log(`Scroll Speed: ${scrollSpeed.value}`);
+        // Điều chỉnh tốc độ chạy chữ
+        speedControl.addEventListener('input', () => {
+            const speed = speedControl.value;
+            const animationDuration = `${21 - speed}s`; // Tốc độ càng cao thời gian chạy càng ngắn
+            ledText.style.animationDuration = animationDuration;
         });
 
-        bgColor.addEventListener('input', () => {
-            ledPreview.style.backgroundColor = bgColor.value;
-            console.log(`Background Color: ${bgColor.value}`);
+        // Thay đổi màu nền LED
+        colorControl.addEventListener('change', () => {
+            ledBanner.style.backgroundColor = colorControl.value;
         });
-
-        // Initial Preview Update
-        ledPreview.style.backgroundColor = bgColor.value;
     </script>
 </body>
 </html>

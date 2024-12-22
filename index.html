@@ -224,6 +224,16 @@
                 <h3>Lượng mây</h3>
                 <p id="cloud-cover">-- %</p>
             </div>
+            <div class="weather-info">
+                <i class="fas fa-thermometer-half"></i>
+                <h3>Nhiệt độ từ DHT11</h3>
+                <p id="dht11-temp">-- °C</p>
+            </div>
+            <div class="weather-info">
+                <i class="fas fa-sun"></i>
+                <h3>Dữ liệu từ ESP32</h3>
+                <p id="esp32-data">--</p>
+            </div>
         </div>
     </section>
 
@@ -273,6 +283,16 @@
             ledText.textContent = `${city} | ${currentTime} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s`;
         }
 
+        async function fetchDHT11Data() {
+            // Mô phỏng dữ liệu từ DHT11
+            document.getElementById('dht11-temp').textContent = "25 °C";
+        }
+
+        async function fetchESP32Data() {
+            // Mô phỏng dữ liệu từ ESP32
+            document.getElementById('esp32-data').textContent = "Dữ liệu thời tiết từ ESP32";
+        }
+
         document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
             const city = document.getElementById('city-input').value.trim();
             if (!city) {
@@ -281,7 +301,13 @@
             }
             const data = await fetchWeatherData(city);
             updateWeatherUI(data, city);
+            fetchDHT11Data();
+            fetchESP32Data();
         });
+
+        // Lấy dữ liệu từ DHT11 và ESP32 ngay khi tải trang
+        fetchDHT11Data();
+        fetchESP32Data();
     </script>
 </body>
 </html>

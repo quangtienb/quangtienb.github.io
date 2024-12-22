@@ -191,41 +191,54 @@
         </div>
     </div>
 
-    <section>
-        <h2>Chọn Địa Điểm và Xem Thời Tiết</h2>
-        <div>
-            <label for="city-input">Nhập tên thành phố:</label>
-            <input type="text" id="city-input" placeholder="Ví dụ: Hanoi, Ho Chi Minh...">
-            <button id="fetch-weather-btn">Lấy dữ liệu thời tiết</button>
+<section>
+    <h2>Chọn Địa Điểm và Xem Thời Tiết</h2>
+    <div>
+        <label for="city-input">Nhập tên thành phố:</label>
+        <input type="text" id="city-input" placeholder="Ví dụ: Hanoi, Ho Chi Minh...">
+        <button id="fetch-weather-btn">Lấy dữ liệu thời tiết</button>
+    </div>
+    <div id="weather-info" class="weather-info-container">
+        <div class="weather-info">
+            <i class="fas fa-temperature-high"></i>
+            <h3>Nhiệt độ ngoài trời</h3>
+            <p id="temperature">-- °C</p>
         </div>
-        <div id="weather-info" class="weather-info-container">
-            <div class="weather-info">
-                <i class="fas fa-temperature-high"></i>
-                <h3>Nhiệt độ</h3>
-                <p id="temperature">-- °C</p>
-            </div>
-            <div class="weather-info">
-                <i class="fas fa-tint"></i>
-                <h3>Độ ẩm</h3>
-                <p id="humidity">-- %</p>
-            </div>
-            <div class="weather-info">
-                <i class="fas fa-wind"></i>
-                <h3>Tốc độ gió</h3>
-                <p id="wind-speed">-- m/s</p>
-            </div>
-            <div class="weather-info">
-                <i class="fas fa-cloud-rain"></i>
-                <h3>Lượng mưa</h3>
-                <p id="rainfall">-- mm</p>
-            </div>
-            <div class="weather-info">
-                <i class="fas fa-cloud"></i>
-                <h3>Lượng mây</h3>
-                <p id="cloud-cover">-- %</p>
-            </div>
+        <div class="weather-info">
+            <i class="fas fa-tint"></i>
+            <h3>Độ ẩm ngoài trời</h3>
+            <p id="humidity">-- %</p>
         </div>
-    </section>
+        <div class="weather-info">
+            <i class="fas fa-wind"></i>
+            <h3>Tốc độ gió</h3>
+            <p id="wind-speed">-- m/s</p>
+        </div>
+        <div class="weather-info">
+            <i class="fas fa-cloud-rain"></i>
+            <h3>Lượng mưa</h3>
+            <p id="rainfall">-- mm</p>
+        </div>
+        <div class="weather-info">
+            <i class="fas fa-cloud"></i>
+            <h3>Lượng mây</h3>
+            <p id="cloud-cover">-- %</p>
+        </div>
+
+        <!-- Thêm ô hiển thị nhiệt độ và độ ẩm DHT11 -->
+        <div class="weather-info">
+            <i class="fas fa-thermometer-half"></i>
+            <h3>Nhiệt độ DHT11</h3>
+            <p id="dht-temperature">-- °C</p>
+        </div>
+        <div class="weather-info">
+            <i class="fas fa-tint"></i>
+            <h3>Độ ẩm DHT11</h3>
+            <p id="dht-humidity">-- %</p>
+        </div>
+    </div>
+</section>
+
 
     <footer>
         <p>© 2024 Nhóm 20 - <a href="https://github.com/quangtienb" target="_blank">GitHub</a></p>

@@ -7,154 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: #f4f4f9;
-            color: #333;
-        }
-
-        header {
-            background: linear-gradient(90deg, #007BFF, #0056b3);
-            color: white;
-            padding: 1rem;
-            text-align: center;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-        }
-
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        nav ul li {
-            display: inline;
-            margin-right: 20px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .led-banner {
-            background: black;
-            color: #00FF00;
-            font-size: 2rem;
-            padding: 1rem 0.5rem;
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-            margin: 1rem auto;
-            max-width: 100%;
-            height: 4rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            border: 2px solid #00FF00;
-        }
-
-        @keyframes scroll-text {
-            0% {
-                transform: translateX(100%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        #led-text {
-            display: inline-block;
-            position: absolute;
-            white-space: nowrap;
-            animation: scroll-text 12s linear infinite;
-            font-size: 1.8rem;
-            line-height: 4rem;
-        }
-
-        .controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 1rem auto;
-            gap: 1rem;
-        }
-
-        .controls label {
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        .controls input[type="range"] {
-            width: 300px;
-        }
-
-        .controls select {
-            padding: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .weather-info-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin: 1rem auto;
-        }
-
-        .weather-info {
-            background: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 1rem;
-            text-align: center;
-            width: 150px;
-        }
-
-        .weather-info i {
-            font-size: 2rem;
-            color: #007BFF;
-            margin-bottom: 0.5rem;
-        }
-
-        .weather-info h3 {
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-        }
-
-        .weather-info p {
-            font-size: 1rem;
-            margin: 0;
-            font-weight: bold;
-            color: #555;
-        }
-
-        footer {
-            text-align: center;
-            margin: 2rem 0;
-        }
-
-        footer a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-
-        @media (max-width: 768px) {
-            .led-banner {
-                font-size: 1.5rem;
-                height: 3rem;
-            }
-
-            .weather-info {
-                width: 100px;
-            }
-        }
+        /* Các styles của bạn */
     </style>
 </head>
 <body>
@@ -191,142 +44,142 @@
         </div>
     </div>
 
-<section>
-    <h2>Chọn Địa Điểm và Xem Thời Tiết</h2>
-    <div>
-        <label for="city-input">Nhập tên thành phố:</label>
-        <input type="text" id="city-input" placeholder="Ví dụ: Hanoi, Ho Chi Minh...">
-        <button id="fetch-weather-btn">Lấy dữ liệu thời tiết</button>
-    </div>
-    <div id="weather-info" class="weather-info-container">
-        <div class="weather-info">
-            <i class="fas fa-temperature-high"></i>
-            <h3>Nhiệt độ ngoài trời</h3>
-            <p id="temperature">-- °C</p>
+    <section>
+        <h2>Chọn Địa Điểm và Xem Thời Tiết</h2>
+        <div>
+            <label for="city-input">Nhập tên thành phố:</label>
+            <input type="text" id="city-input" placeholder="Ví dụ: Hanoi, Ho Chi Minh...">
+            <button id="fetch-weather-btn">Lấy dữ liệu thời tiết</button>
         </div>
-        <div class="weather-info">
-            <i class="fas fa-tint"></i>
-            <h3>Độ ẩm ngoài trời</h3>
-            <p id="humidity">-- %</p>
+        <div id="weather-info" class="weather-info-container">
+            <div class="weather-info">
+                <i class="fas fa-temperature-high"></i>
+                <h3>Nhiệt độ ngoài trời</h3>
+                <p id="temperature">-- °C</p>
+            </div>
+            <div class="weather-info">
+                <i class="fas fa-tint"></i>
+                <h3>Độ ẩm ngoài trời</h3>
+                <p id="humidity">-- %</p>
+            </div>
+            <div class="weather-info">
+                <i class="fas fa-wind"></i>
+                <h3>Tốc độ gió</h3>
+                <p id="wind-speed">-- m/s</p>
+            </div>
+            <div class="weather-info">
+                <i class="fas fa-cloud-rain"></i>
+                <h3>Lượng mưa</h3>
+                <p id="rainfall">-- mm</p>
+            </div>
+            <div class="weather-info">
+                <i class="fas fa-cloud"></i>
+                <h3>Lượng mây</h3>
+                <p id="cloud-cover">-- %</p>
+            </div>
+            <!-- Thêm ô hiển thị nhiệt độ và độ ẩm DHT11 -->
+            <div class="weather-info">
+                <i class="fas fa-thermometer-half"></i>
+                <h3>Nhiệt độ DHT11</h3>
+                <p id="dht-temperature">-- °C</p>
+            </div>
+            <div class="weather-info">
+                <i class="fas fa-tint"></i>
+                <h3>Độ ẩm DHT11</h3>
+                <p id="dht-humidity">-- %</p>
+            </div>
         </div>
-        <div class="weather-info">
-            <i class="fas fa-wind"></i>
-            <h3>Tốc độ gió</h3>
-            <p id="wind-speed">-- m/s</p>
-        </div>
-        <div class="weather-info">
-            <i class="fas fa-cloud-rain"></i>
-            <h3>Lượng mưa</h3>
-            <p id="rainfall">-- mm</p>
-        </div>
-        <div class="weather-info">
-            <i class="fas fa-cloud"></i>
-            <h3>Lượng mây</h3>
-            <p id="cloud-cover">-- %</p>
-        </div>
-
-        <!-- Thêm ô hiển thị nhiệt độ và độ ẩm DHT11 -->
-        <div class="weather-info">
-            <i class="fas fa-thermometer-half"></i>
-            <h3>Nhiệt độ DHT11</h3>
-            <p id="dht-temperature">-- °C</p>
-        </div>
-        <div class="weather-info">
-            <i class="fas fa-tint"></i>
-            <h3>Độ ẩm DHT11</h3>
-            <p id="dht-humidity">-- %</p>
-        </div>
-    </div>
-</section>
-
+    </section>
 
     <footer>
         <p>© 2024 Nhóm 20 - <a href="https://github.com/quangtienb" target="_blank">GitHub</a></p>
         <p>Đồ án IoT và Ứng dụng</p>
     </footer>
 
-<script>
-    const ledText = document.getElementById('led-text');
-    const speedControl = document.getElementById('speed-control');
-    const colorControl = document.getElementById('color-control');
-    const ledBanner = document.querySelector('.led-banner');
+    <script>
+        const ledText = document.getElementById('led-text');
+        const speedControl = document.getElementById('speed-control');
+        const colorControl = document.getElementById('color-control');
+        const ledBanner = document.querySelector('.led-banner');
 
-    speedControl.addEventListener('input', () => {
-        const speed = speedControl.value;
-        const animationDuration = `${21 - speed}s`;
-        ledText.style.animationDuration = animationDuration;
-    });
+        speedControl.addEventListener('input', () => {
+            const speed = speedControl.value;
+            const animationDuration = `${21 - speed}s`;
+            ledText.style.animationDuration = animationDuration;
+        });
 
-    colorControl.addEventListener('change', () => {
-        ledBanner.style.backgroundColor = colorControl.value;
-    });
+        colorControl.addEventListener('change', () => {
+            ledBanner.style.backgroundColor = colorControl.value;
+        });
 
-    async function fetchWeatherData(city) {
-        const apiKey = 'c05417eac917208d896aa3f9cff02ac9'; 
-        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) throw new Error('Không tìm thấy dữ liệu.');
-            return await response.json();
-        } catch (error) {
-            alert(error.message);
-            return null;
-        }
-    }
-
-    function updateWeatherUI(data, city) {
-        if (!data) return;
-        document.getElementById('temperature').textContent = `${data.main.temp} °C`;
-        document.getElementById('humidity').textContent = `${data.main.humidity} %`;
-        document.getElementById('wind-speed').textContent = `${data.wind.speed} m/s`;
-        document.getElementById('rainfall').textContent = `${data.rain ? data.rain['1h'] : 0} mm`;
-        document.getElementById('cloud-cover').textContent = `${data.clouds.all} %`;
-
-        updateLedText(city, data);
-    }
-
-    function updateLedText(city, data) {
-        const currentTime = new Date().toLocaleString('vi-VN');
-        ledText.textContent = `${city} | ${currentTime} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s`;
-    }
-
-    document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
-        const city = document.getElementById('city-input').value.trim();
-        if (!city) {
-            alert('Vui lòng nhập tên thành phố!');
-            return;
-        }
-        const data = await fetchWeatherData(city);
-        updateWeatherUI(data, city);
-    });
-
-    // Cập nhật thời gian hiện tại trên thanh LED mỗi giây
-    setInterval(() => {
-        const city = document.getElementById('city-input').value.trim();
-        if (city) {
-            const data = JSON.parse(localStorage.getItem('weatherData'));
-            if (data) {
-                updateLedText(city, data);
+        async function fetchWeatherData(city) {
+            const apiKey = 'c05417eac917208d896aa3f9cff02ac9'; 
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error('Không tìm thấy dữ liệu.');
+                return await response.json();
+            } catch (error) {
+                alert(error.message);
+                return null;
             }
         }
-    }, 1000);
-</script>
-    async function fetchDHTData() {
-    try {
-        const response = await fetch('http://192.168.4.229:3000/get-dht-data');  // Thay bằng URL API của bạn
-        const data = await response.json();
-        if (data) {
-            // Sử dụng đúng thuộc tính từ API
-            document.getElementById('dht-temperature').textContent = `${data.temperature} °C`;
-            document.getElementById('dht-humidity').textContent = `${data.humidity} %`;
+
+        function updateWeatherUI(data, city) {
+            if (!data) return;
+            document.getElementById('temperature').textContent = `${data.main.temp} °C`;
+            document.getElementById('humidity').textContent = `${data.main.humidity} %`;
+            document.getElementById('wind-speed').textContent = `${data.wind.speed} m/s`;
+            document.getElementById('rainfall').textContent = `${data.rain ? data.rain['1h'] : 0} mm`;
+            document.getElementById('cloud-cover').textContent = `${data.clouds.all} %`;
+
+            updateLedText(city, data);
+
+            // Lưu dữ liệu vào localStorage
+            localStorage.setItem('weatherData', JSON.stringify(data));
         }
-    } catch (error) {
-        console.error('Error fetching DHT data:', error);
-    }
-}
 
-// Cập nhật dữ liệu DHT mỗi 5 giây
-setInterval(fetchDHTData, 5000);
+        function updateLedText(city, data) {
+            const currentTime = new Date().toLocaleString('vi-VN');
+            ledText.textContent = `${city} | ${currentTime} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s`;
+        }
 
+        document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
+            const city = document.getElementById('city-input').value.trim();
+            if (!city) {
+                alert('Vui lòng nhập tên thành phố!');
+                return;
+            }
+            const data = await fetchWeatherData(city);
+            updateWeatherUI(data, city);
+        });
+
+        async function fetchDHTData() {
+            try {
+                const response = await fetch('http://192.168.4.229:3000/get-dht-data');
+                const data = await response.json();
+                if (data) {
+                    document.getElementById('dht-temperature').textContent = `${data.temperature} °C`;
+                    document.getElementById('dht-humidity').textContent = `${data.humidity} %`;
+                }
+            } catch (error) {
+                console.error('Error fetching DHT data:', error);
+            }
+        }
+
+        // Cập nhật dữ liệu DHT mỗi 5 giây
+        setInterval(fetchDHTData, 5000);
+
+        // Cập nhật thời gian hiện tại trên thanh LED mỗi giây
+        setInterval(() => {
+            const city = document.getElementById('city-input').value.trim();
+            if (city) {
+                const data = JSON.parse(localStorage.getItem('weatherData'));
+                if (data) {
+                    updateLedText(city, data);
+                }
+            }
+        }, 1000);
+    </script>
 </body>
 </html>

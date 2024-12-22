@@ -311,5 +311,22 @@
         }
     }, 1000);
 </script>
+    async function fetchDHTData() {
+    try {
+        const response = await fetch('http://192.168.4.229:3000/get-dht-data');  // Thay bằng URL API của bạn
+        const data = await response.json();
+        if (data) {
+            // Sử dụng đúng thuộc tính từ API
+            document.getElementById('dht-temperature').textContent = `${data.temperature} °C`;
+            document.getElementById('dht-humidity').textContent = `${data.humidity} %`;
+        }
+    } catch (error) {
+        console.error('Error fetching DHT data:', error);
+    }
+}
+
+// Cập nhật dữ liệu DHT mỗi 5 giây
+setInterval(fetchDHTData, 5000);
+
 </body>
 </html>

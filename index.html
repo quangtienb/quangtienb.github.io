@@ -202,12 +202,12 @@
             <div class="weather-info">
                 <i class="fas fa-temperature-high"></i>
                 <h3>Nhiệt độ</h3>
-                <p id="temperature">-- °C</p> <!-- Cập nhật từ ESP32 -->
+                <p id="temperature">-- °C</p>
             </div>
             <div class="weather-info">
                 <i class="fas fa-tint"></i>
                 <h3>Độ ẩm</h3>
-                <p id="humidity">-- %</p> <!-- Cập nhật từ ESP32 -->
+                <p id="humidity">-- %</p>
             </div>
             <div class="weather-info">
                 <i class="fas fa-wind"></i>
@@ -248,26 +248,40 @@
             ledBanner.style.backgroundColor = colorControl.value;
         });
 
-        async function fetchDHT11Data() {
-            const apiUrl = 'http://<ESP32_IP_ADDRESS>/getWeatherData'; // Thay <ESP32_IP_ADDRESS> bằng địa chỉ IP của ESP32
+        async function fetchWeatherData(city) {
+            const apiKey = 'c05417eac917208d896aa3f9cff02ac9'; 
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
             try {
                 const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error('Không thể lấy dữ liệu từ ESP32');
-                const data = await response.json();
-                updateDHT11UI(data);
+                if (!response.ok) throw new Error('Không tìm thấy dữ liệu.');
+                return await response.json();
             } catch (error) {
                 alert(error.message);
+                return null;
             }
         }
 
-        function updateDHT11UI(data) {
-            if (data) {
-                document.getElementById('temperature').textContent = `${data.temperature} °C`;
-                document.getElementById('humidity').textContent = `${data.humidity} %`;
-            }
+        function updateWeatherUI(data, city) {
+            if (!data) return;
+            document.getElementById('temperature').textContent = `${data.main.temp} °C`;
+            document.getElementById('humidity').textContent = `${data.main.humidity} %`;
+            document.getElementById('wind-speed').textContent = `${data.wind.speed} m/s`;
+            document.getElementById('rainfall').textContent = `${data.rain ? data.rain['1h'] : 0} mm`;
+            document.getElementById('cloud-cover').textContent = `${data.clouds.all} %`;
+
+            const currentTime = new Date().toLocaleString('vi-VN');
+            ledText.textContent = `${city} | ${currentTime} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s`;
         }
 
-        setInterval(fetchDHT11Data, 5000);
+        document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
+            const city = document.getElementById('city-input').value.trim();
+            if (!city) {
+                alert('Vui lòng nhập tên thành phố!');
+                return;
+            }
+            const data = await fetchWeatherData(city);
+            updateWeatherUI(data, city);
+        });
     </script>
 </body>
-</html>
+</html> thêm vào 2 ô lấy dữ liệu từ dht11 và esp32

@@ -232,56 +232,71 @@
         <p>Đồ án IoT và Ứng dụng</p>
     </footer>
 
-    <script>
-        const ledText = document.getElementById('led-text');
-        const speedControl = document.getElementById('speed-control');
-        const colorControl = document.getElementById('color-control');
-        const ledBanner = document.querySelector('.led-banner');
+<script>
+    const ledText = document.getElementById('led-text');
+    const speedControl = document.getElementById('speed-control');
+    const colorControl = document.getElementById('color-control');
+    const ledBanner = document.querySelector('.led-banner');
 
-        speedControl.addEventListener('input', () => {
-            const speed = speedControl.value;
-            const animationDuration = `${21 - speed}s`;
-            ledText.style.animationDuration = animationDuration;
-        });
+    speedControl.addEventListener('input', () => {
+        const speed = speedControl.value;
+        const animationDuration = `${21 - speed}s`;
+        ledText.style.animationDuration = animationDuration;
+    });
 
-        colorControl.addEventListener('change', () => {
-            ledBanner.style.backgroundColor = colorControl.value;
-        });
+    colorControl.addEventListener('change', () => {
+        ledBanner.style.backgroundColor = colorControl.value;
+    });
 
-        async function fetchWeatherData(city) {
-            const apiKey = 'c05417eac917208d896aa3f9cff02ac9'; 
-            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error('Không tìm thấy dữ liệu.');
-                return await response.json();
-            } catch (error) {
-                alert(error.message);
-                return null;
+    async function fetchWeatherData(city) {
+        const apiKey = 'c05417eac917208d896aa3f9cff02ac9'; 
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error('Không tìm thấy dữ liệu.');
+            return await response.json();
+        } catch (error) {
+            alert(error.message);
+            return null;
+        }
+    }
+
+    function updateWeatherUI(data, city) {
+        if (!data) return;
+        document.getElementById('temperature').textContent = `${data.main.temp} °C`;
+        document.getElementById('humidity').textContent = `${data.main.humidity} %`;
+        document.getElementById('wind-speed').textContent = `${data.wind.speed} m/s`;
+        document.getElementById('rainfall').textContent = `${data.rain ? data.rain['1h'] : 0} mm`;
+        document.getElementById('cloud-cover').textContent = `${data.clouds.all} %`;
+
+        updateLedText(city, data);
+    }
+
+    function updateLedText(city, data) {
+        const currentTime = new Date().toLocaleString('vi-VN');
+        ledText.textContent = `${city} | ${currentTime} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s`;
+    }
+
+    document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
+        const city = document.getElementById('city-input').value.trim();
+        if (!city) {
+            alert('Vui lòng nhập tên thành phố!');
+            return;
+        }
+        const data = await fetchWeatherData(city);
+        updateWeatherUI(data, city);
+    });
+
+    // Cập nhật thời gian hiện tại trên thanh LED mỗi giây
+    setInterval(() => {
+        const city = document.getElementById('city-input').value.trim();
+        if (city) {
+            const data = JSON.parse(localStorage.getItem('weatherData'));
+            if (data) {
+                updateLedText(city, data);
             }
         }
-
-        function updateWeatherUI(data, city) {
-            if (!data) return;
-            document.getElementById('temperature').textContent = `${data.main.temp} °C`;
-            document.getElementById('humidity').textContent = `${data.main.humidity} %`;
-            document.getElementById('wind-speed').textContent = `${data.wind.speed} m/s`;
-            document.getElementById('rainfall').textContent = `${data.rain ? data.rain['1h'] : 0} mm`;
-            document.getElementById('cloud-cover').textContent = `${data.clouds.all} %`;
-
-            const currentTime = new Date().toLocaleString('vi-VN');
-            ledText.textContent = `${city} | ${currentTime} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s`;
-        }
-
-        document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
-            const city = document.getElementById('city-input').value.trim();
-            if (!city) {
-                alert('Vui lòng nhập tên thành phố!');
-                return;
-            }
-            const data = await fetchWeatherData(city);
-            updateWeatherUI(data, city);
-        });
-    </script>
+    }, 1000);
+</script>
 </body>
 </html>

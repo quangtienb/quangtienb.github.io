@@ -55,6 +55,21 @@
             }
         }
 
+        /* Các điều khiển màu và tốc độ */
+        #controls {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        #color-picker {
+            margin-right: 20px;
+            font-size: 16px;
+        }
+
+        #speed-slider {
+            width: 200px;
+        }
+
         /* Lưới thông tin */
         .info-grid {
             display: grid;
@@ -144,6 +159,14 @@
             <div class="led-container">
                 <div id="led-text" class="led-text">Dữ liệu thời tiết sẽ hiển thị ở đây...</div>
             </div>
+        </section>
+
+        <!-- Các điều khiển chỉnh màu và tốc độ -->
+        <section id="controls">
+            <label for="color-picker">Chọn màu thanh LED: </label>
+            <input type="color" id="color-picker" value="#00FF00">
+            <label for="speed-slider">Tốc độ chạy chữ: </label>
+            <input type="range" id="speed-slider" min="1" max="10" value="5">
         </section>
 
         <!-- Phần nhập thành phố -->
@@ -255,6 +278,19 @@
             if (duLieuThoiTiet) {
                 capNhatThongTin(duLieuThoiTiet);
             }
+        });
+
+        // Chỉnh màu thanh LED
+        document.getElementById('color-picker').addEventListener('input', function() {
+            const color = this.value;
+            document.getElementById('led-text').style.color = color;
+        });
+
+        // Chỉnh tốc độ chạy chữ
+        document.getElementById('speed-slider').addEventListener('input', function() {
+            const speed = this.value;
+            const animationDuration = 10 - speed;
+            document.getElementById('led-text').style.animationDuration = `${animationDuration}s`;
         });
     </script>
 </body>

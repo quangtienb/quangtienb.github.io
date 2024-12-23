@@ -211,6 +211,11 @@
                 <h3>Lượng mây</h3>
                 <p id="cloud-cover">-- %</p>
             </div>
+             <div class="weather-info">
+                <i class="fas fa-clock"></i>
+                <h3>Thời gian</h3>
+                <p id="current-time">-- : -- : --</p>
+            </div>
             <!-- Các ô hiển thị thông tin từ Firebase -->
             <div class="weather-info">
                 <i class="fas fa-thermometer-half"></i>
@@ -319,16 +324,21 @@ document.getElementById('color-control').addEventListener('change', function() {
 });
 
 // Display current time
+// Hàm cập nhật thời gian
 function updateTime() {
-    var now = new Date();
-    var hours = now.getHours().toString().padStart(2, '0');
-    var minutes = now.getMinutes().toString().padStart(2, '0');
-    var seconds = now.getSeconds().toString().padStart(2, '0');
-    document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`;
+    var now = new Date(); // Lấy thời gian hiện tại
+    var hours = now.getHours().toString().padStart(2, '0'); // Lấy giờ và đảm bảo có 2 chữ số
+    var minutes = now.getMinutes().toString().padStart(2, '0'); // Lấy phút và đảm bảo có 2 chữ số
+    var seconds = now.getSeconds().toString().padStart(2, '0'); // Lấy giây và đảm bảo có 2 chữ số
+    document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`; // Cập nhật thời gian vào phần tử HTML
 }
+
+// Gọi hàm updateTime mỗi giây
 setInterval(updateTime, 1000);
-updateTime(); // Initial call to set time immediately
- // Initial call to set time immediately
+
+// Gọi hàm một lần ngay khi trang tải để hiển thị thời gian ngay lập tức
+updateTime();
+
     </script>
 </body>
 </html>

@@ -5,34 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bảng Thông Tin Thời Tiết</title>
     <style>
+        /* Tổng quan */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            background: #f4f4f4;
+            background: linear-gradient(to bottom, #87CEEB, #f4f4f4);
             color: #333;
         }
 
         header {
             background: #007bff;
             color: white;
-            padding: 20px 0;
+            padding: 20px;
             text-align: center;
+            border-bottom: 5px solid #0056b3;
         }
 
         main {
             padding: 20px;
         }
 
-        section {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background: white;
-        }
-
+        /* Thanh LED */
         .led-container {
             background: black;
             color: lime;
@@ -42,9 +37,8 @@
             white-space: nowrap;
             padding: 10px;
             border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .led-text {
@@ -61,62 +55,79 @@
             }
         }
 
+        /* Lưới thông tin */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-top: 20px;
         }
 
         .info-card {
             text-align: center;
-            padding: 15px;
-            background: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .info-card:hover {
+            transform: scale(1.05);
         }
 
         .info-card i {
-            font-size: 40px;
+            font-size: 50px;
             color: #007bff;
             margin-bottom: 10px;
         }
 
         .info-card h3 {
             margin: 10px 0;
-            font-size: 18px;
+            font-size: 20px;
         }
 
         .info-card p {
             margin: 0;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
         }
 
-        button {
+        /* Input và nút */
+        #tim-thanh-pho {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #nhap-thanh-pho {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        #lay-thoi-tiet {
             background: #007bff;
             color: white;
             border: none;
             padding: 10px 15px;
             cursor: pointer;
+            font-size: 16px;
             border-radius: 5px;
         }
 
-        button:hover {
+        #lay-thoi-tiet:hover {
             background: #0056b3;
         }
 
-        .slider-container {
-            margin-top: 10px;
-        }
-
-        .slider-label {
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .slider {
-            width: 100%;
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background: #f4f4f4;
+            color: #777;
+            border-top: 1px solid #ddd;
         }
     </style>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -128,23 +139,10 @@
     </header>
 
     <main>
-        <!-- Thanh LED hiển thị -->
+        <!-- Thanh LED -->
         <section id="led-section">
             <div class="led-container">
                 <div id="led-text" class="led-text">Dữ liệu thời tiết sẽ hiển thị ở đây...</div>
-            </div>
-        </section>
-
-        <!-- Thanh trượt để đổi màu và tốc độ -->
-        <section>
-            <div class="slider-container">
-                <label class="slider-label" for="color-picker">Chọn màu cho thanh LED:</label>
-                <input type="color" id="color-picker" value="#00ff00">
-            </div>
-            <div class="slider-container">
-                <label class="slider-label" for="speed-slider">Chọn tốc độ chạy chữ (giây):</label>
-                <input type="range" id="speed-slider" min="2" max="20" value="10">
-                <span id="speed-value">10</span> giây
             </div>
         </section>
 
@@ -157,6 +155,11 @@
         <!-- Ô hiển thị thông tin thời tiết -->
         <section id="thong-tin">
             <div class="info-grid">
+                <div class="info-card">
+                    <i id="weather-icon" class="fas fa-cloud"></i>
+                    <h3>Thời Tiết</h3>
+                    <p id="thoi-tiet">--</p>
+                </div>
                 <div class="info-card">
                     <i class="fas fa-thermometer-half"></i>
                     <h3>Nhiệt Độ</h3>
@@ -202,6 +205,16 @@
         }
         setInterval(capNhatThoiGian, 1000); // Cập nhật mỗi giây
 
+        // Lấy icon theo trạng thái thời tiết
+        function layIconThoiTiet(moTa) {
+            if (moTa.includes('rain')) return 'fas fa-cloud-showers-heavy';
+            if (moTa.includes('cloud')) return 'fas fa-cloud';
+            if (moTa.includes('sun')) return 'fas fa-sun';
+            if (moTa.includes('clear')) return 'fas fa-sun';
+            if (moTa.includes('snow')) return 'fas fa-snowflake';
+            return 'fas fa-smog';
+        }
+
         async function layThoiTiet(thanhPho) {
             const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(thanhPho)}&units=metric&appid=${apiKey}`;
             try {
@@ -220,12 +233,15 @@
             const tocDoGio = data.wind.speed;
             const luongMay = data.clouds.all;
             const duBaoMua = data.rain ? data.rain['1h'] || 0 : 0;
+            const moTaThoiTiet = data.weather[0].description;
 
             document.getElementById('nhiet-do').textContent = `${nhietDo}°C`;
             document.getElementById('do-am').textContent = `${doAm}%`;
             document.getElementById('toc-do-gio').textContent = `${tocDoGio} m/s`;
             document.getElementById('luong-may').textContent = `${luongMay}%`;
             document.getElementById('du-bao-mua').textContent = `${duBaoMua} mm`;
+            document.getElementById('thoi-tiet').textContent = moTaThoiTiet;
+            document.getElementById('weather-icon').className = layIconThoiTiet(moTaThoiTiet);
 
             const thoiGian = new Date().toLocaleTimeString('vi-VN');
             document.getElementById('led-text').textContent = `Thời gian: ${thoiGian} | Nhiệt độ: ${nhietDo}°C | Độ ẩm: ${doAm}% | Lượng mây: ${luongMay}% | Dự báo mưa: ${duBaoMua} mm`;
@@ -239,16 +255,6 @@
             if (duLieuThoiTiet) {
                 capNhatThongTin(duLieuThoiTiet);
             }
-        });
-
-        document.getElementById('color-picker').addEventListener('input', (event) => {
-            document.querySelector('.led-container').style.color = event.target.value;
-        });
-
-        document.getElementById('speed-slider').addEventListener('input', (event) => {
-            const speed = event.target.value;
-            document.querySelector('.led-text').style.animationDuration = `${speed}s`;
-            document.getElementById('speed-value').textContent = speed;
         });
     </script>
 </body>

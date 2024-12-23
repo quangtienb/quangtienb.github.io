@@ -301,7 +301,7 @@
 async function fetchDHTData() {
     try {
         // URL của API ESP32 để lấy dữ liệu DHT11 (thay bằng IP thực tế của bạn)
-        const response = await fetch('http://192.168.4.229:3000/get-dht-data'); 
+        const response = await fetch('http://0.0.0.0:3000/get-dht-data'); 
         if (!response.ok) throw new Error('Không thể lấy dữ liệu từ cảm biến DHT11.');
 
         // Parse dữ liệu nhận được từ ESP32

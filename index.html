@@ -268,23 +268,36 @@
             }
         }
 
-        async function fetchDHTData() {
-            try {
-                // URL của API ESP32 để lấy dữ liệu DHT11 (thay bằng IP thực tế của bạn)
-                const response = await fetch('http://192.168.4.229:3000/get-dht-data');
-                if (!response.ok) throw new Error('Không thể lấy dữ liệu từ cảm biến DHT11.');
+<script>
+    async function fetchDHTData() {
+        try {
+            // Thay đổi URL với địa chỉ IP thực tế của ESP32
+            const response = await fetch('http://192.168.4.229:3000/get-dht-data'); // Đảm bảo sử dụng đúng IP của ESP32
 
-                const data = await response.json();
-                if (data) {
-                    document.getElementById('temperature-dht').textContent = `${data.temperature} °C`;
-                    document.getElementById('humidity-dht').textContent = `${data.humidity} %`;
-                }
-            } catch (error) {
-                console.error('Lỗi khi lấy dữ liệu từ cảm biến DHT11:', error.message);
-                document.getElementById('temperature-dht').textContent = 'Lỗi';
-                document.getElementById('humidity-dht').textContent = 'Lỗi';
+            // Kiểm tra phản hồi từ server ESP32
+            if (!response.ok) throw new Error('Không thể lấy dữ liệu từ cảm biến DHT11.');
+
+            // Chuyển đổi dữ liệu nhận được thành đối tượng JSON
+            const data = await response.json();
+
+            // Kiểm tra nếu dữ liệu hợp lệ
+            if (data && data.temperature !== undefined && data.humidity !== undefined) {
+                // Cập nhật giá trị nhiệt độ và độ ẩm lên trang HTML
+                document.getElementById('temperature-dht').textContent = `${data.temperature} °C`;
+                document.getElementById('humidity-dht').textContent = `${data.humidity} %`;
+            } else {
+                throw new Error('Dữ liệu không hợp lệ');
             }
+        } catch (error) {
+            // Xử lý lỗi nếu không thể lấy dữ liệu
+            console.error('Lỗi khi lấy dữ liệu từ cảm biến DHT11:', error.message);
+            // Hiển thị lỗi lên giao diện người dùng
+            document.getElementById('temperature-dht').textContent = 'Lỗi';
+            document.getElementById('humidity-dht').textContent = 'Lỗi';
         }
+    }
+</script>
+
 
         document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
             const city = document.getElementById('city-input').value.trim();
@@ -301,7 +314,6 @@
                 document.getElementById('rainfall').textContent = `${weatherData.rain ? weatherData.rain['1h'] : 0} mm`;
                 document.getElementById('cloud-cover').textContent = `${weatherData.clouds.all} %`;
             }
-
             await fetchDHTData();
         });
     </script>

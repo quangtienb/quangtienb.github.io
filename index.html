@@ -216,82 +216,107 @@
         <p>&copy; 2024 Ứng Dụng Thời Tiết</p>
     </footer>
 
-    <script>
-        const apiKey = 'c05417eac917208d896aa3f9cff02ac9';
+<script>
+    const apiKey = 'c05417eac917208d896aa3f9cff02ac9';
 
-        // Hiển thị ngày và giờ thực tế
-        function capNhatThoiGian() {
-            const now = new Date();
-            const ngay = now.toLocaleDateString('vi-VN');
-            const gio = now.toLocaleTimeString('vi-VN');
-            document.getElementById('current-date').textContent = `Ngày: ${ngay} - Giờ: ${gio}`;
+    // Hiển thị ngày và giờ thực tế
+    function capNhatThoiGian() {
+        const now = new Date();
+        const ngay = now.toLocaleDateString('vi-VN');
+        const gio = now.toLocaleTimeString('vi-VN');
+        document.getElementById('current-date').textContent = `Ngày: ${ngay} - Giờ: ${gio}`;
+    }
+    setInterval(capNhatThoiGian, 1000); // Cập nhật mỗi giây
+
+    // Lấy icon theo trạng thái thời tiết
+    function layIconThoiTiet(moTa) {
+        if (moTa.includes('rain')) return 'fas fa-cloud-showers-heavy';
+        if (moTa.includes('cloud')) return 'fas fa-cloud';
+        if (moTa.includes('sun')) return 'fas fa-sun';
+        if (moTa.includes('clear')) return 'fas fa-sun';
+        if (moTa.includes('snow')) return 'fas fa-snowflake';
+        return 'fas fa-smog';
+    }
+
+    async function layThoiTiet(thanhPho) {
+        const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(thanhPho)}&units=metric&appid=${apiKey}`;
+        try {
+            const phanHoi = await fetch(apiURL);
+            if (!phanHoi.ok) throw new Error('Không tìm thấy thành phố.');
+            return await phanHoi.json();
+        } catch (loi) {
+            alert(loi.message);
+            return null;
         }
-        setInterval(capNhatThoiGian, 1000); // Cập nhật mỗi giây
+    }
 
-        // Lấy icon theo trạng thái thời tiết
-        function layIconThoiTiet(moTa) {
-            if (moTa.includes('rain')) return 'fas fa-cloud-showers-heavy';
-            if (moTa.includes('cloud')) return 'fas fa-cloud';
-            if (moTa.includes('sun')) return 'fas fa-sun';
-            if (moTa.includes('clear')) return 'fas fa-sun';
-            if (moTa.includes('snow')) return 'fas fa-snowflake';
-            return 'fas fa-smog';
+    function capNhatThongTin(data) {
+        const nhietDo = data.main.temp.toFixed(1);
+        const doAm = data.main.humidity;
+        const tocDoGio = data.wind.speed;
+        const luongMay = data.clouds.all;
+        const duBaoMua = data.rain ? data.rain['1h'] || 0 : 0;
+        const moTaThoiTiet = data.weather[0].description;
+
+        document.getElementById('nhiet-do').textContent = `${nhietDo}°C`;
+        document.getElementById('do-am').textContent = `${doAm}%`;
+        document.getElementById('toc-do-gio').textContent = `${tocDoGio} m/s`;
+        document.getElementById('luong-may').textContent = `${luongMay}%`;
+        document.getElementById('du-bao-mua').textContent = `${duBaoMua} mm`;
+        document.getElementById('thoi-tiet').textContent = moTaThoiTiet;
+        document.getElementById('weather-icon').className = layIconThoiTiet(moTaThoiTiet);
+
+        const thoiGian = new Date().toLocaleTimeString('vi-VN');
+        document.getElementById('led-text').textContent = `Thời gian: ${thoiGian} | Nhiệt độ: ${nhietDo}°C | Độ ẩm: ${doAm}% | Lượng mây: ${luongMay}% | Dự báo mưa: ${duBaoMua} mm`;
+    }
+
+    document.getElementById('lay-thoi-tiet').addEventListener('click', async () => {
+        const thanhPho = document.getElementById('nhap-thanh-pho').value.trim();
+        if (!thanhPho) return;
+
+        const duLieuThoiTiet = await layThoiTiet(thanhPho);
+        if (duLieuThoiTiet) {
+            capNhatThongTin(duLieuThoiTiet);
         }
+    });
 
-        async function layThoiTiet(thanhPho) {
-            const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(thanhPho)}&units=metric&appid=${apiKey}`;
-            try {
-                const phanHoi = await fetch(apiURL);
-                if (!phanHoi.ok) throw new Error('Không tìm thấy thành phố.');
-                return await phanHoi.json();
-            } catch (loi) {
-                alert(loi.message);
-                return null;
+    // Chỉnh màu thanh LED
+    document.getElementById('color-picker').addEventListener('input', function() {
+        const color = this.value;
+        document.getElementById('led-text').style.color = color;
+    });
+
+    // Chỉnh tốc độ chạy chữ
+    document.getElementById('speed-slider').addEventListener('input', function() {
+        const speed = this.value;
+        const animationDuration = 10 - speed;
+        document.getElementById('led-text').style.animationDuration = `${animationDuration}s`;
+    });
+
+    // Lấy dữ liệu từ ESP32 DHT sensor
+    async function layDuLieuDHT() {
+        const url = "https://3853-2401-d800-9ac2-fbd4-5cb5-3246-bb29-4a84.ngrok-free.app/get-dht-data";
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data) {
+                document.getElementById('nhiet-do').textContent = `${data.temperature}°C`;
+                document.getElementById('do-am').textContent = `${data.humidity}%`;
+                document.getElementById('led-text').textContent = `Nhiệt độ: ${data.temperature}°C | Độ ẩm: ${data.humidity}%`;
+            } else {
+                alert('Không nhận được dữ liệu từ ESP32');
             }
+        } catch (error) {
+            alert('Lỗi kết nối API');
         }
+    }
 
-        function capNhatThongTin(data) {
-            const nhietDo = data.main.temp.toFixed(1);
-            const doAm = data.main.humidity;
-            const tocDoGio = data.wind.speed;
-            const luongMay = data.clouds.all;
-            const duBaoMua = data.rain ? data.rain['1h'] || 0 : 0;
-            const moTaThoiTiet = data.weather[0].description;
+    // Gọi hàm khi cần lấy dữ liệu
+    setInterval(layDuLieuDHT, 5000); // Cập nhật dữ liệu mỗi 5 giây
+</script>
 
-            document.getElementById('nhiet-do').textContent = `${nhietDo}°C`;
-            document.getElementById('do-am').textContent = `${doAm}%`;
-            document.getElementById('toc-do-gio').textContent = `${tocDoGio} m/s`;
-            document.getElementById('luong-may').textContent = `${luongMay}%`;
-            document.getElementById('du-bao-mua').textContent = `${duBaoMua} mm`;
-            document.getElementById('thoi-tiet').textContent = moTaThoiTiet;
-            document.getElementById('weather-icon').className = layIconThoiTiet(moTaThoiTiet);
-
-            const thoiGian = new Date().toLocaleTimeString('vi-VN');
-            document.getElementById('led-text').textContent = `Thời gian: ${thoiGian} | Nhiệt độ: ${nhietDo}°C | Độ ẩm: ${doAm}% | Lượng mây: ${luongMay}% | Dự báo mưa: ${duBaoMua} mm`;
-        }
-
-        document.getElementById('lay-thoi-tiet').addEventListener('click', async () => {
-            const thanhPho = document.getElementById('nhap-thanh-pho').value.trim();
-            if (!thanhPho) return;
-
-            const duLieuThoiTiet = await layThoiTiet(thanhPho);
-            if (duLieuThoiTiet) {
-                capNhatThongTin(duLieuThoiTiet);
-            }
-        });
-
-        // Chỉnh màu thanh LED
-        document.getElementById('color-picker').addEventListener('input', function() {
-            const color = this.value;
-            document.getElementById('led-text').style.color = color;
-        });
-
-        // Chỉnh tốc độ chạy chữ
-        document.getElementById('speed-slider').addEventListener('input', function() {
-            const speed = this.value;
-            const animationDuration = 10 - speed;
-            document.getElementById('led-text').style.animationDuration = `${animationDuration}s`;
-        });
-    </script>
+    
 </body>
 </html>

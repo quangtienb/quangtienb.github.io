@@ -3,320 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Thông Tin Thời Tiết</title>
+    <title>Thông Tin Thời Tiết</title>
     <style>
-        /* Tổng quan */
         body {
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background: linear-gradient(to bottom, #87CEEB, #f4f4f4);
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             color: #333;
         }
-
-        header {
-            background: #007bff;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 5px solid #0056b3;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        /* Thanh LED */
-        .led-container {
-            background: black;
-            color: lime;
-            font-size: 18px;
-            font-weight: bold;
-            overflow: hidden;
-            white-space: nowrap;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .led-text {
-            display: inline-block;
-            animation: scroll linear infinite;
-        }
-
-        @keyframes scroll {
-            from {
-                transform: translateX(100%);
-            }
-            to {
-                transform: translateX(-100%);
-            }
-        }
-
-        /* Các điều khiển màu và tốc độ */
-        #controls {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        #color-picker {
-            margin-right: 20px;
-            font-size: 16px;
-        }
-
-        #speed-slider {
-            width: 200px;
-        }
-
-        /* Lưới thông tin */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .info-card {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            transition: transform 0.2s ease;
-        }
-
-        .info-card:hover {
-            transform: scale(1.05);
-        }
-
-        .info-card i {
-            font-size: 50px;
-            color: #007bff;
-            margin-bottom: 10px;
-        }
-
-        .info-card h3 {
-            margin: 10px 0;
-            font-size: 20px;
-        }
-
-        .info-card p {
-            margin: 0;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        /* Input và nút */
-        #tim-thanh-pho {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        #nhap-thanh-pho {
-            width: 80%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-right: 10px;
-        }
-
-        #lay-thoi-tiet {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        #lay-thoi-tiet:hover {
-            background: #0056b3;
-        }
-
-        footer {
-            text-align: center;
+        #thoi-tiet {
             margin-top: 20px;
-            padding: 10px 0;
-            background: #f4f4f4;
-            color: #777;
-            border-top: 1px solid #ddd;
+            font-size: 24px;
+        }
+        #loading {
+            font-size: 18px;
+            color: grey;
         }
     </style>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header>
-        <h1>Bảng Thông Tin Thời Tiết</h1>
-        <p id="current-date"></p>
-    </header>
+    <h1>Thông Tin Thời Tiết</h1>
+    <p id="loading">Đang tải dữ liệu...</p>
+    <div id="thoi-tiet">
+        <!-- Dữ liệu thời tiết sẽ hiển thị tại đây -->
+    </div>
 
-    <main>
-        <!-- Thanh LED -->
-        <section id="led-section">
-            <div class="led-container">
-                <div id="led-text" class="led-text">Dữ liệu thời tiết sẽ hiển thị ở đây...</div>
-            </div>
-        </section>
+    <script>
+        const apiUrl = "https://3853-2401-d800-9ac2-fbd4-5cb5-3246-bb29-4a84.ngrok-free.app/get-dht-data";
 
-        <!-- Các điều khiển chỉnh màu và tốc độ -->
-        <section id="controls">
-            <label for="color-picker">Chọn màu thanh LED: </label>
-            <input type="color" id="color-picker" value="#00FF00">
-            <label for="speed-slider">Tốc độ chạy chữ: </label>
-            <input type="range" id="speed-slider" min="1" max="10" value="5">
-        </section>
-
-        <!-- Phần nhập thành phố -->
-        <section id="tim-thanh-pho">
-            <input type="text" id="nhap-thanh-pho" placeholder="Nhập tên thành phố">
-            <button id="lay-thoi-tiet">Lấy Thông Tin Thời Tiết</button>
-        </section>
-
-        <!-- Ô hiển thị thông tin thời tiết -->
-        <section id="thong-tin">
-            <div class="info-grid">
-                <div class="info-card">
-                    <i id="weather-icon" class="fas fa-cloud"></i>
-                    <h3>Thời Tiết</h3>
-                    <p id="thoi-tiet">--</p>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-thermometer-half"></i>
-                    <h3>Nhiệt Độ</h3>
-                    <p id="nhiet-do">--°C</p>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-tint"></i>
-                    <h3>Độ Ẩm</h3>
-                    <p id="do-am">--%</p>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-wind"></i>
-                    <h3>Tốc Độ Gió</h3>
-                    <p id="toc-do-gio">-- m/s</p>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-cloud"></i>
-                    <h3>Lượng Mây</h3>
-                    <p id="luong-may">--%</p>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-cloud-rain"></i>
-                    <h3>Dự Báo Mưa</h3>
-                    <p id="du-bao-mua">-- mm</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Ứng Dụng Thời Tiết</p>
-    </footer>
-
-<script>
-    const apiKey = 'c05417eac917208d896aa3f9cff02ac9';
-
-    // Hiển thị ngày và giờ thực tế
-    function capNhatThoiGian() {
-        const now = new Date();
-        const ngay = now.toLocaleDateString('vi-VN');
-        const gio = now.toLocaleTimeString('vi-VN');
-        document.getElementById('current-date').textContent = `Ngày: ${ngay} - Giờ: ${gio}`;
-    }
-    setInterval(capNhatThoiGian, 1000); // Cập nhật mỗi giây
-
-    // Lấy icon theo trạng thái thời tiết
-    function layIconThoiTiet(moTa) {
-        if (moTa.includes('rain')) return 'fas fa-cloud-showers-heavy';
-        if (moTa.includes('cloud')) return 'fas fa-cloud';
-        if (moTa.includes('sun')) return 'fas fa-sun';
-        if (moTa.includes('clear')) return 'fas fa-sun';
-        if (moTa.includes('snow')) return 'fas fa-snowflake';
-        return 'fas fa-smog';
-    }
-
-    async function layThoiTiet(thanhPho) {
-        const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(thanhPho)}&units=metric&appid=${apiKey}`;
-        try {
-            const phanHoi = await fetch(apiURL);
-            if (!phanHoi.ok) throw new Error('Không tìm thấy thành phố.');
-            return await phanHoi.json();
-        } catch (loi) {
-            alert(loi.message);
-            return null;
-        }
-    }
-
-    function capNhatThongTin(data) {
-        const nhietDo = data.main.temp.toFixed(1);
-        const doAm = data.main.humidity;
-        const tocDoGio = data.wind.speed;
-        const luongMay = data.clouds.all;
-        const duBaoMua = data.rain ? data.rain['1h'] || 0 : 0;
-        const moTaThoiTiet = data.weather[0].description;
-
-        document.getElementById('nhiet-do').textContent = `${nhietDo}°C`;
-        document.getElementById('do-am').textContent = `${doAm}%`;
-        document.getElementById('toc-do-gio').textContent = `${tocDoGio} m/s`;
-        document.getElementById('luong-may').textContent = `${luongMay}%`;
-        document.getElementById('du-bao-mua').textContent = `${duBaoMua} mm`;
-        document.getElementById('thoi-tiet').textContent = moTaThoiTiet;
-        document.getElementById('weather-icon').className = layIconThoiTiet(moTaThoiTiet);
-
-        const thoiGian = new Date().toLocaleTimeString('vi-VN');
-        document.getElementById('led-text').textContent = `Thời gian: ${thoiGian} | Nhiệt độ: ${nhietDo}°C | Độ ẩm: ${doAm}% | Lượng mây: ${luongMay}% | Dự báo mưa: ${duBaoMua} mm`;
-    }
-
-    document.getElementById('lay-thoi-tiet').addEventListener('click', async () => {
-        const thanhPho = document.getElementById('nhap-thanh-pho').value.trim();
-        if (!thanhPho) return;
-
-        const duLieuThoiTiet = await layThoiTiet(thanhPho);
-        if (duLieuThoiTiet) {
-            capNhatThongTin(duLieuThoiTiet);
-        }
-    });
-
-    // Chỉnh màu thanh LED
-    document.getElementById('color-picker').addEventListener('input', function() {
-        const color = this.value;
-        document.getElementById('led-text').style.color = color;
-    });
-
-    // Chỉnh tốc độ chạy chữ
-    document.getElementById('speed-slider').addEventListener('input', function() {
-        const speed = this.value;
-        const animationDuration = 10 - speed;
-        document.getElementById('led-text').style.animationDuration = `${animationDuration}s`;
-    });
-
-    // Lấy dữ liệu từ ESP32 DHT sensor
-    async function layDuLieuDHT() {
-        const url = "https://3853-2401-d800-9ac2-fbd4-5cb5-3246-bb29-4a84.ngrok-free.app/get-dht-data";
-        
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            if (data) {
-                document.getElementById('nhiet-do').textContent = `${data.temperature}°C`;
-                document.getElementById('do-am').textContent = `${data.humidity}%`;
-                document.getElementById('led-text').textContent = `Nhiệt độ: ${data.temperature}°C | Độ ẩm: ${data.humidity}%`;
-            } else {
-                alert('Không nhận được dữ liệu từ ESP32');
+        async function getThoiTiet() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Không thể lấy dữ liệu từ API');
+                }
+                const data = await response.json();
+                if (data) {
+                    document.getElementById("loading").style.display = "none";
+                    document.getElementById("thoi-tiet").innerHTML = `
+                        <p>Nhiệt độ: ${data.temperature}°C</p>
+                        <p>Độ ẩm: ${data.humidity}%</p>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById("loading").textContent = "Lỗi kết nối API: " + error.message;
             }
-        } catch (error) {
-    console.log("Lỗi API: ", error); // Ghi chi tiết lỗi vào console
-    alert('Lỗi kết nối API');
-}
-    }
-    // Gọi hàm khi cần lấy dữ liệu
-    setInterval(layDuLieuDHT, 5000); // Cập nhật dữ liệu mỗi 5 giây
-</script>
+        }
 
-    
+        getThoiTiet();
+    </script>
 </body>
 </html>

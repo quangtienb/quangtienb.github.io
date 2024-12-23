@@ -1,56 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dữ liệu từ DHT11</title>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin-top: 50px;
-    }
-    .data {
-      font-size: 24px;
-      margin: 20px;
-    }
-  </style>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>IOT</title>
+     <link rel="stylesheet" href="style.css">
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <script src="https://kit.fontawesome.com/a46b7b6629.js" crossorigin="anonymous"></script>
+
+     <style>
+          body, html{
+               height:100%;
+               width: 100%;
+               margin:0;
+               background-image: url(image/PIC3.jpg);
+               background-position: center;
+               background-size: 100% 100%;
+               background-repeat: no-repeat;  
+          }
+     </style>
 </head>
-<body>
-  <h1>Dữ liệu Cảm biến DHT11</h1>
-  <div class="data">
-    <p>Nhiệt độ: <span id="temperature">Đang tải...</span> °C</p>
-    <p>Độ ẩm: <span id="humidity">Đang tải...</span> %</p>
-  </div>
+<body>  
+     <div class="titleContainer">
+          <div class="logo">
+               <!-- Sửa lỗi chính tả ở src -->
+               <img src="image/logo.png" alt="Logo">
+          </div>
+          <div class="title">
+               Smart City
+          </div>    
+     </div>  
+     <div class="tabContainer">
+          <div class="buttonContainer">
+               <button onclick="showPanel(0)"><i class="far fa-building"></i> District I</button>            
+          </div>
+          <div class="tabPanelContainer">
+               <div class="tabPanel">
+                    <div class="tabsub">
+                         <div class="tabTemp">
+                              <script src="https://cdn.lordicon.com//libs/frhvbuzj/lord-icon-2.0.2.js"></script>
+                              <lord-icon
+                              src="https://cdn.lordicon.com//mypzgycw.json"
+                              trigger="loop"
+                              colors="primary:#000000,secondary:#c71f16"
+                              stroke="83"
+                              style="width:100px;height:100px">
+                              </lord-icon>                        
+                             <h1><i class="fas fa-temperature-high"></i> TEMPERATURE:</h1>
+                             <h1 id="temp">Loading...</h1> 
+                         </div>
+                         <div class="tabWet">
+                              <script src="https://cdn.lordicon.com//libs/frhvbuzj/lord-icon-2.0.2.js"></script>
+                              <lord-icon
+                                     src="https://cdn.lordicon.com//oyclgnwc.json"
+                                    trigger="loop"
+                                    colors="primary:#2516c7,secondary:#4030e8"
+                                    style="width:100px;height:100px">
+                               </lord-icon>
+                               <h1><i class="fas fa-tint"></i> HUMIDITY:</h1>
+                               <h1 id="wet">Loading...</h1>
+                         </div>
+                    </div>   
+               </div>
+          </div>
+     </div>
+     <div class="footer">
+          <label for="text">Bui Quang Tien - 21138184</label><br>
+          <label for="text">Nguyen Ngoc Tan - 21138174</label><br>
+          <label for="text">Trường Đại học Nông Lâm TP Hồ Chí Minh</label><br>
+     </div>
 
-  <script>
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk",
-      authDomain: "demothoitiet-995b8.firebaseapp.com",
-      databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com",
-      projectId: "demothoitiet-995b8"
-    };
+<script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+<script>
+  // Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk", 
+    authDomain: "demothoitiet-995b8.firebaseapp.com", 
+    databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com", 
+    projectId: "demothoitiet-995b8", 
+    storageBucket: "demothoitiet-995b8.appspot.com", 
+    messagingSenderId: "823683238153", 
+    appId: "1:823683238153:web:97d52dd7ef86e50c616bd8", 
+    measurementId: "G-2JRE01LWSE"
+  };
 
-    // Reference to DHT11 data
-const dbRef = firebase.database().ref("DHT11");
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
 
-dbRef.on("value", (snapshot) => {
-  const data = snapshot.val();
-  if (data) {
-    document.getElementById("temperature").textContent = data.Temperature || "Không có dữ liệu";
-    document.getElementById("humidity").textContent = data.Humidity || "Không có dữ liệu";
-  } else {
-    document.getElementById("temperature").textContent = "Không có dữ liệu";
-    document.getElementById("humidity").textContent = "Không có dữ liệu";
-  }
-});
-  </script>
+  // Get references to elements
+  var temp = document.getElementById('temp');
+  var wet = document.getElementById('wet');
+
+  // Firebase Realtime Database references
+  var tempRef = firebase.database().ref().child('DHT11/Temperature');
+  var wetRef = firebase.database().ref().child('DHT11/Humidity');
+
+  // Fetch data from Firebase and display on the webpage
+  tempRef.on('value', function(snapshot) {
+    temp.innerText = snapshot.val() + ' °C';
+  });
+
+  wetRef.on('value', function(snapshot) {
+    wet.innerText = snapshot.val() + ' %';
+  });
+</script>
+
 </body>
 </html>

@@ -111,45 +111,62 @@
           }
 
           /* Weather Section */
-          .weatherContainer {
-               text-align: center;
-               color: white;
-               margin-top: 30px;
-          }
+      .weatherContainer {
+    text-align: center;
+    color: white;
+    margin-top: 30px;
+}
 
-          .weatherContainer input {
-               padding: 10px;
-               font-size: 1.2em;
-               border-radius: 5px;
-               border: 1px solid #3498db;
-               margin-right: 10px;
-          }
+.weatherContainer input {
+    padding: 10px;
+    font-size: 1.2em;
+    border-radius: 5px;
+    border: 1px solid #3498db;
+    margin-right: 10px;
+}
 
-          .weatherContainer button {
-               padding: 10px 20px;
-               font-size: 1.2em;
-               background-color: #3498db;
-               color: white;
-               border: none;
-               border-radius: 5px;
-               cursor: pointer;
-               transition: background-color 0.3s;
-          }
+.weatherContainer button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-          .weatherContainer button:hover {
-               background-color: #2980b9;
-          }
+.weatherContainer button:hover {
+    background-color: #2980b9;
+}
 
-          .weatherInfo {
-               margin-top: 20px;
-               font-size: 1.5em;
-               font-weight: bold;
-          }
+.weatherInfo {
+    margin-top: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
 
-          .weatherInfo span {
-               display: block;
-               margin: 5px 0;
-          }
+.weatherItem {
+    margin: 10px 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 10px;
+    width: 200px;
+    display: inline-block;
+    text-align: center;
+}
+
+.weatherItem h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.weatherItem p {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
      </style>
 </head>
 <body>
@@ -193,18 +210,37 @@
      </div>
 
      <!-- Weather Section -->
-     <div class="weatherContainer">
-          <input type="text" id="cityInput" placeholder="Enter City">
-          <button onclick="getWeatherData()">Get Weather</button>
+    <div class="weatherContainer">
+    <input type="text" id="cityInput" placeholder="Enter City">
+    <button onclick="getWeatherData()">Get Weather</button>
 
-          <div class="weatherInfo">
-               <span id="cityName"></span>
-               <span id="temperature"></span>
-               <span id="humidity"></span>
-               <span id="windSpeed"></span>
-               <span id="rain"></span>
-               <span id="time"></span>
-          </div>
+    <div class="weatherInfo">
+        <div class="weatherItem">
+            <h3 id="cityName">City: Loading...</h3>
+        </div>
+        <div class="weatherItem">
+            <h3>Temperature:</h3>
+            <p id="temperature">Loading...</p>
+        </div>
+        <div class="weatherItem">
+            <h3>Humidity:</h3>
+            <p id="humidity">Loading...</p>
+        </div>
+        <div class="weatherItem">
+            <h3>Wind Speed:</h3>
+            <p id="windSpeed">Loading...</p>
+        </div>
+        <div class="weatherItem">
+            <h3>Rain:</h3>
+            <p id="rain">Loading...</p>
+        </div>
+        <div class="weatherItem">
+            <h3>Time:</h3>
+            <p id="time">Loading...</p>
+        </div>
+    </div>
+</div>
+
      </div>
 
      <div class="footer">
@@ -250,6 +286,7 @@ wetRef.on('value', function(snapshot) {
 });
 
 // Function to get weather data from OpenWeatherMap API
+// Function to get weather data from OpenWeatherMap API
 function getWeatherData() {
     var city = document.getElementById('cityInput').value;
     var apiKey = 'c05417eac917208d896aa3f9cff02ac9';  // Replace with your OpenWeatherMap API key
@@ -261,10 +298,10 @@ function getWeatherData() {
             .then(response => response.json())
             .then(data => {
                 document.getElementById('cityName').innerText = `Weather in ${data.name}`;
-                document.getElementById('temperature').innerText = `Temperature: ${data.main.temp}°C`;
-                document.getElementById('humidity').innerText = `Humidity: ${data.main.humidity}%`;
-                document.getElementById('windSpeed').innerText = `Wind Speed: ${data.wind.speed} m/s`;
-                document.getElementById('rain').innerText = `Rain: ${data.rain ? data.rain['1h'] : 'No rain'}`;
+                document.getElementById('temperature').innerText = `${data.main.temp}°C`;
+                document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+                document.getElementById('windSpeed').innerText = `${data.wind.speed} m/s`;
+                document.getElementById('rain').innerText = data.rain ? `${data.rain['1h']} mm` : 'No rain';
                 document.getElementById('time').innerText = `Time: ${new Date().toLocaleTimeString()}`;
             })
             .catch(error => {
@@ -274,6 +311,7 @@ function getWeatherData() {
         alert('Please enter a city!');
     }
 }
+
 </script>
 </body>
 </html>

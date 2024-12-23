@@ -140,47 +140,22 @@
                 <h1><i class="fas fa-tint weatherIcon"></i> Humidity:</h1>
                 <h2 id="wet">Loading...</h2>
             </div>
-            <div class="tabItem">
-                <h1><i class="fas fa-wind weatherIcon"></i> Wind Speed:</h1>
-                <h2 id="windSpeed">Loading...</h2>
-            </div>
-            <div class="tabItem">
-                <h1><i class="fas fa-cloud-rain weatherIcon"></i> Precipitation:</h1>
-                <h2 id="precipitation">Loading...</h2>
-            </div>
-            <div class="tabItem">
-                <h1><i class="fas fa-cloud weatherIcon"></i> Cloudiness:</h1>
-                <h2 id="cloudiness">Loading...</h2>
-            </div>
         </div>
     </div>
 
+    <!-- Di chuyển các ô dưới đây xuống dưới -->
     <div class="weatherContainer">
-        <input type="text" id="cityInput" placeholder="Enter City">
-        <button onclick="getWeatherData()">Get Weather</button>
         <div class="weatherInfo">
             <div class="weatherItem">
-                <h3>City:</h3>
-                <p id="cityName">Loading...</p>
-            </div>
-            <div class="weatherItem">
-                <h3>Temperature:</h3>
-                <p id="temperature">Loading...</p>
-            </div>
-            <div class="weatherItem">
-                <h3>Humidity:</h3>
-                <p id="humidity">Loading...</p>
-            </div>
-            <div class="weatherItem">
-                <h3>Wind Speed:</h3>
+                <h3><i class="fas fa-wind weatherIcon"></i> Wind Speed:</h3>
                 <p id="windSpeed">Loading...</p>
             </div>
             <div class="weatherItem">
-                <h3>Precipitation:</h3>
+                <h3><i class="fas fa-cloud-rain weatherIcon"></i> Precipitation:</h3>
                 <p id="precipitation">Loading...</p>
             </div>
             <div class="weatherItem">
-                <h3>Cloudiness:</h3>
+                <h3><i class="fas fa-cloud weatherIcon"></i> Cloudiness:</h3>
                 <p id="cloudiness">Loading...</p>
             </div>
         </div>
@@ -213,7 +188,6 @@
     // Realtime data
     var temp = document.getElementById('temp');
     var wet = document.getElementById('wet');
-    var windSpeed = document.getElementById('windSpeed');
     firebase.database().ref('DHT11/Temperature').on('value', snapshot => {
         temp.innerText = snapshot.val() + '°C';
     });

@@ -124,6 +124,7 @@
 <body>
     <header>
         <h1>Bảng Thông Tin Thời Tiết</h1>
+        <p id="current-date"></p>
     </header>
 
     <main>
@@ -172,9 +173,14 @@
                     <p id="toc-do-gio">-- m/s</p>
                 </div>
                 <div class="info-card">
-                    <i class="fas fa-clock"></i>
-                    <h3>Thời Gian</h3>
-                    <p id="thoi-gian">--:--:--</p>
+                    <i class="fas fa-cloud"></i>
+                    <h3>Lượng Mây</h3>
+                    <p id="luong-may">--%</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-cloud-rain"></i>
+                    <h3>Dự Báo Mưa</h3>
+                    <p id="du-bao-mua">-- mm</p>
                 </div>
             </div>
         </section>
@@ -185,10 +191,17 @@
     </footer>
 
     <script>
-        // Chìa khóa API OpenWeatherMap
         const apiKey = 'c05417eac917208d896aa3f9cff02ac9';
 
-        // Lấy dữ liệu thời tiết từ API
+        // Hiển thị ngày và giờ thực tế
+        function capNhatThoiGian() {
+            const now = new Date();
+            const ngay = now.toLocaleDateString('vi-VN');
+            const gio = now.toLocaleTimeString('vi-VN');
+            document.getElementById('current-date').textContent = `Ngày: ${ngay} - Giờ: ${gio}`;
+        }
+        setInterval(capNhatThoiGian, 1000); // Cập nhật mỗi giây
+
         async function layThoiTiet(thanhPho) {
             const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(thanhPho)}&units=metric&appid=${apiKey}`;
             try {
@@ -201,24 +214,23 @@
             }
         }
 
-        // Cập nhật thông tin hiển thị
         function capNhatThongTin(data) {
             const nhietDo = data.main.temp.toFixed(1);
             const doAm = data.main.humidity;
             const tocDoGio = data.wind.speed;
-            const thoiGian = new Date().toLocaleTimeString('vi-VN');
+            const luongMay = data.clouds.all;
+            const duBaoMua = data.rain ? data.rain['1h'] || 0 : 0;
 
-            // Cập nhật ô hiển thị
             document.getElementById('nhiet-do').textContent = `${nhietDo}°C`;
             document.getElementById('do-am').textContent = `${doAm}%`;
             document.getElementById('toc-do-gio').textContent = `${tocDoGio} m/s`;
-            document.getElementById('thoi-gian').textContent = thoiGian;
+            document.getElementById('luong-may').textContent = `${luongMay}%`;
+            document.getElementById('du-bao-mua').textContent = `${duBaoMua} mm`;
 
-            // Cập nhật thanh LED
-            document.getElementById('led-text').textContent = `Thời gian: ${thoiGian} | Nhiệt độ: ${nhietDo}°C | Độ ẩm: ${doAm}% | Tốc độ gió: ${tocDoGio} m/s`;
+            const thoiGian = new Date().toLocaleTimeString('vi-VN');
+            document.getElementById('led-text').textContent = `Thời gian: ${thoiGian} | Nhiệt độ: ${nhietDo}°C | Độ ẩm: ${doAm}% | Lượng mây: ${luongMay}% | Dự báo mưa: ${duBaoMua} mm`;
         }
 
-        // Xử lý sự kiện khi nhấn nút
         document.getElementById('lay-thoi-tiet').addEventListener('click', async () => {
             const thanhPho = document.getElementById('nhap-thanh-pho').value.trim();
             if (!thanhPho) return;
@@ -229,21 +241,10 @@
             }
         });
 
-        // Cập nhật tự động mỗi 10 giây
-        setInterval(async () => {
-            const thanhPho = document.getElementById('nhap-thanh-pho').value.trim() || 'Hanoi';
-            const duLieuThoiTiet = await layThoiTiet(thanhPho);
-            if (duLieuThoiTiet) {
-                capNhatThongTin(duLieuThoiTiet);
-            }
-        }, 10000);
-
-        // Đổi màu cho thanh LED
         document.getElementById('color-picker').addEventListener('input', (event) => {
             document.querySelector('.led-container').style.color = event.target.value;
         });
 
-        // Đổi tốc độ chạy chữ
         document.getElementById('speed-slider').addEventListener('input', (event) => {
             const speed = event.target.value;
             document.querySelector('.led-text').style.animationDuration = `${speed}s`;

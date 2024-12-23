@@ -4,73 +4,243 @@
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>IOT</title>
-     <link rel="stylesheet" href="style.css">
-     <link rel="preconnect" href="https://fonts.gstatic.com">
+     <title>IOT Smart City</title>
      <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      <script src="https://kit.fontawesome.com/a46b7b6629.js" crossorigin="anonymous"></script>
 
      <style>
-          body, html{
-               height:100%;
-               width: 100%;
-               margin:0;
+          /* Body and general layout */
+          body, html {
+               height: 100%;
+               margin: 0;
+               font-family: 'Orbitron', sans-serif;
                background-image: url(image/PIC3.jpg);
                background-position: center;
-               background-size: 100% 100%;
-               background-repeat: no-repeat;  
+               background-size: cover;
+               background-repeat: no-repeat;
           }
+
+          /* Title section */
+          .titleContainer {
+               display: flex;
+               justify-content: space-between;
+               align-items: center;
+               padding: 20px;
+               background-color: rgba(0, 0, 0, 0.6);
+               color: white;
+          }
+
+          .logo img {
+               width: 50px;
+               height: 50px;
+          }
+
+          .title {
+               font-size: 2.5em;
+               font-weight: 700;
+               letter-spacing: 2px;
+               color: #fff;
+          }
+
+          /* Tab Section */
+          .tabContainer {
+               padding: 20px;
+               background-color: rgba(0, 0, 0, 0.5);
+               border-radius: 10px;
+               margin: 20px auto;
+               width: 80%;
+          }
+
+          .buttonContainer button {
+               background-color: #3498db;
+               color: white;
+               font-size: 1.2em;
+               border: none;
+               padding: 10px 20px;
+               cursor: pointer;
+               border-radius: 5px;
+               transition: background-color 0.3s;
+          }
+
+          .buttonContainer button:hover {
+               background-color: #2980b9;
+          }
+
+          .tabPanelContainer {
+               margin-top: 20px;
+               display: flex;
+               justify-content: space-around;
+               align-items: center;
+          }
+
+          .tabTemp, .tabWet {
+               text-align: center;
+               color: white;
+               background-color: rgba(0, 0, 0, 0.7);
+               padding: 15px;
+               border-radius: 10px;
+               width: 200px;
+          }
+
+          .tabTemp h1, .tabWet h1 {
+               margin: 10px 0;
+               font-size: 1.5em;
+          }
+
+          .tabTemp h2, .tabWet h2 {
+               font-size: 2.5em;
+               font-weight: bold;
+               color: #e74c3c;
+          }
+
+          /* Footer */
+          .footer {
+               text-align: center;
+               padding: 20px;
+               background-color: rgba(0, 0, 0, 0.6);
+               color: white;
+               position: fixed;
+               bottom: 0;
+               width: 100%;
+          }
+
+          .footer label {
+               font-size: 1em;
+               margin: 5px;
+          }
+
+          /* Equipment Control Section */
+          .equipmentContainer {
+               display: flex;
+               justify-content: center;
+               align-items: center;
+               padding: 30px;
+               flex-wrap: wrap;
+               gap: 30px;
+          }
+
+          .equipmentTitle {
+               text-align: center;
+               width: 100%;
+               font-size: 2em;
+               margin-bottom: 30px;
+               color: white;
+          }
+
+          .equipmentTabContainer {
+               display: flex;
+               justify-content: space-between;
+               width: 100%;
+          }
+
+          .light, .fan, .TV {
+               background-color: rgba(0, 0, 0, 0.6);
+               padding: 20px;
+               border-radius: 10px;
+               text-align: center;
+               width: 200px;
+          }
+
+          .light img, .fan img, .TV img {
+               width: 100px;
+               height: 100px;
+               margin-bottom: 10px;
+          }
+
+          .boxbutton1, .boxbutton2, .boxbutton3 {
+               margin-top: 10px;
+          }
+
+          .boxbutton1 button, .boxbutton2 button, .boxbutton3 button {
+               padding: 10px 20px;
+               font-size: 1.2em;
+               border: none;
+               background-color: #3498db;
+               color: white;
+               border-radius: 5px;
+               margin: 5px;
+               cursor: pointer;
+               transition: background-color 0.3s;
+          }
+
+          .boxbutton1 button:hover, .boxbutton2 button:hover, .boxbutton3 button:hover {
+               background-color: #2980b9;
+          }
+
      </style>
 </head>
-<body>  
+<body>
+
      <div class="titleContainer">
           <div class="logo">
-               <!-- Sửa lỗi chính tả ở src -->
                <img src="image/logo.png" alt="Logo">
           </div>
-          <div class="title">
-               Smart City
-          </div>    
+          <div class="title">Smart City</div>    
      </div>  
+
      <div class="tabContainer">
           <div class="buttonContainer">
                <button onclick="showPanel(0)"><i class="far fa-building"></i> District I</button>            
           </div>
           <div class="tabPanelContainer">
-               <div class="tabPanel">
-                    <div class="tabsub">
-                         <div class="tabTemp">
-                              <script src="https://cdn.lordicon.com//libs/frhvbuzj/lord-icon-2.0.2.js"></script>
-                              <lord-icon
-                              src="https://cdn.lordicon.com//mypzgycw.json"
-                              trigger="loop"
-                              colors="primary:#000000,secondary:#c71f16"
-                              stroke="83"
-                              style="width:100px;height:100px">
-                              </lord-icon>                        
-                             <h1><i class="fas fa-temperature-high"></i> TEMPERATURE:</h1>
-                             <h1 id="temp">Loading...</h1> 
-                         </div>
-                         <div class="tabWet">
-                              <script src="https://cdn.lordicon.com//libs/frhvbuzj/lord-icon-2.0.2.js"></script>
-                              <lord-icon
-                                     src="https://cdn.lordicon.com//oyclgnwc.json"
-                                    trigger="loop"
-                                    colors="primary:#2516c7,secondary:#4030e8"
-                                    style="width:100px;height:100px">
-                               </lord-icon>
-                               <h1><i class="fas fa-tint"></i> HUMIDITY:</h1>
-                               <h1 id="wet">Loading...</h1>
-                         </div>
-                    </div>   
+               <div class="tabTemp">
+                    <script src="https://cdn.lordicon.com//libs/frhvbuzj/lord-icon-2.0.2.js"></script>
+                    <lord-icon
+                         src="https://cdn.lordicon.com//mypzgycw.json"
+                         trigger="loop"
+                         colors="primary:#000000,secondary:#c71f16"
+                         stroke="83"
+                         style="width:100px;height:100px">
+                    </lord-icon>
+                    <h1><i class="fas fa-temperature-high"></i> Temperature:</h1>
+                    <h2 id="temp">Loading...</h2>
+               </div>
+               <div class="tabWet">
+                    <script src="https://cdn.lordicon.com//libs/frhvbuzj/lord-icon-2.0.2.js"></script>
+                    <lord-icon
+                         src="https://cdn.lordicon.com//oyclgnwc.json"
+                         trigger="loop"
+                         colors="primary:#2516c7,secondary:#4030e8"
+                         style="width:100px;height:100px">
+                    </lord-icon>
+                    <h1><i class="fas fa-tint"></i> Humidity:</h1>
+                    <h2 id="wet">Loading...</h2>
                </div>
           </div>
      </div>
+
+     <div class="equipmentContainer">
+          <div class="equipmentTitle"><h1><i class="fas fa-wifi"></i> Equipment Control</h1></div>
+          <div class="equipmentTabContainer">
+               <div class="light">
+                    <img src="image/light_off.png" class="light_on" id="light" alt="">
+                    <div class="boxbutton1">
+                         <button type="button" id="btn1">On</button> 
+                         <button type="button" id="btn2">Off</button><br><br>
+                    </div>
+               </div>
+               <div class="fan">
+                    <img src="image/fan_off.png" class="fan_on" id="fan" alt="">
+                    <div class="boxbutton2">
+                         <button type="button" id="btn3">On</button> 
+                         <button type="button" id="btn4">Off</button><br><br>
+                    </div>
+               </div>
+               <div class="TV">
+                    <img src="image/TV_off.png" class="TV_on" id="TV" alt="">
+                    <div class="boxbutton3">
+                         <button type="button" id="btn5">On</button> 
+                         <button type="button" id="btn6">Off</button><br><br>
+                    </div>
+               </div>
+          </div>
+     </div>
+
      <div class="footer">
-          <label for="text">Bui Quang Tien - 21138184</label><br>
-          <label for="text">Nguyen Ngoc Tan - 21138174</label><br>
-          <label for="text">Trường Đại học Nông Lâm TP Hồ Chí Minh</label><br>
+          <label>Bui Quang Tien - 21138184</label><br>
+          <label>Nguyen Ngoc Tan - 21138174</label><br>
+          <label>Trường Đại học Nông Lâm TP Hồ Chí Minh</label><br>
      </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>

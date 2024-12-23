@@ -30,24 +30,27 @@
     <script>
         const apiUrl = "https://3853-2401-d800-9ac2-fbd4-5cb5-3246-bb29-4a84.ngrok-free.app/get-dht-data";
 
-        async function getThoiTiet() {
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error('Không thể lấy dữ liệu từ API');
-                }
-                const data = await response.json();
-                if (data) {
-                    document.getElementById("loading").style.display = "none";
-                    document.getElementById("thoi-tiet").innerHTML = `
-                        <p>Nhiệt độ: ${data.temperature}°C</p>
-                        <p>Độ ẩm: ${data.humidity}%</p>
-                    `;
-                }
-            } catch (error) {
-                document.getElementById("loading").textContent = "Lỗi kết nối API: " + error.message;
-            }
+async function getThoiTiet() {
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error('Không thể lấy dữ liệu từ API');
         }
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error('API trả về không phải JSON');
+        }
+        const data = await response.json();
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("thoi-tiet").innerHTML = `
+            <p>Nhiệt độ: ${data.temperature}°C</p>
+            <p>Độ ẩm: ${data.humidity}%</p>
+        `;
+    } catch (error) {
+        document.getElementById("loading").textContent = "Lỗi kết nối API: " + error.message;
+    }
+}
+
 
         getThoiTiet();
     </script>

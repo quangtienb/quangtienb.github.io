@@ -1,44 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hiển thị dữ liệu DHT11</title>
-  <script>
-    // Hàm lấy dữ liệu từ API ESP32
-    async function fetchDHTData() {
-      try {
-        // Lấy dữ liệu từ API ESP32
-        const response = await fetch('http://192.168.4.229:3000/get-dht-data');
-        if (!response.ok) {
-          throw new Error('Không thể lấy dữ liệu từ cảm biến DHT11.');
-        }
-
-        // Chuyển đổi dữ liệu JSON
-        const data = await response.json();
-        if (data) {
-          // Hiển thị nhiệt độ và độ ẩm lên trang
-          document.getElementById('temperature-dht').textContent = `${data.temperature} °C`;
-          document.getElementById('humidity-dht').textContent = `${data.humidity} %`;
-        }
-      } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu từ cảm biến DHT11:', error.message);
-        // Hiển thị lỗi nếu không lấy được dữ liệu
-        document.getElementById('temperature-dht').textContent = 'Lỗi';
-        document.getElementById('humidity-dht').textContent = 'Lỗi';
-      }
-    }
-
-    // Gọi hàm để lấy dữ liệu khi trang được tải
-    window.onload = fetchDHTData;
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHT11 Data</title>
 </head>
 <body>
-  <h1>Thông tin cảm biến DHT11</h1>
-  <div>
-    <p><strong>Nhiệt độ:</strong> <span id="temperature-dht">Đang tải...</span></p>
-    <p><strong>Độ ẩm:</strong> <span id="humidity-dht">Đang tải...</span></p>
-  </div>
-  <button onclick="fetchDHTData()">Lấy lại dữ liệu</button>
+    <h1>DHT11 Data</h1>
+    <div>
+        <p id="temperature-dht">Nhiệt độ: Lỗi</p>
+        <p id="humidity-dht">Độ ẩm: Lỗi</p>
+    </div>
+
+    <script>
+        async function fetchDHTData() {
+            try {
+                // URL của API ESP32
+                const response = await fetch('http://192.168.4.229:3000/get-dht-data');
+                
+                // Kiểm tra nếu phản hồi không hợp lệ
+                if (!response.ok) {
+                    throw new Error('Không thể lấy dữ liệu từ cảm biến DHT11.');
+                }
+
+                // Chuyển phản hồi thành JSON
+                const data = await response.json();
+
+                if (data) {
+                    // Hiển thị dữ liệu lên trang
+                    document.getElementById('temperature-dht').textContent = `Nhiệt độ: ${data.temperature} °C`;
+                    document.getElementById('humidity-dht').textContent = `Độ ẩm: ${data.humidity} %`;
+                } else {
+                    throw new Error('Dữ liệu không hợp lệ.');
+                }
+            } catch (error) {
+                console.error('Lỗi khi lấy dữ liệu từ cảm biến DHT11:', error.message);
+                document.getElementById('temperature-dht').textContent = 'Lỗi';
+                document.getElementById('humidity-dht').textContent = 'Lỗi';
+            }
+        }
+
+        // Gọi hàm lấy dữ liệu mỗi 10 giây
+        setInterval(fetchDHTData, 10000);
+        fetchDHTData();  // Lấy dữ liệu ngay khi tải trang
+    </script>
 </body>
 </html>

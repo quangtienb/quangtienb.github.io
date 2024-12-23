@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>IOT Smart City</title>
+     <title>Thành Phố Thông Minh IoT</title>
      <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      <script src="https://kit.fontawesome.com/a46b7b6629.js" crossorigin="anonymous"></script>
 
      <style>
-          /* Body and general layout */
+          /* Body và layout chung */
           body, html {
                height: 100%;
                margin: 0;
@@ -21,7 +21,7 @@
                background-repeat: no-repeat;
           }
 
-          /* Title section */
+          /* Phần tiêu đề */
           .titleContainer {
                display: flex;
                justify-content: space-between;
@@ -43,7 +43,7 @@
                color: #fff;
           }
 
-          /* Tab Section */
+          /* Phần Tab */
           .tabContainer {
                padding: 20px;
                background-color: rgba(0, 0, 0, 0.5);
@@ -102,7 +102,7 @@
                color: white;
                position: relative;
                width: 100%;
-               margin-top: 30px; /* Đảm bảo footer có khoảng cách với các phần khác */
+               margin-top: 30px;
           }
 
           .footer label {
@@ -110,62 +110,62 @@
                margin: 5px;
           }
 
-          /* Weather Section */
-      .weatherContainer {
-    text-align: center;
-    color: white;
-    margin-top: 30px;
-}
+          /* Phần Thời Tiết */
+          .weatherContainer {
+               text-align: center;
+               color: white;
+               margin-top: 30px;
+          }
 
-.weatherContainer input {
-    padding: 10px;
-    font-size: 1.2em;
-    border-radius: 5px;
-    border: 1px solid #3498db;
-    margin-right: 10px;
-}
+          .weatherContainer input {
+               padding: 10px;
+               font-size: 1.2em;
+               border-radius: 5px;
+               border: 1px solid #3498db;
+               margin-right: 10px;
+          }
 
-.weatherContainer button {
-    padding: 10px 20px;
-    font-size: 1.2em;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+          .weatherContainer button {
+               padding: 10px 20px;
+               font-size: 1.2em;
+               background-color: #3498db;
+               color: white;
+               border: none;
+               border-radius: 5px;
+               cursor: pointer;
+               transition: background-color 0.3s;
+          }
 
-.weatherContainer button:hover {
-    background-color: #2980b9;
-}
+          .weatherContainer button:hover {
+               background-color: #2980b9;
+          }
 
-.weatherInfo {
-    margin-top: 20px;
-    font-size: 1.5em;
-    font-weight: bold;
-}
+          .weatherInfo {
+               margin-top: 20px;
+               font-size: 1.5em;
+               font-weight: bold;
+          }
 
-.weatherItem {
-    margin: 10px 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 15px;
-    border-radius: 10px;
-    width: 200px;
-    display: inline-block;
-    text-align: center;
-}
+          .weatherItem {
+               margin: 10px 0;
+               background-color: rgba(0, 0, 0, 0.7);
+               padding: 15px;
+               border-radius: 10px;
+               width: 200px;
+               display: inline-block;
+               text-align: center;
+          }
 
-.weatherItem h3 {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-}
+          .weatherItem h3 {
+               font-size: 1.2em;
+               margin-bottom: 10px;
+          }
 
-.weatherItem p {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #e74c3c;
-}
+          .weatherItem p {
+               font-size: 1.5em;
+               font-weight: bold;
+               color: #e74c3c;
+          }
 
      </style>
 </head>
@@ -175,68 +175,37 @@
           <div class="logo">
                <img src="image/logo.png" alt="Logo">
           </div>
-          <div class="title">Smart City</div>    
+          <div class="title">THÔNG TIN THỜI TIẾT THÔNG MINH</div>    
      </div>  
 
      <div class="tabContainer">
           <div class="buttonContainer">
-               <button onclick="showPanel(0)"><i class="far fa-building"></i> District I</button>            
-          </div>
-          <div class="tabPanelContainer">
-               <div class="tabTemp">
-                    <script src="https://cdn.lordicon.com//libs/frhvbuzj/lord-icon-2.0.2.js"></script>
-                    <lord-icon
-                         src="https://cdn.lordicon.com//mypzgycw.json"
-                         trigger="loop"
-                         colors="primary:#000000,secondary:#c71f16"
-                         stroke="83"
-                         style="width:100px;height:100px">
-                    </lord-icon>
-                    <h1><i class="fas fa-temperature-high"></i> Temperature:</h1>
-                    <h2 id="temp">Loading...</h2>
-               </div>
-               <div class="tabWet">
-                    <script src="https://cdn.lordicon.com//libs/frhvbuzj/lord-icon-2.0.2.js"></script>
-                    <lord-icon
-                         src="https://cdn.lordicon.com//oyclgnwc.json"
-                         trigger="loop"
-                         colors="primary:#2516c7,secondary:#4030e8"
-                         style="width:100px;height:100px">
-                    </lord-icon>
-                    <h1><i class="fas fa-tint"></i> Humidity:</h1>
-                    <h2 id="wet">Loading...</h2>
-               </div>
-          </div>
-     </div>
-
-     <!-- Weather Section -->
-    <div class="weatherContainer">
-    <input type="text" id="cityInput" placeholder="Enter City">
-    <button onclick="getWeatherData()">Get Weather</button>
+               <button onclick="showPanel(0)"><i class="far fa-builtiết">
+    <button onclick="getWeatherData()">Lấy dữ liệu</button>
 
     <div class="weatherInfo">
         <div class="weatherItem">
-            <h3 id="cityName">City: Loading...</h3>
+            <h3 id="cityName">Thành phố:...</h3>
         </div>
         <div class="weatherItem">
-            <h3>Temperature:</h3>
-            <p id="temperature">Loading...</p>
+            <h3>Nhiệt Độ:</h3>
+            <p id="temperature">...</p>
         </div>
         <div class="weatherItem">
-            <h3>Humidity:</h3>
-            <p id="humidity">Loading...</p>
+            <h3>Độ Ẩm:</h3>
+            <p id="humidity">...</p>
         </div>
         <div class="weatherItem">
-            <h3>Wind Speed:</h3>
-            <p id="windSpeed">Loading...</p>
+            <h3>Tốc Độ Gió:</h3>
+            <p id="windSpeed">...</p>
         </div>
         <div class="weatherItem">
-            <h3>Rain:</h3>
-            <p id="rain">Loading...</p>
+            <h3>Lượng Mưa:</h3>
+            <p id="rain">Đang tải...</p>
         </div>
         <div class="weatherItem">
-            <h3>Time:</h3>
-            <p id="time">Loading...</p>
+            <h3>Thời gian:</h3>
+            <p id="time">...</p>
         </div>
     </div>
 </div>
@@ -253,7 +222,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
 
 <script>
-// Firebase configuration
+// Cấu hình Firebase
 var firebaseConfig = {
     apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk", 
     authDomain: "demothoitiet-995b8.firebaseapp.com", 
@@ -265,18 +234,18 @@ var firebaseConfig = {
     measurementId: "G-2JRE01LWSE"
 };
 
-// Initialize Firebase
+// Khởi tạo Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Get references to elements
+// Lấy tham chiếu đến các phần tử
 var temp = document.getElementById('temp');
 var wet = document.getElementById('wet');
 
-// Firebase Realtime Database references
+// Tham chiếu Firebase
 var tempRef = firebase.database().ref().child('DHT11/Temperature');
 var wetRef = firebase.database().ref().child('DHT11/Humidity');
 
-// Fetch data from Firebase
+// Lấy dữ liệu từ Firebase
 tempRef.on('value', function(snapshot) {
     temp.innerHTML = snapshot.val() + '°C';
 });
@@ -285,11 +254,10 @@ wetRef.on('value', function(snapshot) {
     wet.innerHTML = snapshot.val() + '%';
 });
 
-// Function to get weather data from OpenWeatherMap API
-// Function to get weather data from OpenWeatherMap API
+// Lấy dữ liệu thời tiết từ OpenWeatherMap API
 function getWeatherData() {
     var city = document.getElementById('cityInput').value;
-    var apiKey = 'c05417eac917208d896aa3f9cff02ac9';  // Replace with your OpenWeatherMap API key
+    var apiKey = 'c05417eac917208d896aa3f9cff02ac9';  // Thay thế bằng API key của bạn
 
     if (city) {
         var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
@@ -297,21 +265,20 @@ function getWeatherData() {
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
-                document.getElementById('cityName').innerText = `Weather in ${data.name}`;
+                document.getElementById('cityName').innerText = `Thời tiết tại ${data.name}`;
                 document.getElementById('temperature').innerText = `${data.main.temp}°C`;
                 document.getElementById('humidity').innerText = `${data.main.humidity}%`;
                 document.getElementById('windSpeed').innerText = `${data.wind.speed} m/s`;
-                document.getElementById('rain').innerText = data.rain ? `${data.rain['1h']} mm` : 'No rain';
-                document.getElementById('time').innerText = `Time: ${new Date().toLocaleTimeString()}`;
+                document.getElementById('rain').innerText = data.rain ? `${data.rain['1h']} mm` : 'Không mưa';
+                document.getElementById('time').innerText = `Thời gian: ${new Date().toLocaleTimeString()}`;
             })
             .catch(error => {
-                alert('Failed to fetch weather data!');
+                alert('Lỗi khi lấy dữ liệu thời tiết!');
             });
     } else {
-        alert('Please enter a city!');
+        alert('Vui lòng nhập tên thành phố!');
     }
 }
-
 </script>
 </body>
 </html>

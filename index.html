@@ -14,35 +14,26 @@
 
     <script>
         async function fetchDHTData() {
-            try {
-                // URL của API ESP32
-                const response = await fetch('http://192.168.4.229:3000/get-dht-data');
-                
-                // Kiểm tra nếu phản hồi không hợp lệ
-                if (!response.ok) {
-                    throw new Error('Không thể lấy dữ liệu từ cảm biến DHT11.');
-                }
+  try {
+    // URL của API ESP32 để lấy dữ liệu DHT11 (thay bằng IP thực tế của bạn)
+    const response = await fetch('http://192.168.4.229:3000/get-dht-data');
+    if (!response.ok) throw new Error('Không thể lấy dữ liệu từ cảm biến DHT11.');
 
-                // Chuyển phản hồi thành JSON
-                const data = await response.json();
+    const data = await response.json();
+    if (data) {
+      document.getElementById('temperature-dht').textContent = `${data.temperature} °C`;
+      document.getElementById('humidity-dht').textContent = `${data.humidity} %`;
+    }
+  } catch (error) {
+    console.error('Lỗi khi lấy dữ liệu từ cảm biến DHT11:', error.message);
+    document.getElementById('temperature-dht').textContent = 'Lỗi';
+    document.getElementById('humidity-dht').textContent = 'Lỗi';
+  }
+}
 
-                if (data) {
-                    // Hiển thị dữ liệu lên trang
-                    document.getElementById('temperature-dht').textContent = `Nhiệt độ: ${data.temperature} °C`;
-                    document.getElementById('humidity-dht').textContent = `Độ ẩm: ${data.humidity} %`;
-                } else {
-                    throw new Error('Dữ liệu không hợp lệ.');
-                }
-            } catch (error) {
-                console.error('Lỗi khi lấy dữ liệu từ cảm biến DHT11:', error.message);
-                document.getElementById('temperature-dht').textContent = 'Lỗi';
-                document.getElementById('humidity-dht').textContent = 'Lỗi';
-            }
-        }
+// Gọi hàm fetchDHTData khi tải trang
+window.onload = fetchDHTData;
 
-        // Gọi hàm lấy dữ liệu mỗi 10 giây
-        setInterval(fetchDHTData, 10000);
-        fetchDHTData();  // Lấy dữ liệu ngay khi tải trang
     </script>
 </body>
 </html>

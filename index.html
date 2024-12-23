@@ -309,10 +309,10 @@
                 alert('Không nhận được dữ liệu từ ESP32');
             }
         } catch (error) {
-            alert('Lỗi kết nối API');
-        }
+    console.log("Lỗi API: ", error); // Ghi chi tiết lỗi vào console
+    alert('Lỗi kết nối API');
+}
     }
-
     // Gọi hàm khi cần lấy dữ liệu
     setInterval(layDuLieuDHT, 5000); // Cập nhật dữ liệu mỗi 5 giây
 </script>

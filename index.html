@@ -8,9 +8,8 @@
      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      <script src="https://kit.fontawesome.com/a46b7b6629.js" crossorigin="anonymous"></script>
-
      <style>
-          /* CSS */
+          /* CSS đã được chỉnh sửa cho các tính năng mới */
           body, html {
                height: 100%;
                margin: 0;
@@ -139,6 +138,11 @@
                border-radius: 5px;
                border: 1px solid #3498db;
           }
+
+          .mapContainer {
+               margin-top: 20px;
+               text-align: center;
+          }
      </style>
 </head>
 <body>
@@ -199,6 +203,11 @@
           <button onclick="updateLED()">Update LED</button>
      </div>
 
+     <div class="mapContainer">
+          <h2>City Map</h2>
+          <div id="map"></div>
+     </div>
+
      <div class="footer">
           <label>Bùi Quang Tiến - 21138184</label><br>
           <label>Nguyễn Ngọc Tân - 21138174</label><br>
@@ -207,6 +216,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
 
 <script>
      // Firebase configuration
@@ -244,7 +254,10 @@
                     document.getElementById('temperature').innerText = `${data.main.temp}°C`;
                     document.getElementById('humidity').innerText = `${data.main.humidity}%`;
                     document.getElementById('windSpeed').innerText = `${data.wind.speed} m/s`;
-               }).catch(err => console.error(err));
+               }).catch(err => {
+                    alert("City not found or error with the weather API.");
+                    console.error(err);
+               });
      }
 
      // LED Control
@@ -261,6 +274,15 @@
           }).then(() => alert('LED updated successfully!'))
             .catch(err => console.error(err));
      }
+
+     // Google Maps integration
+     function initMap() {
+          const map = new google.maps.Map(document.getElementById("map"), {
+               zoom: 10,
+               center: { lat: 21.0285, lng: 105.8542 }
+          });
+     }
 </script>
+
 </body>
 </html>

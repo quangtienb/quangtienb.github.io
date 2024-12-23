@@ -240,29 +240,29 @@
 
     <script>
         // Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk",
-            authDomain: "demothoitiet-995b8.firebaseapp.com",
-            databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com",
-            projectId: "demothoitiet-995b8",
-            storageBucket: "demothoitiet-995b8.appspot.com",
-            messagingSenderId: "823683238153",
-            appId: "1:823683238153:web:97d52dd7ef86e50c616bd8",
-            measurementId: "G-2JRE01LWSE"
-        };
-        firebase.initializeApp(firebaseConfig);
+       // Firebase configuration
+var firebaseConfig = {
+    apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk",
+    authDomain: "demothoitiet-995b8.firebaseapp.com",
+    databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com",
+    projectId: "demothoitiet-995b8",
+    storageBucket: "demothoitiet-995b8.appspot.com",
+    messagingSenderId: "823683238153",
+    appId: "1:823683238153:web:97d52dd7ef86e50c616bd8",
+    measurementId: "G-2JRE01LWSE"
+};
+firebase.initializeApp(firebaseConfig);
 
-        // Get data from Firebase and update the UI
-        var firebaseTempElement = document.getElementById('firebase-temp');
-        var firebaseHumidityElement = document.getElementById('firebase-humidity');
-        firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
-            firebaseTempElement.innerText = snapshot.val() + " °C";
-        });
-        firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
-            firebaseHumidityElement.innerText = snapshot.val() + " %";
-        });
+// Get data from Firebase and update the UI
+var firebaseTempElement = document.getElementById('firebase-temp');
+var firebaseHumidityElement = document.getElementById('firebase-humidity');
+firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
+    firebaseTempElement.innerText = snapshot.val() + " °C";
+});
+firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
+    firebaseHumidityElement.innerText = snapshot.val() + " %";
+});
 
-        // Get weather data from OpenWeather API
 // Get weather data from OpenWeather API
 var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
 var apiUrl;
@@ -290,11 +290,9 @@ document.getElementById('fetch-weather-btn').addEventListener('click', function(
 
                 document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
 
-                       // Cập nhật dữ liệu thời tiết cho thanh LED
-        function updateLEDText(city, dateTime) {
-            const ledText = `${city} | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Gió: ${mockData.windSpeed} m/s | Mưa: ${mockData.rainfall} mm | Chúc các bạn một ngày tốt lành!`;
-            document.getElementById('led-text').textContent = ledText;
-        }
+                // Update the LED text with real-time data
+                const ledText = `${city} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Chúc các bạn một ngày tốt lành!`;
+                document.getElementById('led-text').textContent = ledText;
             })
             .catch(error => {
                 alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
@@ -304,27 +302,28 @@ document.getElementById('fetch-weather-btn').addEventListener('click', function(
     }
 });
 
-        // Adjust LED speed based on user input
-        document.getElementById('speed-control').addEventListener('input', function() {
-            var speedValue = this.value;
-            document.getElementById('led-text').style.animationDuration = speedValue + 's';
-        });
+// Adjust LED speed based on user input
+document.getElementById('speed-control').addEventListener('input', function() {
+    var speedValue = this.value;
+    document.getElementById('led-text').style.animationDuration = speedValue + 's';
+});
 
-        // Adjust LED color based on user input
-        document.getElementById('color-control').addEventListener('change', function() {
-            document.querySelector('.led-banner').style.backgroundColor = this.value;
-        });
+// Adjust LED color based on user input
+document.getElementById('color-control').addEventListener('change', function() {
+    document.querySelector('.led-banner').style.backgroundColor = this.value;
+});
 
-        // Display current time
-        function updateTime() {
-            var now = new Date();
-            var hours = now.getHours().toString().padStart(2, '0');
-            var minutes = now.getMinutes().toString().padStart(2, '0');
-            var seconds = now.getSeconds().toString().padStart(2, '0');
-            document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`;
-        }
-        setInterval(updateTime, 1000);
-        updateTime(); // Initial call to set time immediately
+// Display current time
+function updateTime() {
+    var now = new Date();
+    var hours = now.getHours().toString().padStart(2, '0');
+    var minutes = now.getMinutes().toString().padStart(2, '0');
+    var seconds = now.getSeconds().toString().padStart(2, '0');
+    document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`;
+}
+setInterval(updateTime, 1000);
+updateTime(); // Initial call to set time immediately
+ // Initial call to set time immediately
     </script>
 </body>
 </html>

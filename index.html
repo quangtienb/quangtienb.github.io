@@ -113,7 +113,7 @@
             text-align: center;
         }
 
-        /* Thanh LED */
+        /* Thanh LED điều khiển */
         .ledControl {
             text-align: center;
             margin-top: 30px;
@@ -129,19 +129,37 @@
 
         .ledBar {
             margin-top: 20px;
-            width: 80%;
-            height: 30px;
-            background-color: #ccc;
-            border-radius: 5px;
+            width: 100%; /* Thanh LED rộng ra hết chiều rộng */
+            height: 50px; /* Kích thước thanh LED */
+            background-color: #2c3e50;
+            border-radius: 10px;
             overflow: hidden;
             display: inline-block;
+            position: relative;
         }
 
         .ledLight {
+            position: absolute;
+            top: 0;
+            left: 100%;
             height: 100%;
-            width: 0%;
+            width: 100%;
             background-color: #f39c12;
-            transition: width 1s;
+            animation: scrollLeft 10s linear infinite;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        @keyframes scrollLeft {
+            0% {
+                left: 100%;
+            }
+            100% {
+                left: -100%;
+            }
         }
     </style>
 </head>
@@ -267,28 +285,18 @@
 
     // LED Control
     let ledText = "Chào mừng các bạn đã đến với thời tiết thông minh";
-    let ledIndex = 0;
     let ledSpeed = 100; // Default speed for LED scrolling
-    let ledInterval;
 
     // Function to update LED text
     function updateLEDData(text) {
-        clearInterval(ledInterval);
         ledText = text;
-        ledIndex = 0;
         scrollLED();
     }
 
     // Function to scroll LED text
     function scrollLED() {
         const ledLight = document.getElementById('ledLight');
-        const fullText = ledText;
-        ledLight.innerText = fullText.substring(ledIndex);
-        ledIndex++;
-        if (ledIndex > fullText.length) {
-            ledIndex = 0;
-        }
-        ledInterval = setInterval(scrollLED, ledSpeed);
+        ledLight.innerText = ledText;
     }
 
     // Update LED speed and color

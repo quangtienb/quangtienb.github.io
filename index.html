@@ -39,19 +39,18 @@
     const database = firebase.database();
 
     // Reference to DHT11 data
-    const dbRef = database.ref("DHT11");
+const dbRef = firebase.database().ref("DHT11");
 
-    // Fetch and display data
-    dbRef.on("value", (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        document.getElementById("temperature").textContent = data.Temperature || "Không có dữ liệu";
-        document.getElementById("humidity").textContent = data.Humidity || "Không có dữ liệu";
-      } else {
-        document.getElementById("temperature").textContent = "Không có dữ liệu";
-        document.getElementById("humidity").textContent = "Không có dữ liệu";
-      }
-    });
+dbRef.on("value", (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    document.getElementById("temperature").textContent = data.Temperature || "Không có dữ liệu";
+    document.getElementById("humidity").textContent = data.Humidity || "Không có dữ liệu";
+  } else {
+    document.getElementById("temperature").textContent = "Không có dữ liệu";
+    document.getElementById("humidity").textContent = "Không có dữ liệu";
+  }
+});
   </script>
 </body>
 </html>

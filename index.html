@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Dashboard</title>
+    <title>Bảng Thông Tin Thời Tiết</title>
     <style>
-        /* CSS Giao diện */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -47,168 +46,122 @@
             background: #0056b3;
         }
 
-        .weather-info-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .weather-info {
-            flex: 1;
-            min-width: 150px;
-            text-align: center;
+        .led-container {
+            background: black;
+            color: lime;
+            font-size: 18px;
+            font-weight: bold;
+            overflow: hidden;
+            white-space: nowrap;
             padding: 10px;
-            border: 1px solid #ddd;
             border-radius: 5px;
-            background: #f9f9f9;
         }
 
-        #history-list {
-            list-style: none;
-            padding: 0;
+        .led-text {
+            display: inline-block;
+            animation: scroll 10s linear infinite;
         }
 
-        #history-list li {
-            margin: 5px 0;
+        @keyframes scroll {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(-100%);
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Weather Dashboard</h1>
+        <h1>Bảng Thông Tin Thời Tiết</h1>
     </header>
 
     <main>
-        <!-- Input tìm kiếm -->
-        <section id="search">
-            <input type="text" id="city-input" placeholder="Nhập thành phố">
-            <button id="fetch-weather-btn">Lấy thời tiết</button>
+        <!-- Thanh LED hiển thị -->
+        <section id="led-section">
+            <div class="led-container">
+                <div id="led-text" class="led-text">Dữ liệu thời tiết sẽ hiển thị ở đây...</div>
+            </div>
         </section>
 
-        <!-- Thời tiết hiện tại -->
-        <section id="current-weather">
-            <h2>Thời tiết hiện tại</h2>
-            <div id="current-weather-container" class="weather-info-container"></div>
+        <!-- Phần nhập thành phố -->
+        <section id="tim-thanh-pho">
+            <input type="text" id="nhap-thanh-pho" placeholder="Nhập tên thành phố">
+            <button id="lay-thoi-tiet">Lấy Thông Tin Thời Tiết</button>
         </section>
 
-        <!-- Dự báo thời tiết -->
-        <section id="forecast">
-            <h2>Dự báo thời tiết (5 ngày)</h2>
-            <div id="forecast-container" class="weather-info-container"></div>
+        <!-- Thông tin thời tiết hiện tại -->
+        <section id="thoi-tiet-hien-tai">
+            <h2>Thời Tiết Hiện Tại</h2>
+            <div id="hien-thoi-tiet-hien-tai"></div>
         </section>
 
-        <!-- Lịch sử tìm kiếm -->
-        <section id="history">
-            <h2>Lịch sử tìm kiếm</h2>
-            <ul id="history-list"></ul>
-        </section>
-
-        <!-- So sánh cảm biến -->
-        <section id="sensor-data">
-            <h2>So sánh cảm biến</h2>
-            <p>Nhiệt độ từ DHT11: <span id="sensor-temp">--</span> °C</p>
-            <p>Độ ẩm từ DHT11: <span id="sensor-humidity">--</span> %</p>
+        <!-- Dữ liệu cảm biến DHT11 -->
+        <section id="cam-bien">
+            <h2>Dữ Liệu Từ Cảm Biến DHT11</h2>
+            <p>Nhiệt độ từ cảm biến: <span id="nhiet-do-cam-bien">--</span> °C</p>
+            <p>Độ ẩm từ cảm biến: <span id="do-am-cam-bien">--</span> %</p>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Weather App</p>
+        <p>&copy; 2024 Ứng Dụng Thời Tiết</p>
     </footer>
 
     <script>
-        // JavaScript Chức năng
+        // Chìa khóa API OpenWeatherMap
         const apiKey = 'c05417eac917208d896aa3f9cff02ac9';
 
-        // Lấy dữ liệu thời tiết hiện tại
-        async function fetchWeather(city) {
-            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
+        // Lấy dữ liệu thời tiết hiện tại từ API
+        async function layThoiTiet(thanhPho) {
+            const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(thanhPho)}&units=metric&appid=${apiKey}`;
             try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error('Không tìm thấy thành phố.');
-                return await response.json();
-            } catch (error) {
-                alert(error.message);
+                const phanHoi = await fetch(apiURL);
+                if (!phanHoi.ok) throw new Error('Không tìm thấy thành phố.');
+                return await phanHoi.json();
+            } catch (loi) {
+                alert(loi.message);
                 return null;
             }
         }
 
-        // Lấy dữ liệu dự báo
-        async function fetchForecast(city) {
-            const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&units=metric&appid=${apiKey}`;
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error('Không tìm thấy dự báo.');
-                return await response.json();
-            } catch (error) {
-                alert(error.message);
-                return null;
+        // Hiển thị dữ liệu trên thanh LED
+        function capNhatThanhLED(data, camBienData) {
+            const ledText = document.getElementById('led-text');
+            const thoiGian = new Date().toLocaleTimeString('vi-VN');
+            ledText.textContent = `Thời gian: ${thoiGian} | Thành phố: ${data.name} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Tốc độ gió: ${data.wind.speed} m/s | Cảm biến: Nhiệt độ ${camBienData.nhietDo}°C, Độ ẩm ${camBienData.doAm}%`;
+        }
+
+        // Lấy dữ liệu từ cảm biến DHT11 (giả lập)
+        function layDuLieuCamBien() {
+            return {
+                nhietDo: (Math.random() * 10 + 25).toFixed(1),
+                doAm: (Math.random() * 20 + 40).toFixed(1),
+            };
+        }
+
+        // Sự kiện khi nhấn nút "Lấy Thông Tin Thời Tiết"
+        document.getElementById('lay-thoi-tiet').addEventListener('click', async () => {
+            const thanhPho = document.getElementById('nhap-thanh-pho').value.trim();
+            if (!thanhPho) return;
+
+            const duLieuThoiTiet = await layThoiTiet(thanhPho);
+            if (duLieuThoiTiet) {
+                const camBienData = layDuLieuCamBien(); // Lấy dữ liệu cảm biến
+                capNhatThanhLED(duLieuThoiTiet, camBienData); // Cập nhật LED
             }
-        }
-
-        // Cập nhật UI thời tiết hiện tại
-        function updateWeatherUI(data) {
-            const container = document.getElementById('current-weather-container');
-            container.innerHTML = `
-                <div class="weather-info">
-                    <h3>${data.name}</h3>
-                    <p>${data.main.temp} °C</p>
-                    <p>${data.weather[0].description}</p>
-                    <p>Độ ẩm: ${data.main.humidity}%</p>
-                    <p>Tốc độ gió: ${data.wind.speed} m/s</p>
-                </div>
-            `;
-        }
-
-        // Cập nhật UI dự báo
-        function updateForecastUI(data) {
-            const container = document.getElementById('forecast-container');
-            container.innerHTML = '';
-            const dailyForecasts = data.list.filter((_, index) => index % 8 === 0);
-            dailyForecasts.forEach(forecast => {
-                const element = document.createElement('div');
-                element.classList.add('weather-info');
-                element.innerHTML = `
-                    <h3>${new Date(forecast.dt * 1000).toLocaleDateString('vi-VN')}</h3>
-                    <p>${forecast.main.temp} °C</p>
-                    <p>${forecast.weather[0].description}</p>
-                `;
-                container.appendChild(element);
-            });
-        }
-
-        // Lưu lịch sử truy vấn
-        function saveToHistory(city) {
-            const historyList = document.getElementById('history-list');
-            const item = document.createElement('li');
-            item.textContent = city;
-            historyList.appendChild(item);
-        }
-
-        // Lấy dữ liệu cảm biến DHT11
-        function fetchSensorData() {
-            // Giả lập cảm biến (thay bằng ESP32 nếu cần)
-            document.getElementById('sensor-temp').textContent = (Math.random() * 10 + 25).toFixed(1);
-            document.getElementById('sensor-humidity').textContent = (Math.random() * 20 + 40).toFixed(1);
-        }
-
-        // Xử lý sự kiện khi nhấn nút
-        document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
-            const city = document.getElementById('city-input').value.trim();
-            if (!city) return;
-
-            const weatherData = await fetchWeather(city);
-            const forecastData = await fetchForecast(city);
-
-            if (weatherData) {
-                updateWeatherUI(weatherData);
-                saveToHistory(city);
-            }
-            if (forecastData) {
-                updateForecastUI(forecastData);
-            }
-
-            fetchSensorData(); // Lấy dữ liệu cảm biến
         });
+
+        // Cập nhật liên tục thời gian thực cho thanh LED
+        setInterval(async () => {
+            const thanhPho = document.getElementById('nhap-thanh-pho').value.trim() || 'Hanoi';
+            const duLieuThoiTiet = await layThoiTiet(thanhPho);
+            if (duLieuThoiTiet) {
+                const camBienData = layDuLieuCamBien(); // Lấy dữ liệu cảm biến
+                capNhatThanhLED(duLieuThoiTiet, camBienData); // Cập nhật LED
+            }
+        }, 10000); // 10 giây cập nhật một lần
     </script>
 </body>
 </html>

@@ -251,52 +251,56 @@
         // Get data from Firebase and update the UI
         var firebaseTempElement = document.getElementById('firebase-temp');
         var firebaseHumidityElement = document.getElementById('firebase-humidity');
-        firebase.database().ref('DHT11/Temperature').on('value', snapshot => {
-            firebaseTempElement.innerText = snapshot.val() + '°C';
+        firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
+            firebaseTempElement.innerText = snapshot.val() + " °C";
         });
-        firebase.database().ref('DHT11/Humidity').on('value', snapshot => {
-            firebaseHumidityElement.innerText = snapshot.val() + '%';
+        firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
+            firebaseHumidityElement.innerText = snapshot.val() + " %";
         });
 
-        // Fetch weather data from API and update LED text
+        // Get weather data from OpenWeather API
+        var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
+        var apiUrl;
+        
         document.getElementById('fetch-weather-btn').addEventListener('click', function() {
             var city = document.getElementById('city-input').value;
-            if (!city) {
+            if (city) {
+                apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
+                
+                fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Lỗi khi lấy dữ liệu thời tiết');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('temperature').innerText = `${data.main.temp}°C`;
+                        document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+                        document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
+                        document.getElementById('rainfall').innerText = data.rain ? `${data.rain['1h']} mm` : '-- mm';
+                        document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
+
+                        // Update LED text
+                        document.getElementById('led-text').innerText = `Thành phố: ${city} - Nhiệt độ: ${data.main.temp}°C - Độ ẩm: ${data.main.humidity}% - Gió: ${data.wind.speed} m/s`;
+                    })
+                    .catch(error => {
+                        alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
+                    });
+            } else {
                 alert('Vui lòng nhập tên thành phố!');
-                return;
             }
-            var apiKey = 'c05417eac917208d896aa3f9cff02ac9'; // Thay bằng API Key của bạn
-            var apiUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    // Cập nhật thông tin thời tiết
-                    document.getElementById('temperature').innerText = `${data.main.temp}°C`;
-                    document.getElementById('humidity').innerText = `${data.main.humidity}%`;
-                    document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
-                    document.getElementById('rainfall').innerText = data.rain ? `${data.rain['1h']} mm` : '-- mm';
-                    document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
-
-                    // Cập nhật thanh LED
-                    const ledText = `Thành phố: ${city} - Nhiệt độ: ${data.main.temp}°C - Độ ẩm: ${data.main.humidity}% - Gió: ${data.wind.speed} m/s`;
-                    document.getElementById('led-text').innerText = ledText;
-                })
-                .catch(error => {
-                    alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
-                });
         });
 
-        // LED Banner Control
-        document.getElementById("speed-control").addEventListener("input", function () {
-            let speed = document.getElementById("speed-control").value;
-            let animationDuration = 12 / speed;
-            document.getElementById("led-text").style.animationDuration = animationDuration + "s";
+        // Adjust LED speed based on user input
+        document.getElementById('speed-control').addEventListener('input', function() {
+            var speedValue = this.value;
+            document.getElementById('led-text').style.animationDuration = speedValue + 's';
         });
 
-        document.getElementById("color-control").addEventListener("change", function () {
-            let color = document.getElementById("color-control").value;
-            document.querySelector(".led-banner").style.backgroundColor = color;
+        // Adjust LED color based on user input
+        document.getElementById('color-control').addEventListener('change', function() {
+            document.querySelector('.led-banner').style.backgroundColor = this.value;
         });
     </script>
 </body>

@@ -1,58 +1,51 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thông Tin Thời Tiết</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        #thoi-tiet {
-            margin-top: 20px;
-            font-size: 24px;
-        }
-        #loading {
-            font-size: 18px;
-            color: grey;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dữ liệu từ DHT11</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .data {
+      font-size: 24px;
+      margin: 20px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Thông Tin Thời Tiết</h1>
-    <p id="loading">Đang tải dữ liệu...</p>
-    <div id="thoi-tiet">
-        <!-- Dữ liệu thời tiết sẽ hiển thị tại đây -->
-    </div>
+  <h1>Dữ liệu Cảm biến DHT11</h1>
+  <div class="data">
+    <p>Nhiệt độ: <span id="temperature">Đang tải...</span> °C</p>
+    <p>Độ ẩm: <span id="humidity">Đang tải...</span> %</p>
+  </div>
 
-    <script>
-        const apiUrl = "https://3853-2401-d800-9ac2-fbd4-5cb5-3246-bb29-4a84.ngrok-free.app/get-dht-data";
+  <script>
+    // Cấu hình Firebase
+    const firebaseConfig = {
+  apiKey: "mvDifUWSp65mg4WPUU0l0aMOVHGsKfwjUz1Cjbb8",
+  databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com",
+  projectId: "demothoitiet-995b8"
+};
 
-async function getThoiTiet() {
-    try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error('Không thể lấy dữ liệu từ API');
-        }
-        const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-            throw new Error('API trả về không phải JSON');
-        }
-        const data = await response.json();
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("thoi-tiet").innerHTML = `
-            <p>Nhiệt độ: ${data.temperature}°C</p>
-            <p>Độ ẩm: ${data.humidity}%</p>
-        `;
-    } catch (error) {
-        document.getElementById("loading").textContent = "Lỗi kết nối API: " + error.message;
-    }
-}
+    // Khởi tạo Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
+    // Lấy dữ liệu từ Firebase
+    const temperatureElement = document.getElementById("temperature");
+    const humidityElement = document.getElementById("humidity");
 
-        getThoiTiet();
-    </script>
+    firebase.database().ref("/DHT11").on("value", (snapshot) => {
+      const data = snapshot.val();
+      temperatureElement.innerText = data.Temperature;
+      humidityElement.innerText = data.Humidity;
+    });
+  </script>
 </body>
 </html>

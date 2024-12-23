@@ -263,38 +263,43 @@
         });
 
         // Get weather data from OpenWeather API
-        var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
-        var apiUrl;
-        
-        document.getElementById('fetch-weather-btn').addEventListener('click', function() {
-            var city = document.getElementById('city-input').value;
-            if (city) {
-                apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
-                
-                fetch(apiUrl)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Lỗi khi lấy dữ liệu thời tiết');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        document.getElementById('temperature').innerText = `${data.main.temp}°C`;
-                        document.getElementById('humidity').innerText = `${data.main.humidity}%`;
-                        document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
-                        document.getElementById('rainfall').innerText = data.rain ? `${data.rain['1h']} mm` : '-- mm';
-                        document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
+// Get weather data from OpenWeather API
+var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
+var apiUrl;
 
-                        // Update LED text
-                        document.getElementById('led-text').innerText = `Thành phố: ${city} - Nhiệt độ: ${data.main.temp}°C - Độ ẩm: ${data.main.humidity}% - Gió: ${data.wind.speed} m/s`;
-                    })
-                    .catch(error => {
-                        alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
-                    });
-            } else {
-                alert('Vui lòng nhập tên thành phố!');
-            }
-        });
+document.getElementById('fetch-weather-btn').addEventListener('click', function() {
+    var city = document.getElementById('city-input').value;
+    if (city) {
+        apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
+        
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lỗi khi lấy dữ liệu thời tiết');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('temperature').innerText = `${data.main.temp}°C`;
+                document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+                document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
+                
+                // Kiểm tra dữ liệu mưa, nếu không có thì hiển thị 0 mm
+                let rainfall = data.rain ? (data.rain['1h'] || 0) : 0;
+                document.getElementById('rainfall').innerText = `${rainfall} mm`;
+
+                document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
+
+                // Update LED text
+                document.getElementById('led-text').innerText = `Thành phố: ${city} - Nhiệt độ: ${data.main.temp}°C - Độ ẩm: ${data.main.humidity}% - Gió: ${data.wind.speed} m/s`;
+            })
+            .catch(error => {
+                alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
+            });
+    } else {
+        alert('Vui lòng nhập tên thành phố!');
+    }
+});
 
         // Adjust LED speed based on user input
         document.getElementById('speed-control').addEventListener('input', function() {

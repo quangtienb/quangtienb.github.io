@@ -224,12 +224,12 @@
             <div class="weather-info">
                 <i class="fas fa-thermometer-half"></i>
                 <h3>Nhiệt độ DHT11</h3>
-                <p id="dht-temperature">-- °C</p>
+                <p id="temperature">-- °C</p>
             </div>
             <div class="weather-info">
                 <i class="fas fa-tint"></i>
                 <h3>Độ ẩm DHT11</h3>
-                <p id="dht-humidity">-- %</p>
+                <p id="humidity">-- %</p>
             </div>
         </div>
     </section>
@@ -309,13 +309,13 @@ async function fetchDHTData() {
 
         // Cập nhật giao diện với dữ liệu nhận được
         if (data) {
-            document.getElementById('dht-temperature').textContent = `${data.temperature} °C`;
-            document.getElementById('dht-humidity').textContent = `${data.humidity} %`;
+            document.getElementById('temperature').textContent = `${data.temperature} °C`;
+            document.getElementById('humidity').textContent = `${data.humidity} %`;
         }
     } catch (error) {
         console.error('Lỗi khi lấy dữ liệu từ cảm biến DHT11:', error.message);
-        document.getElementById('dht-temperature').textContent = 'Lỗi';
-        document.getElementById('dht-humidity').textContent = 'Lỗi';
+        document.getElementById('temperature').textContent = 'Lỗi';
+        document.getElementById('humidity').textContent = 'Lỗi';
     }
 }
 

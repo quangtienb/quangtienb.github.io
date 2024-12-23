@@ -224,12 +224,12 @@
             <div class="weather-info">
                 <i class="fas fa-thermometer-half"></i>
                 <h3>Nhiệt độ DHT11</h3>
-                <p id="temperature">-- °C</p>
+                <p id="temperature-dht">-- °C</p>
             </div>
             <div class="weather-info">
                 <i class="fas fa-tint"></i>
                 <h3>Độ ẩm DHT11</h3>
-                <p id="humidity">-- %</p>
+                <p id="humidity-dht">-- %</p>
             </div>
         </div>
     </section>
@@ -268,23 +268,22 @@
             }
         }
 
-        function updateWeatherUI(data, city) {
-            if (!data) return;
-            document.getElementById('temperature').textContent = `${data.main.temp} °C`;
-            document.getElementById('humidity').textContent = `${data.main.humidity} %`;
-            document.getElementById('wind-speed').textContent = `${data.wind.speed} m/s`;
-            document.getElementById('rainfall').textContent = `${data.rain ? data.rain['1h'] : 0} mm`;
-            document.getElementById('cloud-cover').textContent = `${data.clouds.all} %`;
+        async function fetchDHTData() {
+            try {
+                // URL của API ESP32 để lấy dữ liệu DHT11 (thay bằng IP thực tế của bạn)
+                const response = await fetch('http://192.168.4.229:3000/get-dht-data');
+                if (!response.ok) throw new Error('Không thể lấy dữ liệu từ cảm biến DHT11.');
 
-            updateLedText(city, data);
-
-            // Lưu dữ liệu vào localStorage
-            localStorage.setItem('weatherData', JSON.stringify(data));
-        }
-
-        function updateLedText(city, data) {
-            const currentTime = new Date().toLocaleString('vi-VN');
-            ledText.textContent = `${city} | ${currentTime} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s`;
+                const data = await response.json();
+                if (data) {
+                    document.getElementById('temperature-dht').textContent = `${data.temperature} °C`;
+                    document.getElementById('humidity-dht').textContent = `${data.humidity} %`;
+                }
+            } catch (error) {
+                console.error('Lỗi khi lấy dữ liệu từ cảm biến DHT11:', error.message);
+                document.getElementById('temperature-dht').textContent = 'Lỗi';
+                document.getElementById('humidity-dht').textContent = 'Lỗi';
+            }
         }
 
         document.getElementById('fetch-weather-btn').addEventListener('click', async () => {
@@ -293,52 +292,18 @@
                 alert('Vui lòng nhập tên thành phố!');
                 return;
             }
-            const data = await fetchWeatherData(city);
-            updateWeatherUI(data, city);
-        });
 
-        // Hàm lấy dữ liệu từ DHT11 thông qua API
-async function fetchDHTData() {
-    try {
-        // URL của API ESP32 để lấy dữ liệu DHT11 (thay bằng IP thực tế của bạn)
-        const response = await fetch('http://192.168.4.229:3000/get-dht-data'); 
-        if (!response.ok) throw new Error('Không thể lấy dữ liệu từ cảm biến DHT11.');
-
-        // Parse dữ liệu nhận được từ ESP32
-        const data = await response.json();
-
-        // Cập nhật giao diện với dữ liệu nhận được
-        if (data) {
-            document.getElementById('temperature').textContent = `${data.temperature} °C`;
-            document.getElementById('humidity').textContent = `${data.humidity} %`;
-        }
-    } catch (error) {
-        console.error('Lỗi khi lấy dữ liệu từ cảm biến DHT11:', error.message);
-        document.getElementById('temperature').textContent = 'Lỗi';
-        document.getElementById('humidity').textContent = 'Lỗi';
-    }
-}
-
-// Gọi hàm fetchDHTData() mỗi 5 giây để cập nhật dữ liệu
-setInterval(fetchDHTData, 5000);
-
-// Gọi hàm lần đầu khi trang được tải
-fetchDHTData();
-
-
-        // Cập nhật dữ liệu DHT mỗi 5 giây
-        setInterval(fetchDHTData, 5000);
-
-        // Cập nhật thời gian hiện tại trên thanh LED mỗi giây
-        setInterval(() => {
-            const city = document.getElementById('city-input').value.trim();
-            if (city) {
-                const data = JSON.parse(localStorage.getItem('weatherData'));
-                if (data) {
-                    updateLedText(city, data);
-                }
+            const weatherData = await fetchWeatherData(city);
+            if (weatherData) {
+                document.getElementById('temperature').textContent = `${weatherData.main.temp} °C`;
+                document.getElementById('humidity').textContent = `${weatherData.main.humidity} %`;
+                document.getElementById('wind-speed').textContent = `${weatherData.wind.speed} m/s`;
+                document.getElementById('rainfall').textContent = `${weatherData.rain ? weatherData.rain['1h'] : 0} mm`;
+                document.getElementById('cloud-cover').textContent = `${weatherData.clouds.all} %`;
             }
-        }, 1000);
+
+            await fetchDHTData();
+        });
     </script>
 </body>
 </html>

@@ -53,21 +53,22 @@
             align-items: center;
         }
 
-        .tabTemp, .tabWet {
+        .tabTemp, .tabWet, .tabWind {
             text-align: center;
             color: white;
             background-color: rgba(0, 0, 0, 0.7);
             padding: 15px;
             border-radius: 10px;
             width: 200px;
+            margin: 10px;
         }
 
-        .tabTemp h1, .tabWet h1 {
+        .tabTemp h1, .tabWet h1, .tabWind h1 {
             margin: 10px 0;
             font-size: 1.5em;
         }
 
-        .tabTemp h2, .tabWet h2 {
+        .tabTemp h2, .tabWet h2, .tabWind h2 {
             font-size: 2.5em;
             font-weight: bold;
             color: #e74c3c;
@@ -113,53 +114,9 @@
             text-align: center;
         }
 
-        /* Thanh LED điều khiển */
-        .ledControl {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .ledControl input, .ledControl select, .ledControl button {
-            padding: 10px;
-            font-size: 1.2em;
-            margin: 10px;
-            border-radius: 5px;
-            border: 1px solid #3498db;
-        }
-
-        .ledBar {
-            margin-top: 20px;
-            width: 100%; /* Thanh LED rộng ra hết chiều rộng */
-            height: 50px; /* Kích thước thanh LED */
-            background-color: #000000; /* Nền đen */
-            border-radius: 10px;
-            overflow: hidden;
-            display: inline-block;
-            position: relative;
-        }
-
-        .ledLight {
-            position: absolute;
-            top: 0;
-            left: 100%;
-            height: 100%;
-            width: 100%;
-            background-color: #ffffff; /* Chữ trắng */
-            animation: scrollLeft 10s linear infinite;
-            font-size: 1.8em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        @keyframes scrollLeft {
-            0% {
-                left: 100%;
-            }
-            100% {
-                left: -100%;
-            }
+        .weatherIcon {
+            font-size: 3em;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -175,12 +132,16 @@
     <div class="tabContainer">
         <div class="tabPanelContainer">
             <div class="tabTemp">
-                <h1><i class="fas fa-temperature-high"></i> Temperature:</h1>
+                <h1><i class="fas fa-temperature-high weatherIcon"></i> Temperature:</h1>
                 <h2 id="temp">Loading...</h2>
             </div>
             <div class="tabWet">
-                <h1><i class="fas fa-tint"></i> Humidity:</h1>
+                <h1><i class="fas fa-tint weatherIcon"></i> Humidity:</h1>
                 <h2 id="wet">Loading...</h2>
+            </div>
+            <div class="tabWind">
+                <h1><i class="fas fa-wind weatherIcon"></i> Wind Speed:</h1>
+                <h2 id="windSpeed">Loading...</h2>
             </div>
         </div>
     </div>
@@ -205,24 +166,6 @@
                 <h3>Wind Speed:</h3>
                 <p id="windSpeed">Loading...</p>
             </div>
-        </div>
-    </div>
-
-    <!-- Thanh LED điều khiển -->
-    <div class="ledControl">
-        <h2>LED Control</h2>
-        <label for="ledColor">Choose Color:</label>
-        <select id="ledColor">
-            <option value="red">Red</option>
-            <option value="green">Green</option>
-            <option value="blue">Blue</option>
-            <option value="black">Black</option>
-        </select>
-        <label for="ledSpeed">Set Speed (ms):</label>
-        <input type="number" id="ledSpeed" placeholder="500">
-        <button onclick="updateLED()">Update LED</button>
-        <div class="ledBar">
-            <div class="ledLight" id="ledLight"></div>
         </div>
     </div>
 
@@ -253,6 +196,7 @@
     // Realtime data
     var temp = document.getElementById('temp');
     var wet = document.getElementById('wet');
+    var windSpeed = document.getElementById('windSpeed');
     firebase.database().ref('DHT11/Temperature').on('value', snapshot => {
         temp.innerText = snapshot.val() + '°C';
     });
@@ -261,23 +205,6 @@
     });
 
     // Weather data
-    // Cập nhật dữ liệu thời tiết vào thanh LED
-function updateLEDData(city, temp, humidity, windSpeed, rain) {
-    ledText = `City: ${city} | Temp: ${temp}°C | Humidity: ${humidity}% | Wind Speed: ${windSpeed} m/s | Rain: ${rain ? rain : '0'} mm`;
-    scrollLED();
-}
-
-// Hàm cuộn thanh LED
-function scrollLED() {
-    const ledLight = document.getElementById('ledLight');
-    ledLight.innerText = ledText;
-}
-
-// Ban đầu hiển thị chữ chào mừng
-let ledText = "Chào mừng đến với thời tiết thông minh";
-scrollLED();  // Hiển thị ngay từ khi load trang
-
-// Cập nhật dữ liệu thời tiết và hiển thị lên thanh LED
 function getWeatherData() {
     const city = document.getElementById('cityInput').value;
     const apiKey = 'c05417eac917208d896aa3f9cff02ac9';
@@ -290,42 +217,12 @@ function getWeatherData() {
             document.getElementById('temperature').innerText = `${data.main.temp}°C`;
             document.getElementById('humidity').innerText = `${data.main.humidity}%`;
             document.getElementById('windSpeed').innerText = `${data.wind.speed} m/s`;
-
-            // Kiểm tra và lấy lượng mưa nếu có
-            let rainAmount = data.rain ? data.rain['1h'] : 0;
-
-            // Cập nhật dữ liệu thời tiết lên thanh LED
-            updateLEDData(data.name, data.main.temp, data.main.humidity, data.wind.speed, rainAmount);
         }).catch(err => {
             alert("City not found or error with the weather API.");
             console.error(err);
         });
 }
 
-    // Function to update LED text
-    function updateLEDData(text) {
-        ledText = text;
-        scrollLED();
-    }
-
-    // Function to scroll LED text
-    function scrollLED() {
-        const ledLight = document.getElementById('ledLight');
-        ledLight.innerText = ledText;
-    }
-
-    // Update LED speed and color
-    function updateLED() {
-        const speed = document.getElementById('ledSpeed').value;
-        const color = document.getElementById('ledColor').value;
-        if (!speed || speed <= 0) {
-            alert("Invalid speed!");
-            return;
-        }
-        ledSpeed = speed;
-        ledLight.style.backgroundColor = color;
-        scrollLED();
-    }
 </script>
 
 </body>

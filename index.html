@@ -261,28 +261,40 @@
     });
 
     // Weather data
-    function getWeatherData() {
-        const city = document.getElementById('cityInput').value;
-        const apiKey = 'c05417eac917208d896aa3f9cff02ac9';
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('cityName').innerText = data.name;
-                document.getElementById('temperature').innerText = `${data.main.temp}°C`;
-                document.getElementById('humidity').innerText = `${data.main.humidity}%`;
-                document.getElementById('windSpeed').innerText = `${data.wind.speed} m/s`;
+    // Cập nhật dữ liệu thời tiết vào thanh LED
+function updateLEDData(city, temp, humidity, windSpeed) {
+    ledText = `City: ${city} | Temp: ${temp}°C | Humidity: ${humidity}% | Wind Speed: ${windSpeed} m/s`;
+    scrollLED();
+}
 
-                // Cập nhật dữ liệu thời tiết vào thanh LED
-                updateLEDData(`City: ${data.name}`);
-                updateLEDData(`Temp: ${data.main.temp}°C`);
-                updateLEDData(`Humidity: ${data.main.humidity}%`);
-                updateLEDData(`Wind Speed: ${data.wind.speed} m/s`);
-            }).catch(err => {
-                alert("City not found or error with the weather API.");
-                console.error(err);
-            });
-    }
+// Hàm cuộn thanh LED
+function scrollLED() {
+    const ledLight = document.getElementById('ledLight');
+    ledLight.innerText = ledText;
+}
+
+// Cập nhật dữ liệu thời tiết và hiển thị lên thanh LED
+function getWeatherData() {
+    const city = document.getElementById('cityInput').value;
+    const apiKey = 'c05417eac917208d896aa3f9cff02ac9';
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('cityName').innerText = data.name;
+            document.getElementById('temperature').innerText = `${data.main.temp}°C`;
+            document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+            document.getElementById('windSpeed').innerText = `${data.wind.speed} m/s`;
+
+            // Cập nhật dữ liệu thời tiết lên thanh LED
+            updateLEDData(data.name, data.main.temp, data.main.humidity, data.wind.speed);
+        }).catch(err => {
+            alert("City not found or error with the weather API.");
+            console.error(err);
+        });
+}
+
 
     // LED Control
     let ledText = "Chào mừng các bạn đã đến với thời tiết thông minh";

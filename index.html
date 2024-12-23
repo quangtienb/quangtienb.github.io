@@ -289,9 +289,14 @@ document.getElementById('fetch-weather-btn').addEventListener('click', function(
                 document.getElementById('rainfall').innerText = `${rainfall} mm`;
 
                 document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
+                    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const timeString = `${hours}:${minutes}:${seconds}`;
 
                 // Update the LED text with real-time data
-                const ledText = `${city} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Chúc các bạn một ngày tốt lành!`;
+                 const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}% | Chúc các bạn một ngày tốt lành!`;
                 document.getElementById('led-text').textContent = ledText;
             })
             .catch(error => {

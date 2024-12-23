@@ -189,12 +189,12 @@
             <div class="weather-info">
                 <i class="fas fa-temperature-high"></i>
                 <h3>Nhiệt độ</h3>
-                <p id="temperature">Loading...</p>
+                <p id="temperature">-- </p>
             </div>
             <div class="weather-info">
                 <i class="fas fa-tint"></i>
                 <h3>Độ ẩm</h3>
-                <p id="humidity">Loading...</p>
+                <p id="humidity">-- </p>
             </div>
             <div class="weather-info">
                 <i class="fas fa-wind"></i>
@@ -290,8 +290,11 @@ document.getElementById('fetch-weather-btn').addEventListener('click', function(
 
                 document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
 
-                // Update LED text
-                document.getElementById('led-text').innerText = `Thành phố: ${city} - Nhiệt độ: ${data.main.temp}°C - Độ ẩm: ${data.main.humidity}% - Gió: ${data.wind.speed} m/s`;
+                       // Cập nhật dữ liệu thời tiết cho thanh LED
+        function updateLEDText(city, dateTime) {
+            const ledText = `${city} | ${dateTime} | Nhiệt độ: ${mockData.temperature}°C | Độ ẩm: ${mockData.humidity}% | Gió: ${mockData.windSpeed} m/s | Mưa: ${mockData.rainfall} mm | Chúc các bạn một ngày tốt lành!`;
+            document.getElementById('led-text').textContent = ledText;
+        }
             })
             .catch(error => {
                 alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);

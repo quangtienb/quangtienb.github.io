@@ -186,6 +186,7 @@
             <button id="fetch-weather-btn">Lấy dữ liệu thời tiết</button>
         </div>
         <div id="weather-info" class="weather-info-container">
+            <!-- Các ô hiển thị thông tin thời tiết từ API -->
             <div class="weather-info">
                 <i class="fas fa-temperature-high"></i>
                 <h3>Nhiệt độ</h3>
@@ -210,6 +211,17 @@
                 <i class="fas fa-cloud"></i>
                 <h3>Lượng mây</h3>
                 <p id="cloud-cover">-- %</p>
+            </div>
+            <!-- Các ô hiển thị thông tin từ Firebase -->
+            <div class="weather-info">
+                <i class="fas fa-thermometer-half"></i>
+                <h3>Temp (Firebase)</h3>
+                <p id="firebase-temp">Loading...</p>
+            </div>
+            <div class="weather-info">
+                <i class="fas fa-tint"></i>
+                <h3>Humidity (Firebase)</h3>
+                <p id="firebase-humidity">Loading...</p>
             </div>
         </div>
     </section>
@@ -237,13 +249,42 @@
         firebase.initializeApp(firebaseConfig);
 
         // Get data from Firebase and update the UI
-        var tempElement = document.getElementById('temperature');
-        var humidityElement = document.getElementById('humidity');
+        var firebaseTempElement = document.getElementById('firebase-temp');
+        var firebaseHumidityElement = document.getElementById('firebase-humidity');
         firebase.database().ref('DHT11/Temperature').on('value', snapshot => {
-            tempElement.innerText = snapshot.val() + '°C';
+            firebaseTempElement.innerText = snapshot.val() + '°C';
         });
         firebase.database().ref('DHT11/Humidity').on('value', snapshot => {
-            humidityElement.innerText = snapshot.val() + '%';
+            firebaseHumidityElement.innerText = snapshot.val() + '%';
+        });
+
+        // Fetch weather data from API and update LED text
+        document.getElementById('fetch-weather-btn').addEventListener('click', function() {
+            var city = document.getElementById('city-input').value;
+            if (!city) {
+                alert('Vui lòng nhập tên thành phố!');
+                return;
+            }
+            var apiKey = 'c05417eac917208d896aa3f9cff02ac9'; // Thay bằng API Key của bạn
+            var apiUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Cập nhật thông tin thời tiết
+                    document.getElementById('temperature').innerText = `${data.main.temp}°C`;
+                    document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+                    document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
+                    document.getElementById('rainfall').innerText = data.rain ? `${data.rain['1h']} mm` : '-- mm';
+                    document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
+
+                    // Cập nhật thanh LED
+                    const ledText = `Thành phố: ${city} - Nhiệt độ: ${data.main.temp}°C - Độ ẩm: ${data.main.humidity}% - Gió: ${data.wind.speed} m/s`;
+                    document.getElementById('led-text').innerText = ledText;
+                })
+                .catch(error => {
+                    alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
+                });
         });
 
         // LED Banner Control

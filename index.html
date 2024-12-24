@@ -246,6 +246,15 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
 
     <script>
+            const warning = checkSevereWeather(currentForecast);
+if (warning) alert(`Cảnh báo: ${warning}`);
+
+function checkSevereWeather(forecast) {
+    if (forecast.rain && forecast.rain['3h'] > 50) return 'Cảnh báo: Mưa lớn';
+    if (forecast.wind.speed > 15) return 'Cảnh báo: Gió mạnh';
+    if (forecast.main.temp < 5 || forecast.main.temp > 35) return 'Cảnh báo: Nhiệt độ cực đoan';
+    return null;
+}
         // Firebase configuration
        // Firebase configuration
 var firebaseConfig = {
@@ -325,15 +334,6 @@ document.getElementById('color-control').addEventListener('change', function() {
     document.querySelector('.led-banner').style.backgroundColor = this.value;
 });
         
-    const warning = checkSevereWeather(currentForecast);
-if (warning) alert(`Cảnh báo: ${warning}`);
-
-function checkSevereWeather(forecast) {
-    if (forecast.rain && forecast.rain['3h'] > 50) return 'Cảnh báo: Mưa lớn';
-    if (forecast.wind.speed > 15) return 'Cảnh báo: Gió mạnh';
-    if (forecast.main.temp < 5 || forecast.main.temp > 35) return 'Cảnh báo: Nhiệt độ cực đoan';
-    return null;
-}
 
 // Display current time
 // Hàm cập nhật thời gian

@@ -142,32 +142,6 @@
             color: #007BFF;
             text-decoration: none;
         }
-        .snowflake {
-    position: absolute;
-    top: -50px;
-    color: white;
-    font-size: 1.5rem;
-    animation: fall 10s linear infinite, sway 3s ease-in-out infinite;
-}
-
-@keyframes fall {
-    0% {
-        transform: translateY(-100px);
-    }
-    100% {
-        transform: translateY(400px);
-    }
-}
-
-@keyframes sway {
-    0%, 100% {
-        transform: translateX(0px);
-    }
-    50% {
-        transform: translateX(20px);
-    }
-}
-
     </style>
 </head>
 <body>
@@ -184,9 +158,8 @@
     </header>
 
     <div class="led-banner">
-    <span id="led-text">Chào mừng bạn đến với trang web hệ thống hiển thị thời tiết của chúng tôi! 🌞</span>
-    <div id="snowflakes"></div>
-</div>
+        <span id="led-text">Chào mừng bạn đến với trang web hệ thống hiển thị thời tiết của chúng tôi! 🌞</span>
+    </div>
 
     <div class="controls">
         <div>
@@ -367,34 +340,7 @@ setInterval(updateTime, 1000);
 
 // Gọi hàm một lần ngay khi trang tải để hiển thị thời gian ngay lập tức
 updateTime();
-// Hàm tạo bông tuyết
-function createSnowflake() {
-    const snowflake = document.createElement('i');
-    snowflake.classList.add('snowflake');
-    snowflake.textContent = '❄';
-    
-    // Vị trí ngẫu nhiên trong thanh LED
-    snowflake.style.left = Math.random() * 100 + '%';
-
-    // Kích thước ngẫu nhiên
-    snowflake.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
-
-    // Thời gian rơi ngẫu nhiên
-    snowflake.style.animationDuration = Math.random() * 5 + 5 + 's';
-
-    // Thêm vào thanh LED
-    document.getElementById('snowflakes').appendChild(snowflake);
-
-    // Loại bỏ bông tuyết khi hoàn thành hiệu ứng
-    setTimeout(() => {
-        snowflake.remove();
-    }, 10000);
-}
-
-// Tạo bông tuyết mỗi 300ms
-setInterval(createSnowflake, 300);
-
 
     </script>
 </body>
-</html>
+</html> hãy thêm hiệu ứng tuyết rơi trong thanh led

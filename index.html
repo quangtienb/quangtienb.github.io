@@ -158,7 +158,7 @@
     </header>
 
     <div class="led-banner">
-        <span id="led-text">Chào mừng bạn đến với web hệ thống hiển thị thời tiết của chúng tôi! 🌞</span>
+        <span id="led-text">Chào mừng bạn đến với trang web hệ thống hiển thị thời tiết của chúng tôi! 🌞</span>
     </div>
 
     <div class="controls">
@@ -170,10 +170,12 @@
             <label for="color-control">Chọn màu nền LED:</label>
             <select id="color-control">
                 <option value="black">Đen</option>
+                <option value="white">Trắng</option>
                 <option value="red">Đỏ</option>
                 <option value="blue">Xanh dương</option>
                 <option value="green">Xanh lá</option>
                 <option value="yellow">Vàng</option>
+                <option value="pink">Hồng</option>
             </select>
         </div>
     </div>
@@ -220,7 +222,7 @@
             <!-- Các ô hiển thị thông tin từ Firebase -->
             <div class="weather-info">
                 <i class="fas fa-thermometer-half"></i>
-                <h3>Temp (Firebase)</h3>
+                <h3>Temperature (Firebase)</h3>
                 <p id="firebase-temp">Loading...</p>
             </div>
             <div class="weather-info">
@@ -233,6 +235,8 @@
 
     <footer>
         <p>© 2024 Nhóm 20 - <a href="https://github.com/quangtienb" target="_blank">GitHub</a></p>
+        <p>Bùi Quang Tiến - 21138184</p>
+        <p>Nguyễn Ngọc Tân - 21138174</p>
         <p>Đồ án IoT và Ứng dụng</p>
     </footer>
 
@@ -290,7 +294,7 @@ document.getElementById('fetch-weather-btn').addEventListener('click', function(
                 document.getElementById('rainfall').innerText = `${rainfall} mm`;
 
                 document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
-                    const now = new Date();
+    const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');

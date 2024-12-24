@@ -142,6 +142,32 @@
             color: #007BFF;
             text-decoration: none;
         }
+        .snowflake {
+    position: absolute;
+    top: -50px;
+    color: white;
+    font-size: 1.5rem;
+    animation: fall 10s linear infinite, sway 3s ease-in-out infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100px);
+    }
+    100% {
+        transform: translateY(400px);
+    }
+}
+
+@keyframes sway {
+    0%, 100% {
+        transform: translateX(0px);
+    }
+    50% {
+        transform: translateX(20px);
+    }
+}
+
     </style>
 </head>
 <body>
@@ -149,17 +175,18 @@
         <h1>🌍 Thông Tin Thời Tiết 🌍</h1>
         <nav>
             <ul>
-                <li><a href="gioithieu.html">🌞 Giới thiệu</a></li>
-                <li><a href="yeucau.html">🌞 Yêu cầu</a></li>
-                <li><a href="muctieu.html">🌞 Mục tiêu</a></li>
-                <li><a href="lienhe.html">🌞 Liên hệ</a></li>
+                <li><a href="gioithieu.html">🌤️ <b>Giới thiệu</b></a></li>
+                <li><a href="yeucau.html">🌤️ <b>Yêu cầu</b></a></li>
+                <li><a href="muctieu.html">🌤️ <b>Mục tiêu</b></a></li>
+                <li><a href="lienhe.html">🌤️ <b>Liên hệ</b></a></li>
             </ul>
         </nav>
     </header>
 
     <div class="led-banner">
-        <span id="led-text">Chào mừng bạn đến với trang web hệ thống hiển thị thời tiết của chúng tôi! 🌞</span>
-    </div>
+    <span id="led-text">Chào mừng bạn đến với trang web hệ thống hiển thị thời tiết của chúng tôi! 🌞</span>
+    <div id="snowflakes"></div>
+</div>
 
     <div class="controls">
         <div>
@@ -169,21 +196,23 @@
         <div>
             <label for="color-control">Chọn màu nền LED:</label>
             <select id="color-control">
-                <option value="black">Đen</option>
-                <option value="white">Trắng</option>
-                <option value="red">Đỏ</option>
-                <option value="blue">Xanh dương</option>
-                <option value="green">Xanh lá</option>
-                <option value="yellow">Vàng</option>
-                <option value="pink">Hồng</option>
+                <option value="black">⚫Đen</option>
+                <option value="white">⚪Trắng</option>
+                <option value="red">🔴Đỏ</option>
+                <option value="blue">🔵Xanh dương</option>
+                <option value="green">🟢Xanh lá</option>
+                <option value="yellow">🟡Vàng</option>
+                <option value="orange">🟠Cam</option>
+                <option value="purple">🟣Tím</option>
+                <option value="pink">🌸Hồng</option>
             </select>
         </div>
     </div>
 
     <section>
-        <h2>🌍 Chọn Địa Điểm và Xem Thời Tiết</h2>
+        <h2>🌈 Chọn Địa Điểm và Xem Thời Tiết</h2>
         <div>
-            <label for="city-input">🌍 Nhập tên thành phố:</label>
+            <label for="city-input">🌈 Nhập tên thành phố:</label>
             <input type="text" id="city-input" placeholder="Ví dụ: Hanoi, Ho Chi Minh...">
             <button id="fetch-weather-btn">Lấy dữ liệu thời tiết</button>
         </div>
@@ -338,6 +367,33 @@ setInterval(updateTime, 1000);
 
 // Gọi hàm một lần ngay khi trang tải để hiển thị thời gian ngay lập tức
 updateTime();
+// Hàm tạo bông tuyết
+function createSnowflake() {
+    const snowflake = document.createElement('i');
+    snowflake.classList.add('snowflake');
+    snowflake.textContent = '❄';
+    
+    // Vị trí ngẫu nhiên trong thanh LED
+    snowflake.style.left = Math.random() * 100 + '%';
+
+    // Kích thước ngẫu nhiên
+    snowflake.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
+
+    // Thời gian rơi ngẫu nhiên
+    snowflake.style.animationDuration = Math.random() * 5 + 5 + 's';
+
+    // Thêm vào thanh LED
+    document.getElementById('snowflakes').appendChild(snowflake);
+
+    // Loại bỏ bông tuyết khi hoàn thành hiệu ứng
+    setTimeout(() => {
+        snowflake.remove();
+    }, 10000);
+}
+
+// Tạo bông tuyết mỗi 300ms
+setInterval(createSnowflake, 300);
+
 
     </script>
 </body>

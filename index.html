@@ -304,11 +304,14 @@ document.getElementById('fetch-weather-btn').addEventListener('click', function(
 
                // Đảm bảo bạn lấy giá trị từ phần tử HTML
 // Lấy giá trị thực từ phần tử HTML
+// Lấy giá trị thực từ phần tử HTML
 const firebaseHumidityValue = firebaseHumidityElement.innerText;
 const firebaseTempElementValue = firebaseTempElement.innerText;
 
 // Cập nhật chuỗi ledText với giá trị thực từ Firebase và xuống dòng
-const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}% | Chúc các bạn một ngày tốt lành! \n Thời tiết trong khu vực: Nhiệt độ (DHT11): ${firebaseTempElementValue}°C | Độ ẩm (DHT11): ${firebaseHumidityValue}`;
+const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}% | Chúc các bạn một ngày tốt lành! 
+\nThời tiết trong khu vực: Nhiệt độ (DHT11): ${firebaseTempElementValue}°C | Độ ẩm (DHT11): ${firebaseHumidityValue}`;
+
 
 
                 document.getElementById('led-text').textContent = ledText;

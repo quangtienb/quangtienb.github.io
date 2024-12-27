@@ -304,7 +304,7 @@ document.getElementById('fetch-weather-btn').addEventListener('click', function(
 
                 // Update the LED text with real-time data
                 const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}% | Chúc các bạn một ngày tốt lành!
-Thời tiết trong khu vực: Nhiệt độ (DHT11): ${DHT11/Temperature}°C | Độ ẩm (DHT11): ${DHT11/Humidity}%`;
+Thời tiết trong khu vực: Nhiệt độ (DHT11): ${firebaseTempElement}°C | Độ ẩm (DHT11): ${firebaseHumidity}%`;
 
                 document.getElementById('led-text').textContent = ledText;
             })

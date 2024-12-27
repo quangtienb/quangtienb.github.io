@@ -302,9 +302,15 @@ document.getElementById('fetch-weather-btn').addEventListener('click', function(
     const seconds = now.getSeconds().toString().padStart(2, '0');
     const timeString = `${hours}:${minutes}:${seconds}`;
 
-                // Update the LED text with real-time data
-                const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}% | Chúc các bạn một ngày tốt lành!
-Thời tiết trong khu vực: Nhiệt độ (DHT11): ${firebaseTempElement}°C | Độ ẩm (DHT11): ${firebaseHumidity}%`;
+               // Đảm bảo bạn lấy giá trị từ phần tử HTML
+// Lấy giá trị thực từ phần tử HTML
+const firebaseHumidityValue = firebaseHumidityElement.innerText;
+const firebaseTempElementValue = firebaseTempElement.innerText;
+
+// Cập nhật chuỗi ledText với giá trị thực từ Firebase
+const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}% | Chúc các bạn một ngày tốt lành!
+Thời tiết trong khu vực: Nhiệt độ (DHT11): ${firebaseTempElementValue}°C | Độ ẩm (DHT11): ${firebaseHumidityValue}`;
+
 
                 document.getElementById('led-text').textContent = ledText;
             })

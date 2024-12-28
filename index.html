@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thông Tin Thời Tiết - Nhóm 20</title>
+    <title>Hệ thống điều khiển thông gió cho nhà kính - Nhóm 20</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -40,40 +40,6 @@
         nav ul li a {
             color: white;
             text-decoration: none;
-        }
-
-        .led-banner {
-            background: black;
-            color: #00FF00;
-            font-size: 2rem;
-            padding: 1rem 0.5rem;
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-            margin: 1rem auto;
-            max-width: 100%;
-            height: 4rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            border: 2px solid #00FF00;
-        }
-
-        @keyframes scroll-text {
-            0% {
-                transform: translateX(100%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        #led-text {
-            display: inline-block;
-            position: absolute;
-            white-space: nowrap;
-            animation: scroll-text 12s linear infinite;
-            font-size: 1.8rem;
-            line-height: 4rem;
         }
 
         .controls {
@@ -157,30 +123,6 @@
         </nav>
     </header>
 
-    <div class="led-banner">
-        <span id="led-text">Chào mừng bạn đến với trang web hệ thống hiển thị thời tiết của chúng tôi! 🌞</span>
-    </div>
-
-    <div class="controls">
-        <div>
-            <label for="speed-control">Tốc độ chạy chữ (1-20):</label>
-            <input type="range" id="speed-control" min="1" max="20" value="12">
-        </div>
-        <div>
-            <label for="color-control">Chọn màu nền LED:</label>
-            <select id="color-control">
-                <option value="black">⚫Đen</option>
-                <option value="white">⚪Trắng</option>
-                <option value="red">🔴Đỏ</option>
-                <option value="blue">🔵Xanh dương</option>
-                <option value="green">🟢Xanh lá</option>
-                <option value="yellow">🟡Vàng</option>
-                <option value="orange">🟠Cam</option>
-                <option value="purple">🟣Tím</option>
-                <option value="pink">🌸Hồng</option>
-            </select>
-        </div>
-    </div>
 
     <section>
         <h2>🌈 Chọn Địa Điểm và Xem Thời Tiết</h2>
@@ -247,110 +189,73 @@
 
     <script>
         // Firebase configuration
-       // Firebase configuration
-var firebaseConfig = {
-    apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk",
-    authDomain: "demothoitiet-995b8.firebaseapp.com",
-    databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com",
-    projectId: "demothoitiet-995b8",
-    storageBucket: "demothoitiet-995b8.appspot.com",
-    messagingSenderId: "823683238153",
-    appId: "1:823683238153:web:97d52dd7ef86e50c616bd8",
-    measurementId: "G-2JRE01LWSE"
-};
-firebase.initializeApp(firebaseConfig);
+        var firebaseConfig = {
+            apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk",
+            authDomain: "demothoitiet-995b8.firebaseapp.com",
+            databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com",
+            projectId: "demothoitiet-995b8",
+            storageBucket: "demothoitiet-995b8.appspot.com",
+            messagingSenderId: "823683238153",
+            appId: "1:823683238153:web:97d52dd7ef86e50c616bd8",
+            measurementId: "G-2JRE01LWSE"
+        };
+        firebase.initializeApp(firebaseConfig);
 
-// Get data from Firebase and update the UI
-var firebaseTempElement = document.getElementById('firebase-temp');
-var firebaseHumidityElement = document.getElementById('firebase-humidity');
-firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
-    firebaseTempElement.innerText = snapshot.val() + " °C";
-});
-firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
-    firebaseHumidityElement.innerText = snapshot.val() + " %";
-});
+        // Get data from Firebase and update the UI
+        var firebaseTempElement = document.getElementById('firebase-temp');
+        var firebaseHumidityElement = document.getElementById('firebase-humidity');
+        firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
+            firebaseTempElement.innerText = snapshot.val() + " °C";
+        });
+        firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
+            firebaseHumidityElement.innerText = snapshot.val() + " %";
+        });
 
-// Get weather data from OpenWeather API
-var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
-var apiUrl;
+        // Get weather data from OpenWeather API
+        var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
+        var apiUrl;
 
-document.getElementById('fetch-weather-btn').addEventListener('click', function() {
-    var city = document.getElementById('city-input').value;
-    if (city) {
-        apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
-        
-        fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Lỗi khi lấy dữ liệu thời tiết');
-                }
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById('temperature').innerText = `${data.main.temp}°C`;
-                document.getElementById('humidity').innerText = `${data.main.humidity}%`;
-                document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
+        document.getElementById('fetch-weather-btn').addEventListener('click', function() {
+            var city = document.getElementById('city-input').value;
+            if (city) {
+                apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
                 
-                // Kiểm tra dữ liệu mưa, nếu không có thì hiển thị 0 mm
-                let rainfall = data.rain ? (data.rain['1h'] || 0) : 0;
-                document.getElementById('rainfall').innerText = `${rainfall} mm`;
+                fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Lỗi khi lấy dữ liệu thời tiết');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('temperature').innerText = `${data.main.temp}°C`;
+                        document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+                        document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
+                        
+                        // Kiểm tra dữ liệu mưa, nếu không có thì hiển thị 0 mm
+                        let rainfall = data.rain ? (data.rain['1h'] || 0) : 0;
+                        document.getElementById('rainfall').innerText = `${rainfall} mm`;
 
-                document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const seconds = now.getSeconds().toString().padStart(2, '0');
-    const timeString = `${hours}:${minutes}:${seconds}`;
+                        document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
+                        const now = new Date();
+                        const hours = now.getHours().toString().padStart(2, '0');
+                        const minutes = now.getMinutes().toString().padStart(2, '0');
+                        const seconds = now.getSeconds().toString().padStart(2, '0');
+                        const timeString = `${hours}:${minutes}:${seconds}`;
 
-               // Đảm bảo bạn lấy giá trị từ phần tử HTML
-// Lấy giá trị thực từ phần tử HTML
-// Lấy giá trị thực từ phần tử HTML
-const firebaseHumidityValue = firebaseHumidityElement.innerText;
-const firebaseTempElementValue = firebaseTempElement.innerText;
+                        document.getElementById('current-time').innerText = timeString;
+                    })
+                    .catch(error => console.error(error));
+            }
+        });
 
-// Cập nhật chuỗi ledText với giá trị thực từ Firebase và xuống dòng
-const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}% | Chúc các bạn một ngày tốt lành! 
-\nThời tiết trong khu vực: Nhiệt độ (DHT11): ${firebaseTempElementValue}°C | Độ ẩm (DHT11): ${firebaseHumidityValue}`;
+        // Display current time
+        function updateTime() {
+            var now = new Date();
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`;
+        }
 
-
-
-                document.getElementById('led-text').textContent = ledText;
-            })
-            .catch(error => {
-                alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
-            });
-    } else {
-        alert('Vui lòng nhập tên thành phố!');
-    }
-});
-
-// Adjust LED speed based on user input
-document.getElementById('speed-control').addEventListener('input', function() {
-    var speedValue = this.value;
-    document.getElementById('led-text').style.animationDuration = speedValue + 's';
-});
-
-// Adjust LED color based on user input
-document.getElementById('color-control').addEventListener('change', function() {
-    document.querySelector('.led-banner').style.backgroundColor = this.value;
-});
-
-// Display current time
-// Hàm cập nhật thời gian
-function updateTime() {
-    var now = new Date(); // Lấy thời gian hiện tại
-    var hours = now.getHours().toString().padStart(2, '0'); // Lấy giờ và đảm bảo có 2 chữ số
-    var minutes = now.getMinutes().toString().padStart(2, '0'); // Lấy phút và đảm bảo có 2 chữ số
-    var seconds = now.getSeconds().toString().padStart(2, '0'); // Lấy giây và đảm bảo có 2 chữ số
-    document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`; // Cập nhật thời gian vào phần tử HTML
-}
-
-// Gọi hàm updateTime mỗi giây
-setInterval(updateTime, 1000);
-
-// Gọi hàm một lần ngay khi trang tải để hiển thị thời gian ngay lập tức
-updateTime();
-
-    </script>
-</body>
-</html>
+       

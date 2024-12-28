@@ -309,8 +309,8 @@ const firebaseHumidityValue = firebaseHumidityElement.innerText;
 const firebaseTempElementValue = firebaseTempElement.innerText;
 
 // Cập nhật chuỗi ledText với giá trị thực từ Firebase và xuống dòng
-const ledText = `Thời gian: ${timeString} |Thời tiết khu vực (API) Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}%\n
-                                           Thời tiết nhà kính (DHT11): Nhiệt độ: ${firebaseTempElementValue}°C | Độ ẩm: ${firebaseHumidityValue}`;
+const ledText = `Thời gian: ${timeString} |Thời tiết khu vực (API) Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}%
+                                           <p>Thời tiết nhà kính (DHT11): Nhiệt độ: ${firebaseTempElementValue}°C | Độ ẩm: ${firebaseHumidityValue} </p>`;
 
 
 

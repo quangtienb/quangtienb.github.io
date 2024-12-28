@@ -158,7 +158,7 @@
     </header>
 
     <div class="led-banner">
-        <span id="led-text">Chào mừng bạn đến với trang web hệ thống hiển thị thời tiết của chúng tôi! 🌞</span>
+        <span id="led-text">Chào mừng bạn đến với trang web Hệ thống điều khiển thông gió cho nhà kính của chúng tôi! 🌞</span>
     </div>
 
     <div class="controls">
@@ -309,7 +309,7 @@ const firebaseHumidityValue = firebaseHumidityElement.innerText;
 const firebaseTempElementValue = firebaseTempElement.innerText;
 
 // Cập nhật chuỗi ledText với giá trị thực từ Firebase và xuống dòng
-const ledText = `${city} | Thời gian: ${timeString} | Thời tiết nhà kính: Nhiệt độ (DHT11): ${firebaseTempElementValue}°C | Độ ẩm (DHT11): ${firebaseHumidityValue}`;
+const ledText = `Thời gian: ${timeString} | Thời tiết nhà kính: Nhiệt độ (DHT11): ${firebaseTempElementValue}°C | Độ ẩm (DHT11): ${firebaseHumidityValue}`;
 
 
 
@@ -352,4 +352,4 @@ updateTime();
 
     </script>
 </body>
-</html> hãy bỏ các chức năng led trong code
+</html>

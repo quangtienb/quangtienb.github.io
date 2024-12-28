@@ -157,6 +157,30 @@
         </nav>
     </header>
 
+    <div class="led-banner">
+        <span id="led-text">Chào mừng bạn đến với trang web hệ thống hiển thị thời tiết của chúng tôi! 🌞</span>
+    </div>
+
+    <div class="controls">
+        <div>
+            <label for="speed-control">Tốc độ chạy chữ (1-20):</label>
+            <input type="range" id="speed-control" min="1" max="20" value="12">
+        </div>
+        <div>
+            <label for="color-control">Chọn màu nền LED:</label>
+            <select id="color-control">
+                <option value="black">⚫Đen</option>
+                <option value="white">⚪Trắng</option>
+                <option value="red">🔴Đỏ</option>
+                <option value="blue">🔵Xanh dương</option>
+                <option value="green">🟢Xanh lá</option>
+                <option value="yellow">🟡Vàng</option>
+                <option value="orange">🟠Cam</option>
+                <option value="purple">🟣Tím</option>
+                <option value="pink">🌸Hồng</option>
+            </select>
+        </div>
+    </div>
 
     <section>
         <h2>🌈 Chọn Địa Điểm và Xem Thời Tiết</h2>
@@ -279,9 +303,25 @@ document.getElementById('fetch-weather-btn').addEventListener('click', function(
     const timeString = `${hours}:${minutes}:${seconds}`;
 
                // Đảm bảo bạn lấy giá trị từ phần tử HTML
+// Lấy giá trị thực từ phần tử HTML
+// Lấy giá trị thực từ phần tử HTML
+const firebaseHumidityValue = firebaseHumidityElement.innerText;
+const firebaseTempElementValue = firebaseTempElement.innerText;
+
+// Cập nhật chuỗi ledText với giá trị thực từ Firebase và xuống dòng
+const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}% | Chúc các bạn một ngày tốt lành! 
+\nThời tiết trong khu vực: Nhiệt độ (DHT11): ${firebaseTempElementValue}°C | Độ ẩm (DHT11): ${firebaseHumidityValue}`;
 
 
 
+                document.getElementById('led-text').textContent = ledText;
+            })
+            .catch(error => {
+                alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
+            });
+    } else {
+        alert('Vui lòng nhập tên thành phố!');
+    }
 });
 
 // Adjust LED speed based on user input
@@ -313,4 +353,4 @@ updateTime();
 
     </script>
 </body>
-</html>
+</html> hãy bỏ các chức năng led trong code

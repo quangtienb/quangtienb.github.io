@@ -161,10 +161,12 @@
 
         firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
             firebaseTempElement.innerText = snapshot.val() + " °C";
+            document.getElementById('firebase-temp').innerText = snapshot.val() + " °C";
         });
 
         firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
             firebaseHumidityElement.innerText = snapshot.val() + " %";
+            document.getElementById('firebase-humidity').innerText = snapshot.val() + " %";
         });
 
         // OpenWeather API

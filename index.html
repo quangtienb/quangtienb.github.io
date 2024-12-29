@@ -405,18 +405,21 @@ setInterval(updateTime, 1000);
 
 // Gọi hàm một lần ngay khi trang tải để hiển thị thời gian ngay lập tức
 updateTime();
-
-        document.getElementById('compare-btn').addEventListener('click', function() {
+document.getElementById('compare-btn').addEventListener('click', function() {
     // Lấy giá trị nhiệt độ từ DHT11 và API
     var dht11Temp = firebaseTempElement.innerText; // Nhiệt độ DHT11
     var apiTemp = document.getElementById('temperature').innerText; // Nhiệt độ từ API
+    var rainfall = document.getElementById('rainfall').innerText; // Lượng mưa từ API
 
     // Chuyển đổi giá trị từ chuỗi thành số để so sánh
     var dht11TempValue = parseFloat(dht11Temp.replace(' °C', '').trim());
     var apiTempValue = parseFloat(apiTemp.replace('°C', '').trim());
+    var rainfallValue = parseFloat(rainfall.replace('mm', '').trim());
 
     // So sánh và hiển thị kết quả
     var comparisonResult = '';
+    var ventMessage = ''; // Thông báo mở/đóng cửa thông gió
+
     if (dht11TempValue > apiTempValue) {
         comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) cao hơn nhiệt độ khu vực (API) (${apiTempValue}°C).`;
     } else if (dht11TempValue < apiTempValue) {
@@ -425,8 +428,19 @@ updateTime();
         comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) bằng nhiệt độ khu vực API (${apiTempValue}°C).`;
     }
 
-    // Hiển thị kết quả so sánh
-    document.getElementById('comparison-result').innerText = comparisonResult;
+    // Kiểm tra lượng mưa và đưa ra thông báo
+    if (rainfallValue > 0) {
+        ventMessage = 'Có mưa, đóng cửa thông gió!';
+        // Cập nhật màu sắc thông báo
+        document.getElementById('comparison-result').style.color = 'red';
+    } else {
+        ventMessage = 'Không mưa, mở cửa thông gió!';
+        // Cập nhật màu sắc thông báo
+        document.getElementById('comparison-result').style.color = 'green';
+    }
+
+    // Hiển thị kết quả so sánh nhiệt độ và thông báo cửa thông gió
+    document.getElementById('comparison-result').innerText = `${comparisonResult} ${ventMessage}`;
 });
 
 

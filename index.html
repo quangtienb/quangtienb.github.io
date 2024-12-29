@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ thống điều khiển thông gió cho nhà kính - Nhóm 20</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/a...in.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -112,7 +112,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 1rem;
-text-align: center;
+            text-align: center;
             width: 150px;
         }
         .weather-info i {
@@ -158,7 +158,7 @@ text-align: center;
     </header>
 
     <div class="led-banner">
-        <span id="led-text">Chào mừng bạn đến với trang web Hệ thống điều khiển thông gió cho nhà kính của chúng tôi! 🌞</span>
+        <span id="led-text">Chào mừng bạn đến với trang web hệ thống hiển thị thời tiết của chúng tôi! 🌞</span>
     </div>
 
     <div class="controls">
@@ -177,6 +177,7 @@ text-align: center;
                 <option value="yellow">🟡Vàng</option>
                 <option value="orange">🟠Cam</option>
                 <option value="purple">🟣Tím</option>
+                <option value="pink">🌸Hồng</option>
             </select>
         </div>
     </div>
@@ -198,7 +199,7 @@ text-align: center;
             <div class="weather-info">
                 <i class="fas fa-tint"></i>
                 <h3>Độ ẩm</h3>
-<p id="humidity">-- %</p>
+                <p id="humidity">-- %</p>
             </div>
             <div class="weather-info">
                 <i class="fas fa-wind"></i>
@@ -248,14 +249,14 @@ text-align: center;
         // Firebase configuration
        // Firebase configuration
 var firebaseConfig = {
-   apiKey : "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk" , 
-  authDomain : "demothoitiet-995b8.firebaseapp.com" , 
-  databaseURL : "https://demothoitiet-995b8-default-rtdb.firebaseio.com" , 
-  projectId : "demothoitiet-995b8" , 
-  storageBucket : "demothoitiet-995b8.firebasestorage.app" , 
-  messagingSenderId : "823683238153" , 
-  appId : "1:823683238153:web:97d52dd7ef86e50c616bd8" , 
-  measurementId : "G-2JRE01LWSE" 
+    apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk",
+    authDomain: "demothoitiet-995b8.firebaseapp.com",
+    databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com",
+    projectId: "demothoitiet-995b8",
+    storageBucket: "demothoitiet-995b8.appspot.com",
+    messagingSenderId: "823683238153",
+    appId: "1:823683238153:web:97d52dd7ef86e50c616bd8",
+    measurementId: "G-2JRE01LWSE"
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -271,28 +272,20 @@ firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
 
 // Get weather data from OpenWeather API
 var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
+var apiUrl;
+
 document.getElementById('fetch-weather-btn').addEventListener('click', function() {
     var city = document.getElementById('city-input').value;
     if (city) {
-        var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=vi`;
+        apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
+        
         fetch(apiUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data.cod === 200) {
-                    console.log('Weather data:', data);
-                    // Xử lý dữ liệu thời tiết ở đây
-                } else {
-                    console.log('Error:', data.message);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lỗi khi lấy dữ liệu thời tiết');
                 }
+                return response.json();
             })
-            .catch(error => {
-                console.error('Error fetching weather data:', error);
-            });
-    } else {
-        console.log('Please enter a city.');
-    }
-});
-
             .then(data => {
                 document.getElementById('temperature').innerText = `${data.main.temp}°C`;
                 document.getElementById('humidity').innerText = `${data.main.humidity}%`;
@@ -316,8 +309,8 @@ const firebaseHumidityValue = firebaseHumidityElement.innerText;
 const firebaseTempElementValue = firebaseTempElement.innerText;
 
 // Cập nhật chuỗi ledText với giá trị thực từ Firebase và xuống dòng
-const ledText = `Thời gian: ${timeString} | Thời tiết khu vực (API) Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}%\n
-                                           Thời tiết nhà kính (DHT11): Nhiệt độ: ${firebaseTempElementValue}°C | Độ ẩm: ${firebaseHumidityValue} `;
+const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}% | Chúc các bạn một ngày tốt lành! 
+\nThời tiết trong khu vực: Nhiệt độ (DHT11): ${firebaseTempElementValue}°C | Độ ẩm (DHT11): ${firebaseHumidityValue}`;
 
 
 
@@ -339,7 +332,7 @@ document.getElementById('speed-control').addEventListener('input', function() {
 
 // Adjust LED color based on user input
 document.getElementById('color-control').addEventListener('change', function() {
-document.querySelector('.led-banner').style.backgroundColor = this.value;
+    document.querySelector('.led-banner').style.backgroundColor = this.value;
 });
 
 // Display current time

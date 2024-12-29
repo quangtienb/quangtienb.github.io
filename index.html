@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ thống điều khiển thông gió cho nhà kính - Nhóm 20</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/a...in.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -112,8 +112,8 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 1rem;
-text-align: center;
-                width: 150px;
+            text-align: center;
+            width: 150px;
         }
         .weather-info i {
             font-size: 2rem;
@@ -199,8 +199,8 @@ text-align: center;
             <div class="weather-info">
                 <i class="fas fa-tint"></i>
                 <h3>Độ ẩm</h3>
-<p id="humidity">-- %</p>
-</div>
+                <p id="humidity">-- %</p>
+            </div>
             <div class="weather-info">
                 <i class="fas fa-wind"></i>
                 <h3>Tốc độ gió</h3>
@@ -273,10 +273,11 @@ firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
 // Get weather data from OpenWeather API
 var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
 var apiUrl;
-            document.getElementById('fetch-weather-btn').addEventListener('click', function() {
+
+document.getElementById('fetch-weather-btn').addEventListener('click', function() {
     var city = document.getElementById('city-input').value;
     if (city) {
-        apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${a...ang=vi`;
+        apiUrl = https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi;
         
         fetch(apiUrl)
             .then(response => {
@@ -286,20 +287,20 @@ var apiUrl;
                 return response.json();
             })
             .then(data => {
-                document.getElementById('temperature').innerText = `${data.main.temp}°C`;
-                document.getElementById('humidity').innerText = `${data.main.humidity}%`;
-                document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
+                document.getElementById('temperature').innerText = ${data.main.temp}°C;
+                document.getElementById('humidity').innerText = ${data.main.humidity}%;
+                document.getElementById('wind-speed').innerText = ${data.wind.speed} m/s;
                 
                 // Kiểm tra dữ liệu mưa, nếu không có thì hiển thị 0 mm
                 let rainfall = data.rain ? (data.rain['1h'] || 0) : 0;
-                document.getElementById('rainfall').innerText = `${rainfall} mm`;
+                document.getElementById('rainfall').innerText = ${rainfall} mm;
 
-                document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
+                document.getElementById('cloud-cover').innerText = ${data.clouds.all}%;
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
     const seconds = now.getSeconds().toString().padStart(2, '0');
-    const timeString = `${hours}:${minutes}:${seconds}`;
+    const timeString = ${hours}:${minutes}:${seconds};
 
                // Đảm bảo bạn lấy giá trị từ phần tử HTML
 // Lấy giá trị thực từ phần tử HTML
@@ -308,8 +309,8 @@ const firebaseHumidityValue = firebaseHumidityElement.innerText;
 const firebaseTempElementValue = firebaseTempElement.innerText;
 
 // Cập nhật chuỗi ledText với giá trị thực từ Firebase và xuống dòng
-const ledText = `Thời gian: ${timeString} | Thời tiết khu vực (API) Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}%\n
-                                           Thời tiết nhà kính (DHT11): Nhiệt độ: ${firebaseTempElementValue}°C | Độ ẩm: ${firebaseHumidityValue} `;
+const ledText = Thời gian: ${timeString} | Thời tiết khu vực (API) Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}%\n
+                                           Thời tiết nhà kính (DHT11): Nhiệt độ: ${firebaseTempElementValue}°C | Độ ẩm: ${firebaseHumidityValue} ;
 
 
 
@@ -331,7 +332,7 @@ document.getElementById('speed-control').addEventListener('input', function() {
 
 // Adjust LED color based on user input
 document.getElementById('color-control').addEventListener('change', function() {
-        document.querySelector('.led-banner').style.backgroundColor = this.value;
+    document.querySelector('.led-banner').style.backgroundColor = this.value;
 });
 
 // Display current time
@@ -341,7 +342,7 @@ function updateTime() {
     var hours = now.getHours().toString().padStart(2, '0'); // Lấy giờ và đảm bảo có 2 chữ số
     var minutes = now.getMinutes().toString().padStart(2, '0'); // Lấy phút và đảm bảo có 2 chữ số
     var seconds = now.getSeconds().toString().padStart(2, '0'); // Lấy giây và đảm bảo có 2 chữ số
-    document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`; // Cập nhật thời gian vào phần tử HTML
+    document.getElementById('current-time').innerText = ${hours}:${minutes}:${seconds}; // Cập nhật thời gian vào phần tử HTML
 }
 
 // Gọi hàm updateTime mỗi giây

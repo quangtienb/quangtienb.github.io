@@ -180,6 +180,12 @@
                 <option value="pink">🌸Hồng</option>
             </select>
         </div>
+        <!-- Thêm nút so sánh nhiệt độ -->
+<div>
+    <button id="compare-btn">So sánh Nhiệt độ DHT11 và Nhiệt độ API</button>
+    <p id="comparison-result"></p>
+</div>
+
     </div>
 
     <section>
@@ -399,6 +405,30 @@ setInterval(updateTime, 1000);
 
 // Gọi hàm một lần ngay khi trang tải để hiển thị thời gian ngay lập tức
 updateTime();
+
+        document.getElementById('compare-btn').addEventListener('click', function() {
+    // Lấy giá trị nhiệt độ từ DHT11 và API
+    var dht11Temp = firebaseTempElement.innerText; // Nhiệt độ DHT11
+    var apiTemp = document.getElementById('temperature').innerText; // Nhiệt độ từ API
+
+    // Chuyển đổi giá trị từ chuỗi thành số để so sánh
+    var dht11TempValue = parseFloat(dht11Temp.replace(' °C', '').trim());
+    var apiTempValue = parseFloat(apiTemp.replace('°C', '').trim());
+
+    // So sánh và hiển thị kết quả
+    var comparisonResult = '';
+    if (dht11TempValue > apiTempValue) {
+        comparisonResult = `Nhiệt độ DHT11 (${dht11TempValue}°C) cao hơn nhiệt độ API (${apiTempValue}°C).`;
+    } else if (dht11TempValue < apiTempValue) {
+        comparisonResult = `Nhiệt độ DHT11 (${dht11TempValue}°C) thấp hơn nhiệt độ API (${apiTempValue}°C).`;
+    } else {
+        comparisonResult = `Nhiệt độ DHT11 (${dht11TempValue}°C) bằng nhiệt độ API (${apiTempValue}°C).`;
+    }
+
+    // Hiển thị kết quả so sánh
+    document.getElementById('comparison-result').innerText = comparisonResult;
+});
+
 
     </script>
 </body>

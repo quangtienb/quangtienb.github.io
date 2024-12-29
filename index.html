@@ -180,7 +180,13 @@ text-align: center;
                 <option value="pink">🌸Hồng</option>
             </select>
         </div>
+         <div>
+    <button id="compare-temp-btn">So sánh nhiệt độ</button>
+    <p id="temp-comparison-result"></p>
     </div>
+    </div>
+   
+
 
     <section>
         <h2>🌈 Chọn Địa Điểm và Xem Thời Tiết</h2>
@@ -233,10 +239,6 @@ text-align: center;
                 <p id="firebase-humidity">Loading...</p>
             </div>
         </div>
-         <h2>🔄 So sánh nhiệt độ và điều khiển cửa thông gió</h2>
-    <div id="temperature-comparison">
-        <p id="temp-comparison-message">Chưa có kết quả so sánh.</p>
-    </div>
     </section>
 
     <footer>
@@ -250,6 +252,26 @@ text-align: center;
     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
 
     <script>
+        // Lắng nghe sự kiện khi nhấn nút "So sánh nhiệt độ"
+document.getElementById('compare-temp-btn').addEventListener('click', function() {
+    var firebaseTemp = parseFloat(firebaseTempElement.innerText); // Nhiệt độ từ Firebase (DHT11)
+    var apiTemp = parseFloat(document.getElementById('temperature').innerText); // Nhiệt độ từ API
+
+    // Kiểm tra nếu các giá trị nhiệt độ hợp lệ
+    if (!isNaN(firebaseTemp) && !isNaN(apiTemp)) {
+        // So sánh nhiệt độ
+        if (firebaseTemp > apiTemp) {
+            document.getElementById('temp-comparison-result').innerText = "Nhiệt độ trong nhà kính (DHT11) cao hơn nhiệt độ khu vực (API).";
+        } else if (firebaseTemp < apiTemp) {
+            document.getElementById('temp-comparison-result').innerText = "Nhiệt độ trong nhà kính (DHT11) thấp hơn nhiệt độ khu vực (API).";
+        } else {
+            document.getElementById('temp-comparison-result').innerText = "Nhiệt độ trong nhà kính (DHT11) bằng với nhiệt độ khu vực (API).";
+        }
+    } else {
+        document.getElementById('temp-comparison-result').innerText = "Dữ liệu nhiệt độ không hợp lệ.";
+    }
+});
+
         // Firebase configuration
        // Firebase configuration
 var firebaseConfig = {
@@ -314,7 +336,10 @@ const firebaseTempElementValue = firebaseTempElement.innerText;
 // Cập nhật chuỗi ledText với giá trị thực từ Firebase và xuống dòng
 const ledText = `Thời gian: ${timeString} | Thời tiết khu vực (API) Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}%\n
                                            Thời tiết nhà kính (DHT11): Nhiệt độ: ${firebaseTempElementValue}°C | Độ ẩm: ${firebaseHumidityValue} `;
-             document.getElementById('led-text').textContent = ledText;
+
+
+
+                document.getElementById('led-text').textContent = ledText;
             })
             .catch(error => {
                 alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
@@ -323,48 +348,17 @@ const ledText = `Thời gian: ${timeString} | Thời tiết khu vực (API) Nhi�
         alert('Vui lòng nhập tên thành phố!');
     }
 });
+
+// Adjust LED speed based on user input
 document.getElementById('speed-control').addEventListener('input', function() {
     var speedValue = this.value;
     document.getElementById('led-text').style.animationDuration = speedValue + 's';
 });
+
+// Adjust LED color based on user input
 document.getElementById('color-control').addEventListener('change', function() {
 document.querySelector('.led-banner').style.backgroundColor = this.value;
 });
-        // Lấy phần tử hiển thị thông báo so sánh nhiệt độ
-var tempComparisonMessage = document.getElementById('temp-comparison-message');
-
-// Hàm so sánh nhiệt độ giữa DHT11 và API
-function compareTemperatures() {
-    var dht11Temp = parseFloat(firebaseTempElement.innerText);  // Nhiệt độ từ Firebase
-    var apiTemp = parseFloat(document.getElementById('temperature').innerText.replace('°C', '').trim()); // Nhiệt độ từ API
-    
-    if (isNaN(dht11Temp) || isNaN(apiTemp)) {
-        tempComparisonMessage.innerText = "Lỗi: Không thể so sánh nhiệt độ. Kiểm tra lại dữ liệu.";
-        return;
-    }
-
-    // So sánh nhiệt độ và cập nhật thông báo
-    if (dht11Temp > apiTemp) {
-        tempComparisonMessage.innerText = "🌞 Nhiệt độ trong nhà kính cao hơn. Mở cửa thông gió.";
-    } else if (dht11Temp < apiTemp) {
-        tempComparisonMessage.innerText = "🌧️ Nhiệt độ trong nhà kính thấp hơn. Đóng cửa thông gió.";
-    } else {
-        tempComparisonMessage.innerText = "🔄 Nhiệt độ trong nhà kính và ngoài trời tương đương.";
-    }
-}
-
-// Cập nhật thông tin khi dữ liệu thời tiết mới được lấy từ API hoặc Firebase
-document.getElementById('fetch-weather-btn').addEventListener('click', function() {
-    // Sau khi dữ liệu thời tiết từ API đã được lấy và hiển thị
-    compareTemperatures();  // So sánh nhiệt độ mỗi lần cập nhật dữ liệu mới
-});
-
-// Cập nhật dữ liệu từ Firebase (DHT11) và gọi hàm so sánh khi có sự thay đổi
-firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
-    // Sau khi nhận được giá trị mới từ Firebase
-    compareTemperatures();  // So sánh nhiệt độ mỗi khi DHT11 cập nhật
-});
-
 
 // Display current time
 // Hàm cập nhật thời gian
@@ -375,7 +369,11 @@ function updateTime() {
     var seconds = now.getSeconds().toString().padStart(2, '0'); // Lấy giây và đảm bảo có 2 chữ số
     document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`; // Cập nhật thời gian vào phần tử HTML
 }
+
+// Gọi hàm updateTime mỗi giây
 setInterval(updateTime, 1000);
+
+// Gọi hàm một lần ngay khi trang tải để hiển thị thời gian ngay lập tức
 updateTime();
 
     </script>

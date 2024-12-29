@@ -322,7 +322,56 @@ const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.ma
     } else {
         alert('Vui lòng nhập tên thành phố!');
     }
+});document.getElementById('fetch-weather-btn').addEventListener('click', function() {
+    var city = document.getElementById('city-input').value;
+    if (city) {
+        apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
+        
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lỗi khi lấy dữ liệu thời tiết');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('temperature').innerText = `${data.main.temp}°C`;
+                document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+                document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
+                
+                let rainfall = data.rain ? (data.rain['1h'] || 0) : 0;
+                document.getElementById('rainfall').innerText = `${rainfall} mm`;
+
+                document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
+
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const seconds = now.getSeconds().toString().padStart(2, '0');
+                const timeString = `${hours}:${minutes}:${seconds}`;
+
+                const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}%`;
+                document.getElementById('led-text').textContent = ledText;
+
+                // Đẩy dữ liệu thời tiết lên Firebase
+                firebase.database().ref('OpenWeather').set({
+                    Temperature: data.main.temp,
+                    Humidity: data.main.humidity,
+                    WindSpeed: data.wind.speed,
+                    Rainfall: rainfall,
+                    CloudCover: data.clouds.all,
+                    Location: city,
+                    Time: timeString
+                });
+            })
+            .catch(error => {
+                alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
+            });
+    } else {
+        alert('Vui lòng nhập tên thành phố!');
+    }
 });
+
 
 // Adjust LED speed based on user input
 document.getElementById('speed-control').addEventListener('input', function() {

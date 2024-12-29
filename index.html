@@ -247,21 +247,27 @@
 
     <script>
 
-        fetch(apiUrl)
+    fetch(apiUrl)
     .then(response => {
         if (!response.ok) throw new Error('Lỗi khi lấy dữ liệu thời tiết');
         return response.json();
     })
     .then(data => {
-        const apiTemp = data.main.temp; // Nhiệt độ từ API
+        const apiTempKelvin = data.main.temp; // Nhiệt độ từ API (Kelvin)
+        const apiTempCelsius = apiTempKelvin - 273.15; // Chuyển đổi sang Celsius
         const firebasePath = "APIWeather/Temperature"; // Đường dẫn Firebase
 
         // Đẩy nhiệt độ API vào Firebase
-        firebase.database().ref(firebasePath).set(apiTemp);
-        console.log(`Nhiệt độ từ API (${apiTemp}°C) đã được cập nhật vào Firebase.`);
+        firebase.database().ref(firebasePath).set(apiTempCelsius)
+            .then(() => {
+                console.log(`Nhiệt độ từ API (${apiTempCelsius.toFixed(2)}°C) đã được cập nhật vào Firebase.`);
+            })
+            .catch(error => {
+                console.error('Lỗi khi cập nhật Firebase:', error);
+            });
 
         // Cập nhật giao diện
-        document.getElementById('temperature').innerText = `${apiTemp}°C`;
+        document.getElementById('temperature').innerText = `${apiTempCelsius.toFixed(2)}°C`;
     })
     .catch(error => {
         alert('Lỗi khi lấy dữ liệu thời tiết: ' + error.message);

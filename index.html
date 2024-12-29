@@ -177,7 +177,6 @@ text-align: center;
                 <option value="yellow">🟡Vàng</option>
                 <option value="orange">🟠Cam</option>
                 <option value="purple">🟣Tím</option>
-                <option value="pink">🌸Hồng</option>
             </select>
         </div>
     </div>
@@ -249,14 +248,14 @@ text-align: center;
         // Firebase configuration
        // Firebase configuration
 var firebaseConfig = {
-    apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk",
-    authDomain: "demothoitiet-995b8.firebaseapp.com",
-    databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com",
-    projectId: "demothoitiet-995b8",
-    storageBucket: "demothoitiet-995b8.appspot.com",
-    messagingSenderId: "823683238153",
-    appId: "1:823683238153:web:97d52dd7ef86e50c616bd8",
-    measurementId: "G-2JRE01LWSE"
+   apiKey : "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk" , 
+  authDomain : "demothoitiet-995b8.firebaseapp.com" , 
+  databaseURL : "https://demothoitiet-995b8-default-rtdb.firebaseio.com" , 
+  projectId : "demothoitiet-995b8" , 
+  storageBucket : "demothoitiet-995b8.firebasestorage.app" , 
+  messagingSenderId : "823683238153" , 
+  appId : "1:823683238153:web:97d52dd7ef86e50c616bd8" , 
+  measurementId : "G-2JRE01LWSE" 
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -272,19 +271,28 @@ firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
 
 // Get weather data from OpenWeather API
 var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
-var apiUrl;
 document.getElementById('fetch-weather-btn').addEventListener('click', function() {
     var city = document.getElementById('city-input').value;
     if (city) {
-        apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${a...ang=vi`;
-        
+        var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=vi`;
         fetch(apiUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Lỗi khi lấy dữ liệu thời tiết');
+            .then(response => response.json())
+            .then(data => {
+                if (data.cod === 200) {
+                    console.log('Weather data:', data);
+                    // Xử lý dữ liệu thời tiết ở đây
+                } else {
+                    console.log('Error:', data.message);
                 }
-                return response.json();
             })
+            .catch(error => {
+                console.error('Error fetching weather data:', error);
+            });
+    } else {
+        console.log('Please enter a city.');
+    }
+});
+
             .then(data => {
                 document.getElementById('temperature').innerText = `${data.main.temp}°C`;
                 document.getElementById('humidity').innerText = `${data.main.humidity}%`;

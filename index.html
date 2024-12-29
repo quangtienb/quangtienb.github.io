@@ -418,11 +418,11 @@ updateTime();
     // So sánh và hiển thị kết quả
     var comparisonResult = '';
     if (dht11TempValue > apiTempValue) {
-        comparisonResult = `Nhiệt độ DHT11 (${dht11TempValue}°C) cao hơn nhiệt độ API (${apiTempValue}°C).`;
+        comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) cao hơn nhiệt độ khu vực (API) (${apiTempValue}°C).`;
     } else if (dht11TempValue < apiTempValue) {
-        comparisonResult = `Nhiệt độ DHT11 (${dht11TempValue}°C) thấp hơn nhiệt độ API (${apiTempValue}°C).`;
+        comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) thấp hơn nhiệt độ khu vực (API) (${apiTempValue}°C).`;
     } else {
-        comparisonResult = `Nhiệt độ DHT11 (${dht11TempValue}°C) bằng nhiệt độ API (${apiTempValue}°C).`;
+        comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) bằng nhiệt độ khu vực API (${apiTempValue}°C).`;
     }
 
     // Hiển thị kết quả so sánh

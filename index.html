@@ -235,6 +235,20 @@
         </div>
     </section>
 
+    <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>So sánh nhiệt độ</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    #result { margin-top: 20px; font-size: 20px; color: blue; }
+  </style>
+    </head>
+      <h1>So sánh nhiệt độ</h1>
+  <button onclick="compareTemperatures()">So sánh</button>
+  <div id="result"></div>
+
     <footer>
         <p>© 2024 Nhóm 20 - <a href="https://github.com/quangtienb" target="_blank">GitHub</a></p>
         <p><b>Bùi Quang Tiến - 21138184</b></p>
@@ -246,6 +260,21 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
 
     <script>
+    function compareTemperatures() {
+      const dht11Temp = firebaseHumidityValue;
+      const apiTemp = ${data.main.temp};
+      const weatherCondition = apiData.condition;
+
+      let resultMessage = "";
+
+      if (dht11Temp > apiTemp || weatherCondition !== "KHÔNG MƯA") {
+        resultMessage = "Mở cửa thông gió";
+      } else {
+        resultMessage = "Đóng cửa thông gió";
+      }
+
+      document.getElementById("result").innerText = resultMessage;
+    }
         // Firebase configuration
        // Firebase configuration
 var firebaseConfig = {
@@ -350,7 +379,7 @@ setInterval(updateTime, 1000);
 
 // Gọi hàm một lần ngay khi trang tải để hiển thị thời gian ngay lập tức
 updateTime();
-
+        
     </script>
 </body>
 </html>

@@ -246,6 +246,26 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
 
     <script>
+
+        fetch(apiUrl)
+    .then(response => {
+        if (!response.ok) throw new Error('Lỗi khi lấy dữ liệu thời tiết');
+        return response.json();
+    })
+    .then(data => {
+        const apiTemp = data.main.temp; // Nhiệt độ từ API
+        const firebasePath = "APIWeather/Temperature"; // Đường dẫn Firebase
+
+        // Đẩy nhiệt độ API vào Firebase
+        firebase.database().ref(firebasePath).set(apiTemp);
+        console.log(`Nhiệt độ từ API (${apiTemp}°C) đã được cập nhật vào Firebase.`);
+
+        // Cập nhật giao diện
+        document.getElementById('temperature').innerText = `${apiTemp}°C`;
+    })
+    .catch(error => {
+        alert('Lỗi khi lấy dữ liệu thời tiết: ' + error.message);
+    });
         // Firebase configuration
        // Firebase configuration
 var firebaseConfig = {

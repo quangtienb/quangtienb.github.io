@@ -1,3 +1,16 @@
+Cái dht11 còn sài đc k hay mua mới
+Ok v thôi
+Cái dht11 tui mua r
+ô mua board lun r hả
+K cái dht11 mua bữa cái kia hư r
+mai làm đâu z trọ ô hả
+Um
+có hy vọng k z sao tui thấy như sắp đi r
+K sao
+Giờ qua đuợc k z
+Qua chưa
+Đang đi
+Sao z
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -113,7 +126,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 1rem;
 text-align: center;
-            width: 150px;
+width: 150px;
         }
         .weather-info i {
             font-size: 2rem;
@@ -200,7 +213,7 @@ text-align: center;
                 <i class="fas fa-tint"></i>
                 <h3>Độ ẩm</h3>
 <p id="humidity">-- %</p>
-            </div>
+</div>
             <div class="weather-info">
                 <i class="fas fa-wind"></i>
                 <h3>Tốc độ gió</h3>
@@ -246,26 +259,6 @@ text-align: center;
     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
 
     <script>
-        fetch(apiUrl)
-    .then(response => {
-        if (!response.ok) throw new Error('Lỗi khi lấy dữ liệu thời tiết');
-        return response.json();
-    })
-    .then(data => {
-        const apiTemp = data.main.temp; // Nhiệt độ từ API
-        const firebasePath = "APIWeather/Temperature"; // Đường dẫn Firebase
-
-        // Đẩy nhiệt độ API vào Firebase
-        firebase.database().ref(firebasePath).set(apiTemp);
-        console.log(`Nhiệt độ từ API (${apiTemp}°C) đã được cập nhật vào Firebase.`);
-
-        // Cập nhật giao diện
-        document.getElementById('temperature').innerText = `${apiTemp}°C`;
-    })
-    .catch(error => {
-        alert('Lỗi khi lấy dữ liệu thời tiết: ' + error.message);
-    });
-
         // Firebase configuration
        // Firebase configuration
 var firebaseConfig = {

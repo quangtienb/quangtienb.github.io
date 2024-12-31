@@ -132,6 +132,28 @@
             font-weight: bold;
             color: #555;
         }
+        #firebase-console-btn {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    #firebase-console-btn:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    #firebase-console-btn:active {
+        background-color: #004499;
+        transform: scale(1);
+    }
 
         footer {
             text-align: center;
@@ -185,9 +207,8 @@
     <button id="compare-btn">So sánh Nhiệt độ DHT11 và Nhiệt độ API</button>
     <p id="comparison-result"></p>
 </div>
- </div>
-    <button id="open-firebase-btn">Mở Bảng data Firebase</button>
-    <p id="comparison-result"></p>
+<div style="text-align: center; margin-top: 20px;">
+    <button id="firebase-console-btn">Mở Firebase Console</button>
 </div>
 
 

@@ -187,6 +187,7 @@
 </div>
  </div>
     <button id="open-firebase-btn">Mở Bảng data Firebase</button>
+    <p id="comparison-result"></p>
 </div>
 
 
@@ -450,6 +451,10 @@ document.getElementById('compare-btn').addEventListener('click', function() {
     // Hiển thị kết quả so sánh nhiệt độ và thông báo cửa thông gió
     document.getElementById('comparison-result').innerText = `${comparisonResult} ${ventMessage}`;
 });
+        // Thêm sự kiện mở bảng Firebase
+    document.getElementById('open-firebase-btn').addEventListener('click', function() {
+        window.open('https://console.firebase.google.com/u/1/project/demothoitiet-995b8/database/demothoitiet-995b8-default-rtdb/data/~2F', '_blank');
+    });
         
 
 

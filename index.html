@@ -252,107 +252,198 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
 
     <script>
-    // Firebase configuration
-    var firebaseConfig = {
-        apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk",
-        authDomain: "demothoitiet-995b8.firebaseapp.com",
-        databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com",
-        projectId: "demothoitiet-995b8",
-        storageBucket: "demothoitiet-995b8.appspot.com",
-        messagingSenderId: "823683238153",
-        appId: "1:823683238153:web:97d52dd7ef86e50c616bd8",
-        measurementId: "G-2JRE01LWSE"
-    };
-    firebase.initializeApp(firebaseConfig);
+        // Firebase configuration
+       // Firebase configuration
+var firebaseConfig = {
+    apiKey: "AIzaSyDe0ckQHkCBHGWQARoCTvIo1T1WEUHXlvk",
+    authDomain: "demothoitiet-995b8.firebaseapp.com",
+    databaseURL: "https://demothoitiet-995b8-default-rtdb.firebaseio.com",
+    projectId: "demothoitiet-995b8",
+    storageBucket: "demothoitiet-995b8.appspot.com",
+    messagingSenderId: "823683238153",
+    appId: "1:823683238153:web:97d52dd7ef86e50c616bd8",
+    measurementId: "G-2JRE01LWSE"
+};
+firebase.initializeApp(firebaseConfig);
 
-    // Lấy dữ liệu từ Firebase
-    var firebaseTempElement = document.getElementById('firebase-temp');
-    var firebaseHumidityElement = document.getElementById('firebase-humidity');
-    firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
-        var value = snapshot.val();
-        firebaseTempElement.innerText = value ? value + " °C" : "Không có dữ liệu";
-    });
-    firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
-        var value = snapshot.val();
-        firebaseHumidityElement.innerText = value ? value + " %" : "Không có dữ liệu";
-    });
+// Get data from Firebase and update the UI
+var firebaseTempElement = document.getElementById('firebase-temp');
+var firebaseHumidityElement = document.getElementById('firebase-humidity');
+firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
+    firebaseTempElement.innerText = snapshot.val() + " °C";
+});
+firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
+    firebaseHumidityElement.innerText = snapshot.val() + " %";
+});
 
-    // Xử lý LED Text
-    document.getElementById('fetch-weather-btn').addEventListener('click', function() {
-        var city = document.getElementById('city-input').value.trim();
-        if (!city) {
-            alert('Vui lòng nhập tên thành phố!');
-            return;
-        }
+// Get weather data from OpenWeather API
+var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
+var apiUrl;
 
-        var apiKey = 'c05417eac917208d896aa3f9cff02ac9';
-        var apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
-
+document.getElementById('fetch-weather-btn').addEventListener('click', function() {
+    var city = document.getElementById('city-input').value;
+    if (city) {
+        apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
+        
         fetch(apiUrl)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Lỗi khi lấy dữ liệu thời tiết từ OpenWeather API.');
+                    throw new Error('Lỗi khi lấy dữ liệu thời tiết');
                 }
                 return response.json();
             })
             .then(data => {
-                const temp = data.main.temp;
-                const humidity = data.main.humidity;
-                const windSpeed = data.wind.speed;
-                const rainfall = data.rain ? (data.rain['1h'] || 0) : 0;
-                const cloudCover = data.clouds.all;
-                const currentTime = new Date().toLocaleTimeString();
-
-                // Hiển thị dữ liệu lên giao diện
-                document.getElementById('temperature').innerText = `${temp}°C`;
-                document.getElementById('humidity').innerText = `${humidity}%`;
-                document.getElementById('wind-speed').innerText = `${windSpeed} m/s`;
+                document.getElementById('temperature').innerText = `${data.main.temp}°C`;
+                document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+                document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
+                
+                // Kiểm tra dữ liệu mưa, nếu không có thì hiển thị 0 mm
+                let rainfall = data.rain ? (data.rain['1h'] || 0) : 0;
                 document.getElementById('rainfall').innerText = `${rainfall} mm`;
-                document.getElementById('cloud-cover').innerText = `${cloudCover}%`;
 
-                // Cập nhật nội dung LED Text
-                const firebaseTemp = firebaseTempElement.innerText;
-                const firebaseHumidity = firebaseHumidityElement.innerText;
-                const ledText = `${city} | Thời gian: ${currentTime} | Nhiệt độ (API): ${temp}°C | Độ ẩm (API): ${humidity}% | Gió: ${windSpeed} m/s | Mưa: ${rainfall} mm | Mây: ${cloudCover}% 
-Nhiệt độ trong nhà (DHT11): ${firebaseTemp} | Độ ẩm trong nhà (DHT11): ${firebaseHumidity}`;
+                document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const timeString = `${hours}:${minutes}:${seconds}`;
+
+               // Đảm bảo bạn lấy giá trị từ phần tử HTML
+// Lấy giá trị thực từ phần tử HTML
+// Lấy giá trị thực từ phần tử HTML
+const firebaseHumidityValue = firebaseHumidityElement.innerText;
+const firebaseTempElementValue = firebaseTempElement.innerText;
+
+// Cập nhật chuỗi ledText với giá trị thực từ Firebase và xuống dòng
+const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}% | Chúc các bạn một ngày tốt lành! 
+\nThời tiết trong khu vực: Nhiệt độ (DHT11): ${firebaseTempElementValue}°C | Độ ẩm (DHT11): ${firebaseHumidityValue}`;
+
+
 
                 document.getElementById('led-text').textContent = ledText;
+            })
+            .catch(error => {
+                alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
+            });
+    } else {
+        alert('Vui lòng nhập tên thành phố!');
+    }
+});document.getElementById('fetch-weather-btn').addEventListener('click', function() {
+    var city = document.getElementById('city-input').value;
+    if (city) {
+        apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=vi`;
+        
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Lỗi khi lấy dữ liệu thời tiết');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('temperature').innerText = `${data.main.temp}°C`;
+                document.getElementById('humidity').innerText = `${data.main.humidity}%`;
+                document.getElementById('wind-speed').innerText = `${data.wind.speed} m/s`;
+                
+                let rainfall = data.rain ? (data.rain['1h'] || 0) : 0;
+                document.getElementById('rainfall').innerText = `${rainfall} mm`;
 
-                // Đẩy dữ liệu lên Firebase
+                document.getElementById('cloud-cover').innerText = `${data.clouds.all}%`;
+
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const seconds = now.getSeconds().toString().padStart(2, '0');
+                const timeString = `${hours}:${minutes}:${seconds}`;
+
+                const ledText = `${city} | Thời gian: ${timeString} | Nhiệt độ: ${data.main.temp}°C | Độ ẩm: ${data.main.humidity}% | Gió: ${data.wind.speed} m/s | Mưa: ${rainfall} mm | Lượng mây: ${data.clouds.all}%`;
+                document.getElementById('led-text').textContent = ledText;
+
+                // Đẩy dữ liệu thời tiết lên Firebase
                 firebase.database().ref('OpenWeather').set({
-                    Temperature: temp,
-                    Humidity: humidity,
-                    WindSpeed: windSpeed,
+                    Temperature: data.main.temp,
+                    Humidity: data.main.humidity,
+                    WindSpeed: data.wind.speed,
                     Rainfall: rainfall,
-                    CloudCover: cloudCover,
+                    CloudCover: data.clouds.all,
                     Location: city,
-                    Time: currentTime
+                    Time: timeString
                 });
             })
             .catch(error => {
-                alert('Lỗi: ' + error.message);
+                alert('Lỗi khi lấy dữ liệu thời tiết: ' + error);
             });
-    });
-
-    // Điều chỉnh tốc độ LED
-    document.getElementById('speed-control').addEventListener('input', function() {
-        var speed = this.value;
-        document.getElementById('led-text').style.animationDuration = `${speed}s`;
-    });
-
-    // Điều chỉnh màu nền LED
-    document.getElementById('color-control').addEventListener('change', function() {
-        document.querySelector('.led-banner').style.backgroundColor = this.value;
-    });
-
-    // Cập nhật thời gian hiển thị hiện tại
-    function updateTime() {
-        const now = new Date();
-        document.getElementById('current-time').innerText = now.toLocaleTimeString();
+    } else {
+        alert('Vui lòng nhập tên thành phố!');
     }
-    setInterval(updateTime, 1000); // Cập nhật mỗi giây
-    updateTime();
-</script>
+});
 
+
+// Adjust LED speed based on user input
+document.getElementById('speed-control').addEventListener('input', function() {
+    var speedValue = this.value;
+    document.getElementById('led-text').style.animationDuration = speedValue + 's';
+});
+
+// Adjust LED color based on user input
+document.getElementById('color-control').addEventListener('change', function() {
+    document.querySelector('.led-banner').style.backgroundColor = this.value;
+});
+
+// Display current time
+// Hàm cập nhật thời gian
+function updateTime() {
+    var now = new Date(); // Lấy thời gian hiện tại
+    var hours = now.getHours().toString().padStart(2, '0'); // Lấy giờ và đảm bảo có 2 chữ số
+    var minutes = now.getMinutes().toString().padStart(2, '0'); // Lấy phút và đảm bảo có 2 chữ số
+    var seconds = now.getSeconds().toString().padStart(2, '0'); // Lấy giây và đảm bảo có 2 chữ số
+    document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`; // Cập nhật thời gian vào phần tử HTML
+}
+
+// Gọi hàm updateTime mỗi giây
+setInterval(updateTime, 1000);
+
+// Gọi hàm một lần ngay khi trang tải để hiển thị thời gian ngay lập tức
+updateTime();
+document.getElementById('compare-btn').addEventListener('click', function() {
+    // Lấy giá trị nhiệt độ từ DHT11 và API
+    var dht11Temp = firebaseTempElement.innerText; // Nhiệt độ DHT11
+    var apiTemp = document.getElementById('temperature').innerText; // Nhiệt độ từ API
+    var rainfall = document.getElementById('rainfall').innerText; // Lượng mưa từ API
+
+    // Chuyển đổi giá trị từ chuỗi thành số để so sánh
+    var dht11TempValue = parseFloat(dht11Temp.replace(' °C', '').trim());
+    var apiTempValue = parseFloat(apiTemp.replace('°C', '').trim());
+    var rainfallValue = parseFloat(rainfall.replace('mm', '').trim());
+
+    // So sánh và hiển thị kết quả
+    var comparisonResult = '';
+    var ventMessage = ''; // Thông báo mở/đóng cửa thông gió
+
+    if (dht11TempValue > apiTempValue) {
+        comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) cao hơn nhiệt độ khu vực (API) (${apiTempValue}°C).`;
+    } else if (dht11TempValue < apiTempValue) {
+        comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) thấp hơn nhiệt độ khu vực (API) (${apiTempValue}°C).`;
+    } else {
+        comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) bằng nhiệt độ khu vực API (${apiTempValue}°C).`;
+    }
+
+    // Kiểm tra lượng mưa và đưa ra thông báo
+    if (rainfallValue > 0) {
+        ventMessage = 'Có mưa, đóng cửa thông gió!';
+        // Cập nhật màu sắc thông báo
+        document.getElementById('comparison-result').style.color = 'red';
+    } else {
+        ventMessage = 'Không mưa, mở cửa thông gió!';
+        // Cập nhật màu sắc thông báo
+        document.getElementById('comparison-result').style.color = 'green';
+    }
+
+    // Hiển thị kết quả so sánh nhiệt độ và thông báo cửa thông gió
+    document.getElementById('comparison-result').innerText = `${comparisonResult} ${ventMessage}`;
+});
+
+
+    </script>
 </body>
 </html>

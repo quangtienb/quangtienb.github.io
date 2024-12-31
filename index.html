@@ -270,11 +270,11 @@ firebase.initializeApp(firebaseConfig);
 var firebaseTempElement = document.getElementById('firebase-temp');
 var firebaseHumidityElement = document.getElementById('firebase-humidity');
 
-firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
+firebase.database().ref('DHT11/temperature').on('value', function(snapshot) {
     firebaseTempElement.innerText = snapshot.val() + " °C";
 });
 
-firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
+firebase.database().ref('DHT11/humidity').on('value', function(snapshot) {
     firebaseHumidityElement.innerText = snapshot.val() + " %";
 });
 

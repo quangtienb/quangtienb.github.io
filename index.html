@@ -270,15 +270,14 @@ firebase.initializeApp(firebaseConfig);
 var firebaseTempElement = document.getElementById('firebase-temp');
 var firebaseHumidityElement = document.getElementById('firebase-humidity');
 
-// Listen for changes to temperature data
-firebase.database().ref('DHT11/Temperature/value').on('value', function(snapshot) {
+firebase.database().ref('DHT11/Temperature').on('value', function(snapshot) {
     firebaseTempElement.innerText = snapshot.val() + " °C";
 });
 
-// Listen for changes to humidity data
-firebase.database().ref('DHT11/Humidity/value').on('value', function(snapshot) {
+firebase.database().ref('DHT11/Humidity').on('value', function(snapshot) {
     firebaseHumidityElement.innerText = snapshot.val() + " %";
 });
+
 
 
 // Get weather data from OpenWeather API

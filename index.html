@@ -449,7 +449,7 @@ document.getElementById('compare-btn').addEventListener('click', function() {
     // So sánh và hiển thị kết quả
     var comparisonResult = '';
     var ventMessage = ''; // Thông báo mở/đóng cửa thông gió
-    if ( dht11TempValue < apiTempValue) {
+    if ( dht11TempValue < apiTempValue || rainfallValue > 0 ) {
         ventMessage = 'Thời tiết xấu , đóng cửa thông gió!';
         // Cập nhật màu sắc thông báo
         document.getElementById('comparison-result').style.color = 'red';

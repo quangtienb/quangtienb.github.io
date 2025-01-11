@@ -449,15 +449,6 @@ document.getElementById('compare-btn').addEventListener('click', function() {
     // So sánh và hiển thị kết quả
     var comparisonResult = '';
     var ventMessage = ''; // Thông báo mở/đóng cửa thông gió
-
-    if (dht11TempValue > apiTempValue) {
-        comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) cao hơn nhiệt độ khu vực (API) (${apiTempValue}°C).`;
-    } else if (dht11TempValue < apiTempValue) {
-        comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) thấp hơn nhiệt độ khu vực (API) (${apiTempValue}°C).`;
-    } else {
-        comparisonResult = `Nhiệt độ trong nhà kính (DHT11) (${dht11TempValue}°C) bằng nhiệt độ khu vực API (${apiTempValue}°C).`;
-    }
-
     // Kiểm tra lượng mưa và đưa ra thông báo
     if (rainfallValue > 0) {
         ventMessage = 'Có mưa, đóng cửa thông gió!';
